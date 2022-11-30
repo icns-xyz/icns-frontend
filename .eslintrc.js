@@ -5,6 +5,7 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:prettier/recommended",
     "plugin:import/typescript",
+    "next/core-web-vitals",
   ],
   plugins: ["react-hooks", "unicorn", "import"],
   parserOptions: {
