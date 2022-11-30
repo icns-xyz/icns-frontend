@@ -1,0 +1,15 @@
+**/*.png
+**/*.svg
+
+.DS_Store
+
+node_modules
+.next
+
+yarn.lock
+
+.eslintignore
+.prettierignore
+
+package.json
+tsconfig.json
