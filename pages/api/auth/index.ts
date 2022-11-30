@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { authClient } from "../../client/twitter";
+import { authClient } from "../../../client/twitter";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (

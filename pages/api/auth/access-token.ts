@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { authClient } from "../../client/twitter";
+import { authClient } from "../../../client/twitter";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   try {
     const { code, state } = req.query;
