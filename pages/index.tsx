@@ -1,9 +1,15 @@
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
+  const handleSigninWithTwitter = async () => {
+    const { authUrl } = await (await fetch("/api/auth")).json();
+
+    window.open(authUrl);
+  };
+
   return (
     <div className={styles.container}>
-      <a href="/api/auth">login</a>
+      <button onClick={handleSigninWithTwitter}>Sign in with Twitter</button>
     </div>
   );
 }
