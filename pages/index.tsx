@@ -1,15 +1,22 @@
 import styles from "../styles/Home.module.css";
+import { useEffect } from "react";
+
+interface AuthResponse {
+  authUrl: string;
+}
 
 export default function Home() {
-  const handleSigninWithTwitter = async () => {
-    const { authUrl } = await (await fetch("/api/auth")).json();
+  const handleSignInWithTwitter = async () => {
+    const response: AuthResponse = await (await fetch("/api/auth")).json();
 
-    window.open(authUrl);
+    window.location.href = response.authUrl;
   };
 
   return (
     <div className={styles.container}>
-      <button onClick={handleSigninWithTwitter}>Sign in with Twitter</button>
+      <div>
+        <button onClick={handleSignInWithTwitter}>Sign in with Twitter</button>
+      </div>
     </div>
   );
 }
