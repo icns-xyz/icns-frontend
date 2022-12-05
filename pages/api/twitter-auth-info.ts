@@ -4,14 +4,6 @@ import { request } from "../../utils/url";
 import { ironOptions } from "../../iron.config";
 import { twitterApiBaseUrl } from "../../constants/twitter";
 
-interface TwitterOAuth2TokenData {
-  token_type: string;
-  expires_in: number;
-  access_token: string;
-  scope: string;
-  refresh_token: string;
-}
-
 export default withIronSessionApiRoute(async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -43,21 +35,31 @@ export default withIronSessionApiRoute(async function handler(
     params.append("code", code as string);
     params.append("redirect_uri", process.env.TWITTER_AUTH_CALLBACK_URI);
     params.append("code_verifier", req.session.code_verifier);
-    const tokenData = await request<TwitterOAuth2TokenData>(
-      `${twitterApiBaseUrl}/oauth2/token`,
-      {
-        method: "post",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: `Basic ${Buffer.from(
-            `${process.env.TWITTER_CLIENT_ID}:${process.env.TWITTER_CLIENT_SECRET}`,
-          ).toString("base64")}`,
+    const { access_token: accessToken } =
+      await request<TwitterOAuth2TokenResponse>(
+        `${twitterApiBaseUrl}/oauth2/token`,
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: `Basic ${Buffer.from(
+              `${process.env.TWITTER_CLIENT_ID}:${process.env.TWITTER_CLIENT_SECRET}`,
+            ).toString("base64")}`,
+          },
+          body: params,
         },
-        body: params,
+      );
+    const {
+      data: { id, username },
+    } = await request<TwitterUsersMeResponse>(`${twitterApiBaseUrl}/users/me`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
       },
-    );
+    });
     res.status(200).json({
-      accessToken: tokenData.access_token,
+      accessToken,
+      id,
+      username,
     });
   } catch (error) {
     console.log(error);
@@ -65,3 +67,19 @@ export default withIronSessionApiRoute(async function handler(
   }
 },
 ironOptions);
+
+interface TwitterOAuth2TokenResponse {
+  token_type: string;
+  expires_in: number;
+  access_token: string;
+  scope: string;
+  refresh_token: string;
+}
+
+interface TwitterUsersMeResponse {
+  data: {
+    id: string;
+    username: string;
+    name: string;
+  };
+}

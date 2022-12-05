@@ -4,4 +4,6 @@ export interface TwitterAuthUrlResponse {
 
 export interface TwitterAuthInfoResponse {
   accessToken: string;
+  id: string;
+  username: string;
 }
