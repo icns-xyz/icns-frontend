@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
-
-interface AccessTokenResponse {
-  accessToken: string;
-}
+import { TwitterAuthInfoResponse } from "../../types/api-response";
 
 export default function VerificationPage() {
   const [accessToken, setAccessToken] = useState<string>();
 
   const fetchAccessToken = async (state: string, code: string) => {
-    const { accessToken }: AccessTokenResponse = await (
+    const { accessToken }: TwitterAuthInfoResponse = await (
       await fetch(`/api/auth/access-token?state=${state}&code=${code}`)
     ).json();
 

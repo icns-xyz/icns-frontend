@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { withIronSessionApiRoute } from "iron-session/next";
-import { request } from "../../../utils/url";
-import { ironOptions } from "../../../iron.config";
-import { twitterApiBaseUrl } from "../../../constants/twitter";
+import { request } from "../../utils/url";
+import { ironOptions } from "../../iron.config";
+import { twitterApiBaseUrl } from "../../constants/twitter";
 
 interface TwitterOAuth2TokenData {
   token_type: string;
@@ -16,23 +16,23 @@ export default withIronSessionApiRoute(async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
+  if (
+    !process.env.TWITTER_CLIENT_ID ||
+    !process.env.TWITTER_CLIENT_SECRET ||
+    !process.env.TWITTER_AUTH_CALLBACK_URI
+  ) {
+    return res
+      .status(500)
+      .send(
+        "Twitter app client id or client secret or callback URI is not set",
+      );
+  }
+
+  if (!req.session.code_verifier) {
+    return res.status(401).send("No OAuth2.0 code verifier");
+  }
+
   try {
-    if (
-      !process.env.TWITTER_CLIENT_ID ||
-      !process.env.TWITTER_CLIENT_SECRET ||
-      !process.env.TWITTER_AUTH_CALLBACK_URI
-    ) {
-      return res
-        .status(500)
-        .send(
-          "Twitter app client id or client secret or callback URI is not set",
-        );
-    }
-
-    if (!req.session.code_verifier) {
-      return res.status(401).send("No OAuth2.0 code verifier");
-    }
-
     const { code, state } = req.query;
     if (state !== process.env.TWITTER_AUTH_STATE) {
       return res.status(401).send("State isn't matching");
@@ -61,6 +61,7 @@ export default withIronSessionApiRoute(async function handler(
     });
   } catch (error) {
     console.log(error);
+    res.status(500).send("Internal server error ");
   }
 },
 ironOptions);

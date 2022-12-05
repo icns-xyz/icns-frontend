@@ -1,12 +1,11 @@
 import styles from "../styles/Home.module.css";
-
-interface AuthResponse {
-  authUrl: string;
-}
+import { TwitterAuthUrlResponse } from "../types/api-response";
 
 export default function Home() {
   const handleSignInWithTwitter = async () => {
-    const { authUrl }: AuthResponse = await (await fetch("/api/auth")).json();
+    const { authUrl }: TwitterAuthUrlResponse = await (
+      await fetch("/api/twitter-auth-url")
+    ).json();
 
     window.location.href = authUrl;
   };
