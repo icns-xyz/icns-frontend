@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-  IcnsVerificationInfoResponse,
+  IcnsVerificationResponse,
   TwitterAuthInfoResponse,
 } from "../../types/api-response";
 import { VerifierMsg } from "../../types/msg";
@@ -24,12 +24,13 @@ export default function VerificationPage() {
 
       setTwitterAuthInfo(newTwitterAuthInfo);
       const verifierMsg: VerifierMsg = {
+        unique_twitter_id: newTwitterAuthInfo.id,
         name: newTwitterAuthInfo.username,
         claimer: "osmo1y5mm5nj5m8ttddt5ccspek6xgyyavehrkak7gq",
         contract_address: "osmo1y5mm5nj5m8ttddt5ccspek6xgyyavehrkak7gq",
         chain_id: "osmosis-1",
       };
-      const icnsVerificationInfo = await request<IcnsVerificationInfoResponse>(
+      const icnsVerification = await request<IcnsVerificationResponse>(
         "/api/icns-verification",
         {
           method: "post",
@@ -42,7 +43,7 @@ export default function VerificationPage() {
           }),
         },
       );
-      console.log(icnsVerificationInfo);
+      console.log(icnsVerification);
     };
 
     handleVerification();

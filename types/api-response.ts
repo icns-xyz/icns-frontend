@@ -8,7 +8,7 @@ export interface TwitterAuthInfoResponse {
   username: string;
 }
 
-export interface IcnsVerificationInfoResponse {
+export interface IcnsVerificationResponse {
   signature: number[];
   algorithm: string;
 }
