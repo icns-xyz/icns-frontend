@@ -1,5 +1,4 @@
 import styles from "../styles/Home.module.css";
-import { useEffect } from "react";
 
 interface AuthResponse {
   authUrl: string;
@@ -7,9 +6,9 @@ interface AuthResponse {
 
 export default function Home() {
   const handleSignInWithTwitter = async () => {
-    const response: AuthResponse = await (await fetch("/api/auth")).json();
+    const { authUrl }: AuthResponse = await (await fetch("/api/auth")).json();
 
-    window.location.href = response.authUrl;
+    window.location.href = authUrl;
   };
 
   return (

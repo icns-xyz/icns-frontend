@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 
 interface AccessTokenResponse {
-  access_token: string;
+  accessToken: string;
 }
 
 export default function VerificationPage() {
   const [accessToken, setAccessToken] = useState<string>();
 
   const fetchAccessToken = async (state: string, code: string) => {
-    const response: AccessTokenResponse = await (
+    const { accessToken }: AccessTokenResponse = await (
       await fetch(`/api/auth/access-token?state=${state}&code=${code}`)
     ).json();
 
-    setAccessToken(response.access_token);
+    setAccessToken(accessToken);
   };
 
   useEffect(() => {
