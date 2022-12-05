@@ -1,7 +1,7 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ironOptions } from "../../iron.config";
-import { IcnsVerificationInfoResponse } from "../../types/api-response";
+import { IcnsVerificationResponse } from "../../types/api-response";
 import { request } from "../../utils/url";
 
 export default withIronSessionApiRoute(async function handler(
@@ -13,7 +13,7 @@ export default withIronSessionApiRoute(async function handler(
       console.log(".env is not set");
       return res.status(500).json({ error: "Internal server error" });
     }
-    const icnsVerificationInfo = await request<IcnsVerificationInfoResponse>(
+    const icnsVerificationInfo = await request<IcnsVerificationResponse>(
       process.env.ICNS_VERIFIER_URI,
       {
         method: "post",
