@@ -14,10 +14,12 @@ export default withIronSessionApiRoute(async function handler(
   res: NextApiResponse,
 ) {
   if (
-    !process.env.TWITTER_AUTH_STATE ||
-    !process.env.TWITTER_AUTH_CODE_CHALLENGE
+    !process.env.TWITTER_CLIENT_ID ||
+    !process.env.TWITTER_AUTH_CALLBACK_URI ||
+    !process.env.TWITTER_AUTH_STATE
   ) {
-    return res.status(500).send("No state or code_challenge");
+    console.error(new Error(".env is not set"));
+    return res.status(500).json({ error: "Internal server error" });
   }
 
   try {
@@ -42,7 +44,7 @@ export default withIronSessionApiRoute(async function handler(
     res.status(200).json({ authUrl });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Internal server error");
+    res.status(500).json({ error: "Internal server error" });
   }
 },
 ironOptions);
@@ -50,5 +52,6 @@ ironOptions);
 declare module "iron-session" {
   interface IronSessionData {
     code_verifier?: string;
+    refresh_token?: string;
   }
 }

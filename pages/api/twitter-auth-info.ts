@@ -13,29 +13,39 @@ export default withIronSessionApiRoute(async function handler(
     !process.env.TWITTER_CLIENT_SECRET ||
     !process.env.TWITTER_AUTH_CALLBACK_URI
   ) {
-    return res
-      .status(500)
-      .send(
+    console.error(new Error(".env is not set"));
+    return res.status(500).send({
+      error:
         "Twitter app client id or client secret or callback URI is not set",
-      );
+    });
   }
 
   if (!req.session.code_verifier) {
-    return res.status(401).send("No OAuth2.0 code verifier");
+    return res.status(401).send({
+      error: "No OAuth2.0 code verifier",
+    });
   }
 
   try {
-    const { code, state } = req.query;
-    if (state !== process.env.TWITTER_AUTH_STATE) {
-      return res.status(401).send("State isn't matching");
+    const params = new URLSearchParams();
+
+    if (req.session.refresh_token) {
+      params.append("grant_type", "refresh_token");
+      params.append("refresh_token", req.session.refresh_token);
+      params.append("client_id", process.env.TWITTER_CLIENT_ID);
+    } else {
+      const { code, state } = req.query;
+      if (state !== process.env.TWITTER_AUTH_STATE) {
+        return res.status(401).send({ error: "State isn't matching" });
+      }
+
+      params.append("grant_type", "authorization_code");
+      params.append("code", code as string);
+      params.append("redirect_uri", process.env.TWITTER_AUTH_CALLBACK_URI);
+      params.append("code_verifier", req.session.code_verifier);
     }
 
-    const params = new URLSearchParams();
-    params.append("grant_type", "authorization_code");
-    params.append("code", code as string);
-    params.append("redirect_uri", process.env.TWITTER_AUTH_CALLBACK_URI);
-    params.append("code_verifier", req.session.code_verifier);
-    const { access_token: accessToken } =
+    const { access_token: accessToken, refresh_token } =
       await request<TwitterOAuth2TokenResponse>(
         `${twitterApiBaseUrl}/oauth2/token`,
         {
@@ -49,6 +59,9 @@ export default withIronSessionApiRoute(async function handler(
           body: params,
         },
       );
+
+    req.session.refresh_token = refresh_token;
+    await req.session.save();
     const {
       data: { id, username },
     } = await request<TwitterUsersMeResponse>(`${twitterApiBaseUrl}/users/me`, {
@@ -62,8 +75,8 @@ export default withIronSessionApiRoute(async function handler(
       username,
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).send("Internal server error ");
+    console.error(error);
+    res.status(500).json({ error: "Internal server error " });
   }
 },
 ironOptions);
