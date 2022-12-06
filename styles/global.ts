@@ -7,11 +7,9 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
 
     font-family: 'Inter', sans-serif;
+    font-size: 16px;
     
     background-color: ${color.black};
-
-    font-size: 0.85vw;
-    //font-size: 22px;
 
     background-size: 5rem 5rem;
     background-position: top left;

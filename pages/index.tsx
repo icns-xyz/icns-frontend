@@ -1,24 +1,24 @@
+// NextJs
 import Image from "next/image";
+import Link from "next/link";
 
 // Styles
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import color from "../styles/color";
 
 // Components
 import { PrimaryButton } from "../components/primary-button";
 
 // Image Assets
-import Logo from "../public/images/svg/logo.svg";
 import MainTitle from "../public/images/svg/main-title.svg";
 import MainLogo from "../public/images/svg/main-logo.svg";
 import CheckIcon from "../public/images/svg/check-icon.svg";
+import { Logo } from "../components/logo";
 
 export default function Home() {
   return (
     <Container>
-      <LogoContainer>
-        <Image src={Logo} fill={true} objectFit="contain" alt="Home Logo" />
-      </LogoContainer>
+      <Logo />
 
       <MainContainer>
         <MainTitleContainer>
@@ -29,7 +29,9 @@ export default function Home() {
           </MainTitleImageBackground>
 
           <ConnectButtonContainer>
-            <PrimaryButton>Connect Wallet</PrimaryButton>
+            <Link href="/verification">
+              <PrimaryButton>Connect Wallet</PrimaryButton>
+            </Link>
           </ConnectButtonContainer>
           <SubContainer>
             <CheckContainer>
@@ -63,20 +65,6 @@ const Container = styled.div`
 
   width: 100vw;
   height: 100vh;
-`;
-
-const LogoContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  position: absolute;
-
-  width: 10rem;
-  height: 5rem;
-
-  margin-top: 5rem;
-  margin-left: 5rem;
 `;
 
 const MainContainer = styled.div`
@@ -113,7 +101,7 @@ const MainTitleImageContainer = styled.div`
 
   position: relative;
 
-  width: 55rem;
+  width: 60rem;
   height: 19.9rem;
 `;
 
