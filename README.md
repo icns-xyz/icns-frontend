@@ -18,6 +18,6 @@ ICNS_VERIFIER_URI=...
 Run the development server:
 
 ```bash
-yarn
+yarn install
 yarn dev
 ```
