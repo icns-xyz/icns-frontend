@@ -48,6 +48,7 @@ import {
 } from "./styled";
 
 import { PrimaryButton } from "../../components/primary-button";
+import { AccountInfos } from "../../config";
 
 export default function VerificationPage() {
   const [twitterAuthInfo, setTwitterAuthInfo] =
@@ -237,125 +238,25 @@ export default function VerificationPage() {
             </ChainListTitleContainer>
 
             <ChainContainer color={color.grey["700"]}>
-              <ChainItemContainer>
-                <ChainImageContainer width="3rem" height="3rem">
-                  <Image
-                    src="https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/chain.png"
-                    alt="chain image"
-                    fill={true}
-                  />
-                </ChainImageContainer>
-                <ChainInfoContainer>
-                  <ChainName>.osmo</ChainName>
-                  <WalletAddress>
-                    cosmos14ky6udatsvdx859050mrnr7rvml0huue2wszvs
-                  </WalletAddress>
-                </ChainInfoContainer>
+              {AccountInfos.map((accountInfo) => (
+                <ChainItemContainer key={accountInfo.prefix}>
+                  <ChainImageContainer width="3rem" height="3rem">
+                    <Image
+                      src={accountInfo.chainImageUrl}
+                      alt={`${accountInfo.prefix} image`}
+                      fill={true}
+                    />
+                  </ChainImageContainer>
+                  <ChainInfoContainer>
+                    <ChainName>{`.${accountInfo.prefix}`}</ChainName>
+                    <WalletAddress>{accountInfo.address}</WalletAddress>
+                  </ChainInfoContainer>
 
-                <Flex1 />
+                  <Flex1 />
 
-                <ChainCheckBox />
-              </ChainItemContainer>
-
-              <ChainItemContainer>
-                <ChainImageContainer width="3rem" height="3rem">
-                  <Image
-                    src="https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/chain.png"
-                    alt="chain image"
-                    fill={true}
-                  />
-                </ChainImageContainer>
-                <ChainInfoContainer>
-                  <ChainName>.osmo</ChainName>
-                  <WalletAddress>
-                    cosmos14ky6udatsvdx859050mrnr7rvml0huue2wszvs
-                  </WalletAddress>
-                </ChainInfoContainer>
-
-                <Flex1 />
-
-                <ChainCheckBox />
-              </ChainItemContainer>
-
-              <ChainItemContainer>
-                <ChainImageContainer width="3rem" height="3rem">
-                  <Image
-                    src="https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/chain.png"
-                    alt="chain image"
-                    fill={true}
-                  />
-                </ChainImageContainer>
-                <ChainInfoContainer>
-                  <ChainName>.osmo</ChainName>
-                  <WalletAddress>
-                    cosmos14ky6udatsvdx859050mrnr7rvml0huue2wszvs
-                  </WalletAddress>
-                </ChainInfoContainer>
-
-                <Flex1 />
-
-                <ChainCheckBox />
-              </ChainItemContainer>
-
-              <ChainItemContainer>
-                <ChainImageContainer width="3rem" height="3rem">
-                  <Image
-                    src="https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/chain.png"
-                    alt="chain image"
-                    fill={true}
-                  />
-                </ChainImageContainer>
-                <ChainInfoContainer>
-                  <ChainName>.osmo</ChainName>
-                  <WalletAddress>
-                    cosmos14ky6udatsvdx859050mrnr7rvml0huue2wszvs
-                  </WalletAddress>
-                </ChainInfoContainer>
-
-                <Flex1 />
-
-                <ChainCheckBox />
-              </ChainItemContainer>
-
-              <ChainItemContainer>
-                <ChainImageContainer width="3rem" height="3rem">
-                  <Image
-                    src="https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/chain.png"
-                    alt="chain image"
-                    fill={true}
-                  />
-                </ChainImageContainer>
-                <ChainInfoContainer>
-                  <ChainName>.osmo</ChainName>
-                  <WalletAddress>
-                    cosmos14ky6udatsvdx859050mrnr7rvml0huue2wszvs
-                  </WalletAddress>
-                </ChainInfoContainer>
-
-                <Flex1 />
-
-                <ChainCheckBox />
-              </ChainItemContainer>
-
-              <ChainItemContainer>
-                <ChainImageContainer width="3rem" height="3rem">
-                  <Image
-                    src="https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/osmosis/chain.png"
-                    alt="chain image"
-                    fill={true}
-                  />
-                </ChainImageContainer>
-                <ChainInfoContainer>
-                  <ChainName>.osmo</ChainName>
-                  <WalletAddress>
-                    cosmos14ky6udatsvdx859050mrnr7rvml0huue2wszvs
-                  </WalletAddress>
-                </ChainInfoContainer>
-
-                <Flex1 />
-
-                <ChainCheckBox />
-              </ChainItemContainer>
+                  <ChainCheckBox />
+                </ChainItemContainer>
+              ))}
             </ChainContainer>
 
             <ButtonContainer>
