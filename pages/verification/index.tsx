@@ -8,44 +8,22 @@ import Image from "next/image";
 import {
   IcnsVerificationResponse,
   TwitterAuthInfoResponse,
-} from "../../types/api-response";
-import { VerifierMsg } from "../../types/msg";
+  VerifierMsg,
+  WidthHeightProps,
+} from "../../types";
 import { request } from "../../utils/url";
 
 // Styles
+import styled from "styled-components";
 import color from "../../styles/color";
 
 // Components
 import { Logo } from "../../components/logo";
-import { SkeletonCircle, SkeletonText } from "../../components/skeleton";
 import {
-  Container,
-  MainContainer,
-  ContentContainer,
-  ProfileContainer,
-  ProfileFollowContainer,
-  ProfileContentContainer,
-  ProfileImageContainer,
-  ProfileNameContainer,
-  ProfileFollowerContainer,
-  ProfileFollowBold,
-  ProfileUserNameContainer,
-  ProfileDescriptionContainer,
-  ChainListTitle,
-  SearchContainer,
-  ChainContainer,
-  ChainItemContainer,
-  ChainImageContainer,
-  ChainInfoContainer,
-  ChainListTitleContainer,
-  ChainName,
-  WalletAddress,
-  Flex1,
-  ChainCheckBox,
-  ButtonContainer,
-  SkeletonDivider,
-  SkeletonButton,
-} from "./styled";
+  SkeletonAnimation,
+  SkeletonCircle,
+  SkeletonText,
+} from "../../components/skeleton";
 
 import { PrimaryButton } from "../../components/primary-button";
 import { AccountInfos } from "../../config";
@@ -268,3 +246,218 @@ export default function VerificationPage() {
     </Container>
   );
 }
+
+const Container = styled.div`
+  width: 100vw;
+  height: 100vh;
+`;
+
+const MainContainer = styled.div`
+  display: flex;
+  justify-content: center;
+
+  color: white;
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 40rem;
+
+  margin-top: 5rem;
+`;
+
+const ProfileContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  width: 100%;
+
+  padding: 1.5rem 2rem;
+
+  background-color: ${(props) => props.color};
+`;
+
+const ProfileContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+
+  margin-left: 1.5rem;
+`;
+
+const ProfileFollowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  gap: 1.5rem;
+`;
+
+const ChainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 33rem;
+  overflow: scroll;
+
+  background-color: ${(props) => props.color};
+`;
+
+const ChainItemContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: 1rem;
+
+  padding: 1.5rem;
+
+  &:hover {
+    background: ${color.grey["900"]};
+  }
+`;
+
+const ChainImageContainer = styled.div<WidthHeightProps>`
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+
+  position: relative;
+`;
+
+const ChainInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const ButtonContainer = styled.div`
+  width: 10rem;
+  height: 4rem;
+
+  margin-top: 2rem;
+`;
+
+const SkeletonButton = styled.div`
+  width: 12rem;
+  height: 4rem;
+
+  background-color: ${color.grey["700"]};
+`;
+
+const SkeletonDivider = styled(SkeletonAnimation)`
+  width: 100%;
+  height: 1px;
+  background-color: ${color.grey["600"]};
+`;
+
+const ProfileImageContainer = styled.div`
+  width: 5rem;
+  height: 5rem;
+
+  margin-top: -3rem;
+
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  position: relative;
+`;
+
+const ProfileNameContainer = styled.div`
+  font-weight: 600;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+
+  color: ${color.white};
+`;
+
+const ProfileUserNameContainer = styled.div`
+  font-weight: 500;
+  font-size: 0.8rem;
+  line-height: 1rem;
+
+  color: ${color.grey["100"]};
+`;
+
+const ProfileFollowerContainer = styled.div`
+  font-weight: 500;
+  font-size: 0.8rem;
+  line-height: 1rem;
+
+  color: ${color.grey["400"]};
+`;
+
+const ProfileFollowBold = styled.span`
+  font-weight: 600;
+  font-size: 0.8rem;
+  line-height: 1rem;
+
+  color: ${color.white};
+`;
+
+const ProfileDescriptionContainer = styled.div`
+  font-weight: 500;
+  font-size: 0.8rem;
+  line-height: 1rem;
+
+  color: ${color.grey["300"]};
+`;
+
+const ChainListTitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+`;
+
+const ChainListTitle = styled.div`
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
+
+  color: ${color.white};
+`;
+
+const SearchContainer = styled.div`
+  display: flex;
+  align-items: center;
+
+  border-radius: 3rem;
+
+  min-width: 10rem;
+  height: 2rem;
+
+  background-color: ${color.grey["700"]};
+`;
+
+const ChainName = styled.div`
+  font-weight: 600;
+  font-size: 0.8rem;
+  line-height: 1rem;
+
+  color: ${color.grey["100"]};
+`;
+
+const WalletAddress = styled.div`
+  font-weight: 500;
+  font-size: 0.8rem;
+  line-height: 1rem;
+
+  color: ${color.grey["400"]};
+`;
+
+const Flex1 = styled.div`
+  flex: 1;
+`;
+
+const ChainCheckBox = styled.input.attrs({ type: "checkbox" })`
+  width: 1.5rem;
+  height: 1.5rem;
+`;
