@@ -2,6 +2,21 @@
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
+  compiler: {
+    styledComponents: true,
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "pbs.twimg.com",
+      },
+      {
+        protocol: "https",
+        hostname: "raw.githubusercontent.com",
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;
