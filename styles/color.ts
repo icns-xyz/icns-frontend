@@ -14,11 +14,13 @@ const grey = {
   900: "#181818",
 };
 
+const white = "#FFFFFF";
 const black = "#121212";
 
 const color = {
   primary,
   grey,
+  white,
   black,
   orange,
 };
