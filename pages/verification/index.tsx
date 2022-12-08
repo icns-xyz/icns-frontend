@@ -35,10 +35,6 @@ export default function VerificationPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => setIsLoading(false), 1500);
-  }, []);
-
-  useEffect(() => {
     const handleVerification = async () => {
       if (window.location.search) {
         const [, state, code] =
@@ -50,9 +46,8 @@ export default function VerificationPage() {
           `/api/twitter-auth-info?state=${state}&code=${code}`,
         );
 
-        console.log(newTwitterAuthInfo);
-
         setTwitterAuthInfo(newTwitterAuthInfo);
+
         const verifierMsg: VerifierMsg = {
           unique_twitter_id: newTwitterAuthInfo.id,
           name: newTwitterAuthInfo.username,
@@ -60,20 +55,19 @@ export default function VerificationPage() {
           contract_address: "osmo1y5mm5nj5m8ttddt5ccspek6xgyyavehrkak7gq",
           chain_id: "osmosis-1",
         };
-        const icnsVerification = await request<IcnsVerificationResponse>(
-          "/api/icns-verification",
-          {
-            method: "post",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              msg: JSON.stringify(verifierMsg),
-              authToken: newTwitterAuthInfo.accessToken,
-            }),
+
+        await request<IcnsVerificationResponse>("/api/icns-verification", {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
-        console.log(icnsVerification);
+          body: JSON.stringify({
+            msg: JSON.stringify(verifierMsg),
+            authToken: newTwitterAuthInfo.accessToken,
+          }),
+        });
+
+        setIsLoading(false);
       }
     };
 
@@ -182,30 +176,38 @@ export default function VerificationPage() {
             <ProfileContainer color={color.grey["700"]}>
               <ProfileImageContainer>
                 <Image
-                  src="https://pbs.twimg.com/profile_images/1503375455532974084/KWG1XmEc_400x400.jpg"
+                  src={twitterAuthInfo?.profile_image_url ?? ""}
                   alt="profile image"
                   fill={true}
                 />
               </ProfileImageContainer>
 
               <ProfileContentContainer>
-                <ProfileNameContainer>BaeHeesung</ProfileNameContainer>
+                <ProfileNameContainer>
+                  {twitterAuthInfo?.name}
+                </ProfileNameContainer>
                 <ProfileUserNameContainer>
-                  @BaeHeesung25
+                  {twitterAuthInfo?.username}
                 </ProfileUserNameContainer>
 
                 <ProfileFollowContainer>
                   <ProfileFollowerContainer>
-                    <ProfileFollowBold>42</ProfileFollowBold> Following
+                    <ProfileFollowBold>
+                      {twitterAuthInfo?.public_metrics?.following_count}
+                    </ProfileFollowBold>{" "}
+                    Following
                   </ProfileFollowerContainer>
 
                   <ProfileFollowerContainer>
-                    <ProfileFollowBold>42</ProfileFollowBold> Following
+                    <ProfileFollowBold>
+                      {twitterAuthInfo?.public_metrics?.followers_count}
+                    </ProfileFollowBold>{" "}
+                    Followers
                   </ProfileFollowerContainer>
                 </ProfileFollowContainer>
 
                 <ProfileDescriptionContainer>
-                  Product UIUX designer @Keplrwallet and I like @regen_network🌿
+                  {twitterAuthInfo?.description}
                 </ProfileDescriptionContainer>
               </ProfileContentContainer>
             </ProfileContainer>

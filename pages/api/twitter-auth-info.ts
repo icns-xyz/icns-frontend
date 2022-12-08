@@ -63,16 +63,31 @@ export default withIronSessionApiRoute(async function handler(
     req.session.refresh_token = refresh_token;
     await req.session.save();
     const {
-      data: { id, username },
-    } = await request<TwitterUsersMeResponse>(`${twitterApiBaseUrl}/users/me`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+      data: {
+        id,
+        username,
+        name,
+        profile_image_url,
+        description,
+        public_metrics,
       },
-    });
+    } = await request<TwitterUsersMeResponse>(
+      `${twitterApiBaseUrl}/users/me?user.fields=profile_image_url,public_metrics,description`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+
     res.status(200).json({
       accessToken,
       id,
       username,
+      name,
+      profile_image_url: profile_image_url.replace("normal.jpg", "400x400.jpg"),
+      description,
+      public_metrics,
     });
   } catch (error) {
     console.error(error);
@@ -94,5 +109,15 @@ interface TwitterUsersMeResponse {
     id: string;
     username: string;
     name: string;
+    profile_image_url: string;
+    description: string;
+    public_metrics: TwitterPublicMetrics;
   };
+}
+
+export interface TwitterPublicMetrics {
+  followers_count: number;
+  following_count: number;
+  listed_count: number;
+  tweet_count: number;
 }
