@@ -40,9 +40,9 @@ export default function Home() {
           </MainTitleImageBackground>
 
           <ConnectButtonContainer>
-            <Link href="/verification">
-              <PrimaryButton>Connect Wallet</PrimaryButton>
-            </Link>
+            <PrimaryButton onClick={handleSignInWithTwitter}>
+              Connect Wallet
+            </PrimaryButton>
           </ConnectButtonContainer>
           <SubContainer>
             <CheckContainer>

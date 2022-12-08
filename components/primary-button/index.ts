@@ -17,4 +17,6 @@ export const PrimaryButton = styled.button`
   line-height: 20px;
 
   color: ${color.orange};
+
+  cursor: pointer;
 `;
