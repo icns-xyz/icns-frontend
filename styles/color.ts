@@ -1,7 +1,12 @@
-const primary = "#FB5232";
+const orange = {
+  50: "#FFCDC3",
+  100: "#FB5232",
+  200: "#A13E2A",
+  300: "#62332A",
+  400: "#442924",
+};
 
-const orange = "#FFCDC3";
-
+const white = "#FCFCFC";
 const grey = {
   100: "#A3A3A3",
   200: "#868686",
@@ -13,12 +18,9 @@ const grey = {
   800: "#242424",
   900: "#181818",
 };
-
-const white = "#FFFFFF";
 const black = "#121212";
 
 const color = {
-  primary,
   grey,
   white,
   black,

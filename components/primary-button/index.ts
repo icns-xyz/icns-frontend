@@ -7,7 +7,7 @@ export const PrimaryButton = styled.button`
 
   border: none;
 
-  background-color: ${color.primary};
+  background-color: ${color.orange["100"]};
   padding: 11px 30px;
 
   font-family: "Inter", serif;
@@ -16,7 +16,16 @@ export const PrimaryButton = styled.button`
   font-size: 1.5rem;
   line-height: 20px;
 
-  color: ${color.orange};
+  color: ${color.orange["50"]};
 
   cursor: pointer;
+
+  &:hover {
+    transition-duration: 0.5s;
+    background-color: ${color.orange["200"]};
+  }
+
+  &:disabled {
+    background-color: ${color.orange["200"]};
+  }
 `;

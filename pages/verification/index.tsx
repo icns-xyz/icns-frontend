@@ -19,14 +19,15 @@ import color from "../../styles/color";
 
 // Components
 import { Logo } from "../../components/logo";
-import {
-  SkeletonAnimation,
-  SkeletonCircle,
-  SkeletonText,
-} from "../../components/skeleton";
+import { SkeletonChainList } from "../../components/skeleton";
 
 import { PrimaryButton } from "../../components/primary-button";
 import { AccountInfos } from "../../config";
+import {
+  ProfileContainer,
+  TwitterProfile,
+} from "../../components/twitter-profile";
+import { ChainList } from "../../components/chain-list";
 
 export default function VerificationPage() {
   const [twitterAuthInfo, setTwitterAuthInfo] =
@@ -48,24 +49,24 @@ export default function VerificationPage() {
 
         setTwitterAuthInfo(newTwitterAuthInfo);
 
-        const verifierMsg: VerifierMsg = {
-          unique_twitter_id: newTwitterAuthInfo.id,
-          name: newTwitterAuthInfo.username,
-          claimer: "osmo1y5mm5nj5m8ttddt5ccspek6xgyyavehrkak7gq",
-          contract_address: "osmo1y5mm5nj5m8ttddt5ccspek6xgyyavehrkak7gq",
-          chain_id: "osmosis-1",
-        };
-
-        await request<IcnsVerificationResponse>("/api/icns-verification", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            msg: JSON.stringify(verifierMsg),
-            authToken: newTwitterAuthInfo.accessToken,
-          }),
-        });
+        // const verifierMsg: VerifierMsg = {
+        //   unique_twitter_id: newTwitterAuthInfo.id,
+        //   name: newTwitterAuthInfo.username,
+        //   claimer: "osmo1y5mm5nj5m8ttddt5ccspek6xgyyavehrkak7gq",
+        //   contract_address: "osmo1y5mm5nj5m8ttddt5ccspek6xgyyavehrkak7gq",
+        //   chain_id: "osmosis-1",
+        // };
+        //
+        // await request<IcnsVerificationResponse>("/api/icns-verification", {
+        //   method: "post",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({
+        //     msg: JSON.stringify(verifierMsg),
+        //     authToken: newTwitterAuthInfo.accessToken,
+        //   }),
+        // });
 
         setIsLoading(false);
       }
@@ -80,164 +81,17 @@ export default function VerificationPage() {
 
       <MainContainer>
         {isLoading ? (
-          <ContentContainer>
-            <ProfileContainer color={color.grey["700"]}>
-              <SkeletonCircle width="5.5rem" height="5.5rem" />
-
-              <ProfileContentContainer>
-                <ProfileNameContainer>
-                  <SkeletonText width="5rem" height="1.5rem" />
-                </ProfileNameContainer>
-                <ProfileUserNameContainer>
-                  <SkeletonText width="5rem" height="1rem" />
-                </ProfileUserNameContainer>
-
-                <ProfileFollowContainer>
-                  <SkeletonText width="8rem" height="1rem" />
-                  <SkeletonText width="8rem" height="1rem" />
-                </ProfileFollowContainer>
-
-                <SkeletonText width="20rem" height="1rem" />
-              </ProfileContentContainer>
-            </ProfileContainer>
-
-            <ChainListTitleContainer>
-              <SkeletonText width="8rem" height="1.5rem" />
-            </ChainListTitleContainer>
-
-            <ChainContainer color={color.grey["700"]}>
-              <ChainItemContainer>
-                <ChainImageContainer width="3rem" height="3rem">
-                  <SkeletonCircle width="3rem" height="3rem" />
-                </ChainImageContainer>
-                <ChainInfoContainer>
-                  <SkeletonText width="4rem" height="1rem" />
-                  <SkeletonText width="12rem" height="1rem" />
-                </ChainInfoContainer>
-              </ChainItemContainer>
-
-              <SkeletonDivider />
-
-              <ChainItemContainer>
-                <ChainImageContainer width="3rem" height="3rem">
-                  <SkeletonCircle width="3rem" height="3rem" />
-                </ChainImageContainer>
-                <ChainInfoContainer>
-                  <SkeletonText width="4rem" height="1rem" />
-                  <SkeletonText width="12rem" height="1rem" />
-                </ChainInfoContainer>
-              </ChainItemContainer>
-
-              <SkeletonDivider />
-
-              <ChainItemContainer>
-                <ChainImageContainer width="3rem" height="3rem">
-                  <SkeletonCircle width="3rem" height="3rem" />
-                </ChainImageContainer>
-                <ChainInfoContainer>
-                  <SkeletonText width="4rem" height="1rem" />
-                  <SkeletonText width="12rem" height="1rem" />
-                </ChainInfoContainer>
-              </ChainItemContainer>
-
-              <SkeletonDivider />
-
-              <ChainItemContainer>
-                <ChainImageContainer width="3rem" height="3rem">
-                  <SkeletonCircle width="3rem" height="3rem" />
-                </ChainImageContainer>
-                <ChainInfoContainer>
-                  <SkeletonText width="4rem" height="1rem" />
-                  <SkeletonText width="12rem" height="1rem" />
-                </ChainInfoContainer>
-              </ChainItemContainer>
-
-              <SkeletonDivider />
-
-              <ChainItemContainer>
-                <ChainImageContainer width="3rem" height="3rem">
-                  <SkeletonCircle width="3rem" height="3rem" />
-                </ChainImageContainer>
-                <ChainInfoContainer>
-                  <SkeletonText width="4rem" height="1rem" />
-                  <SkeletonText width="12rem" height="1rem" />
-                </ChainInfoContainer>
-              </ChainItemContainer>
-
-              <SkeletonDivider />
-            </ChainContainer>
-
-            <ButtonContainer>
-              <SkeletonButton />
-            </ButtonContainer>
-          </ContentContainer>
+          <SkeletonChainList />
         ) : (
           <ContentContainer>
-            <ProfileContainer color={color.grey["700"]}>
-              <ProfileImageContainer>
-                <Image
-                  src={twitterAuthInfo?.profile_image_url ?? ""}
-                  alt="profile image"
-                  fill={true}
-                />
-              </ProfileImageContainer>
-
-              <ProfileContentContainer>
-                <ProfileNameContainer>
-                  {twitterAuthInfo?.name}
-                </ProfileNameContainer>
-                <ProfileUserNameContainer>
-                  {twitterAuthInfo?.username}
-                </ProfileUserNameContainer>
-
-                <ProfileFollowContainer>
-                  <ProfileFollowerContainer>
-                    <ProfileFollowBold>
-                      {twitterAuthInfo?.public_metrics?.following_count}
-                    </ProfileFollowBold>{" "}
-                    Following
-                  </ProfileFollowerContainer>
-
-                  <ProfileFollowerContainer>
-                    <ProfileFollowBold>
-                      {twitterAuthInfo?.public_metrics?.followers_count}
-                    </ProfileFollowBold>{" "}
-                    Followers
-                  </ProfileFollowerContainer>
-                </ProfileFollowContainer>
-
-                <ProfileDescriptionContainer>
-                  {twitterAuthInfo?.description}
-                </ProfileDescriptionContainer>
-              </ProfileContentContainer>
-            </ProfileContainer>
+            <TwitterProfile twitterProfileInformation={twitterAuthInfo} />
 
             <ChainListTitleContainer>
               <ChainListTitle>Chain List</ChainListTitle>
               <SearchContainer>Search</SearchContainer>
             </ChainListTitleContainer>
 
-            <ChainContainer color={color.grey["700"]}>
-              {AccountInfos.map((accountInfo) => (
-                <ChainItemContainer key={accountInfo.prefix}>
-                  <ChainImageContainer width="3rem" height="3rem">
-                    <Image
-                      src={accountInfo.chainImageUrl}
-                      alt={`${accountInfo.prefix} image`}
-                      fill={true}
-                    />
-                  </ChainImageContainer>
-                  <ChainInfoContainer>
-                    <ChainName>{`.${accountInfo.prefix}`}</ChainName>
-                    <WalletAddress>{accountInfo.address}</WalletAddress>
-                  </ChainInfoContainer>
-
-                  <Flex1 />
-
-                  <ChainCheckBox />
-                </ChainItemContainer>
-              ))}
-            </ChainContainer>
+            <ChainList chainList={AccountInfos} />
 
             <ButtonContainer>
               <PrimaryButton>Register</PrimaryButton>
@@ -261,7 +115,7 @@ const MainContainer = styled.div`
   color: white;
 `;
 
-const ContentContainer = styled.div`
+export const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -271,143 +125,14 @@ const ContentContainer = styled.div`
   margin-top: 5rem;
 `;
 
-const ProfileContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  width: 100%;
-
-  padding: 1.5rem 2rem;
-
-  background-color: ${(props) => props.color};
-`;
-
-const ProfileContentContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-
-  margin-left: 1.5rem;
-`;
-
-const ProfileFollowContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  gap: 1.5rem;
-`;
-
-const ChainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-height: 33rem;
-  overflow: scroll;
-
-  background-color: ${(props) => props.color};
-`;
-
-const ChainItemContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  gap: 1rem;
-
-  padding: 1.5rem;
-
-  &:hover {
-    background: ${color.grey["900"]};
-  }
-`;
-
-const ChainImageContainer = styled.div<WidthHeightProps>`
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
-
-  position: relative;
-`;
-
-const ChainInfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
-
-const ButtonContainer = styled.div`
-  width: 10rem;
+export const ButtonContainer = styled.div`
+  width: 12rem;
   height: 4rem;
 
   margin-top: 2rem;
 `;
 
-const SkeletonButton = styled.div`
-  width: 12rem;
-  height: 4rem;
-
-  background-color: ${color.grey["700"]};
-`;
-
-const SkeletonDivider = styled(SkeletonAnimation)`
-  width: 100%;
-  height: 1px;
-  background-color: ${color.grey["600"]};
-`;
-
-const ProfileImageContainer = styled.div`
-  width: 5rem;
-  height: 5rem;
-
-  margin-top: -3rem;
-
-  border-radius: 50%;
-
-  overflow: hidden;
-
-  position: relative;
-`;
-
-const ProfileNameContainer = styled.div`
-  font-weight: 600;
-  font-size: 1.2rem;
-  line-height: 1.5rem;
-
-  color: ${color.white};
-`;
-
-const ProfileUserNameContainer = styled.div`
-  font-weight: 500;
-  font-size: 0.8rem;
-  line-height: 1rem;
-
-  color: ${color.grey["100"]};
-`;
-
-const ProfileFollowerContainer = styled.div`
-  font-weight: 500;
-  font-size: 0.8rem;
-  line-height: 1rem;
-
-  color: ${color.grey["400"]};
-`;
-
-const ProfileFollowBold = styled.span`
-  font-weight: 600;
-  font-size: 0.8rem;
-  line-height: 1rem;
-
-  color: ${color.white};
-`;
-
-const ProfileDescriptionContainer = styled.div`
-  font-weight: 500;
-  font-size: 0.8rem;
-  line-height: 1rem;
-
-  color: ${color.grey["300"]};
-`;
-
-const ChainListTitleContainer = styled.div`
+export const ChainListTitleContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -437,29 +162,4 @@ const SearchContainer = styled.div`
   height: 2rem;
 
   background-color: ${color.grey["700"]};
-`;
-
-const ChainName = styled.div`
-  font-weight: 600;
-  font-size: 0.8rem;
-  line-height: 1rem;
-
-  color: ${color.grey["100"]};
-`;
-
-const WalletAddress = styled.div`
-  font-weight: 500;
-  font-size: 0.8rem;
-  line-height: 1rem;
-
-  color: ${color.grey["400"]};
-`;
-
-const Flex1 = styled.div`
-  flex: 1;
-`;
-
-const ChainCheckBox = styled.input.attrs({ type: "checkbox" })`
-  width: 1.5rem;
-  height: 1.5rem;
 `;
