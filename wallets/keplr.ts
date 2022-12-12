@@ -41,7 +41,7 @@ export class KeplrWallet implements Wallet {
   constructor(public readonly keplr: Keplr) {}
 
   broadcastTxSync(chainId: string, tx: Uint8Array): Promise<Uint8Array> {
-    return this.keplr.sendTx(chainId, tx, BroadcastMode.Sync);
+    return this.keplr.sendTx(chainId, tx, "sync" as BroadcastMode);
   }
 
   getChainInfosWithoutEndpoints(): Promise<
