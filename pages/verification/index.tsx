@@ -8,8 +8,6 @@ import Image from "next/image";
 import {
   IcnsVerificationResponse,
   TwitterAuthInfoResponse,
-  VerifierMsg,
-  WidthHeightProps,
 } from "../../types";
 import { request } from "../../utils/url";
 
@@ -24,7 +22,6 @@ import { SkeletonChainList } from "../../components/skeleton";
 import { PrimaryButton } from "../../components/primary-button";
 import { AccountInfos } from "../../config";
 import {
-  ProfileContainer,
   TwitterProfile,
 } from "../../components/twitter-profile";
 import { ChainList } from "../../components/chain-list";
@@ -49,24 +46,20 @@ export default function VerificationPage() {
 
         setTwitterAuthInfo(newTwitterAuthInfo);
 
-        // const verifierMsg: VerifierMsg = {
-        //   unique_twitter_id: newTwitterAuthInfo.id,
-        //   name: newTwitterAuthInfo.username,
-        //   claimer: "osmo1y5mm5nj5m8ttddt5ccspek6xgyyavehrkak7gq",
-        //   contract_address: "osmo1y5mm5nj5m8ttddt5ccspek6xgyyavehrkak7gq",
-        //   chain_id: "osmosis-1",
-        // };
-        //
-        // await request<IcnsVerificationResponse>("/api/icns-verification", {
-        //   method: "post",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({
-        //     msg: JSON.stringify(verifierMsg),
-        //     authToken: newTwitterAuthInfo.accessToken,
-        //   }),
-        // });
+        const icnsVerificationList = (
+          await request<IcnsVerificationResponse>("/api/icns-verification", {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              claimer: "osmo1y5mm5nj5m8ttddt5ccspek6xgyyavehrkak7gq",
+              authToken: newTwitterAuthInfo.accessToken,
+            }),
+          })
+        ).verificationList;
+
+        console.log(icnsVerificationList);
 
         setIsLoading(false);
       }

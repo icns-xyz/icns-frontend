@@ -1,4 +1,4 @@
-export interface VerifierMsg {
+export interface VerifyingMsg {
   unique_twitter_id: string;
   name: string;
   claimer: string;

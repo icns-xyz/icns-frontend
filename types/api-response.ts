@@ -15,6 +15,21 @@ export interface TwitterAuthInfoResponse {
 }
 
 export interface IcnsVerificationResponse {
-  signature: number[];
-  algorithm: string;
+  verificationList: (
+    | {
+        status: "fulfilled";
+        value: {
+          errors: Error[];
+          data: {
+            verifying_msg: string;
+            signature: number[];
+            algorithm: string;
+          };
+        };
+      }
+    | {
+        status: "rejected";
+        reason: Error;
+      }
+  )[];
 }
