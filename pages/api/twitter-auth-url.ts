@@ -23,6 +23,8 @@ export default withIronSessionApiRoute(async function handler(
   }
 
   try {
+    req.session.destroy();
+
     const codeVerifier = base64URLEncode(crypto.randomBytes(32));
     req.session.code_verifier = codeVerifier;
     await req.session.save();
