@@ -6,6 +6,8 @@ const orange = {
   400: "#442924",
 };
 
+const blue = "#536EF8";
+
 const white = "#FCFCFC";
 const grey = {
   100: "#A3A3A3",
@@ -25,6 +27,7 @@ const color = {
   white,
   black,
   orange,
+  blue,
 };
 
 export default color;
