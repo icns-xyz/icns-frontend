@@ -1,14 +1,8 @@
 // React
 import { useEffect, useState } from "react";
 
-// NextJs
-import Image from "next/image";
-
 // Types
-import {
-  IcnsVerificationResponse,
-  TwitterAuthInfoResponse,
-} from "../../types";
+import { IcnsVerificationResponse, TwitterAuthInfoResponse } from "../../types";
 import { request } from "../../utils/url";
 
 // Styles
@@ -21,9 +15,7 @@ import { SkeletonChainList } from "../../components/skeleton";
 
 import { PrimaryButton } from "../../components/primary-button";
 import { AccountInfos } from "../../config";
-import {
-  TwitterProfile,
-} from "../../components/twitter-profile";
+import { TwitterProfile } from "../../components/twitter-profile";
 import { ChainList } from "../../components/chain-list";
 
 export default function VerificationPage() {
