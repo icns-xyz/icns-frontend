@@ -1,7 +1,9 @@
-import ReactModal from "react-modal";
 import { FunctionComponent } from "react";
+import ReactModal from "react-modal";
 import styled from "styled-components";
 import color from "../../styles/color";
+import { WalletList } from "../../constants/wallet";
+import { WalletItem } from "./wallet-item";
 
 interface Props {
   isModalOpen: boolean;
@@ -36,35 +38,9 @@ export const ConnectWalletModal: FunctionComponent<Props> = (props) => {
           Plz check which account is selected after you connect it
         </ModalDescription>
 
-        {/*<ChainConnectItem>*/}
-        {/*  <ChainConnectIcon>*/}
-        {/*    <Image src={KeplrIcon} fill={true} alt="Keplr Icon" />*/}
-        {/*  </ChainConnectIcon>*/}
-        {/*  <ChainConnectContentContainer>*/}
-        {/*    <ChainConnectContentTitle>Keplr</ChainConnectContentTitle>*/}
-        {/*  </ChainConnectContentContainer>*/}
-
-        {/*  <Flex1 />*/}
-
-        {/*  <Image src={ArrowRightIcon} alt="arrow right icon" />*/}
-        {/*</ChainConnectItem>*/}
-
-        {/*<ChainConnectItem>*/}
-        {/*  <ChainConnectIcon>*/}
-        {/*    <Image src={CosmostationIcon} fill={true} alt="Cosmostation Icon" />*/}
-        {/*  </ChainConnectIcon>*/}
-
-        {/*  <ChainConnectContentContainer>*/}
-        {/*    <ChainConnectContentTitle>Cosmostation</ChainConnectContentTitle>*/}
-
-        {/*    <ChainConnectContentDescription>*/}
-        {/*      Coming soon*/}
-        {/*    </ChainConnectContentDescription>*/}
-        {/*  </ChainConnectContentContainer>*/}
-        {/*  <Flex1 />*/}
-
-        {/*  <Image src={ArrowRightIcon} alt="arrow right icon" />*/}
-        {/*</ChainConnectItem>*/}
+        {WalletList.map((walletItem) => {
+          return <WalletItem wallet={walletItem} key={walletItem.name} />;
+        })}
       </ModalContainer>
     </ReactModal>
   );

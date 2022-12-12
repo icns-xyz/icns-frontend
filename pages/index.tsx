@@ -7,6 +7,7 @@ import color from "../styles/color";
 
 // Components
 import { PrimaryButton } from "../components/primary-button";
+import { ConnectWalletModal } from "../components/connect-wallet-modal";
 
 // Image Assets
 import MainTitle from "../public/images/svg/main-title.svg";
@@ -14,7 +15,6 @@ import MainLogo from "../public/images/svg/main-logo.svg";
 import CheckIcon from "../public/images/svg/check-icon.svg";
 import { Logo } from "../components/logo";
 import { useState } from "react";
-import { ConnectWalletModal } from "../components/connect-wallet-modal";
 
 export default function Home() {
   const [isModalOpen, setModalOpen] = useState(false);
