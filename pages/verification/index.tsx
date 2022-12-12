@@ -8,7 +8,7 @@ import Image from "next/image";
 import {
   IcnsVerificationResponse,
   TwitterAuthInfoResponse,
-  VerifierMsg,
+  VerifyingMsg,
   WidthHeightProps,
 } from "../../types";
 import { request } from "../../utils/url";
@@ -48,24 +48,20 @@ export default function VerificationPage() {
 
         setTwitterAuthInfo(newTwitterAuthInfo);
 
-        const verifierMsg: VerifierMsg = {
-          unique_twitter_id: newTwitterAuthInfo.id,
-          name: newTwitterAuthInfo.username,
-          claimer: "osmo1y5mm5nj5m8ttddt5ccspek6xgyyavehrkak7gq",
-          contract_address: "osmo1y5mm5nj5m8ttddt5ccspek6xgyyavehrkak7gq",
-          chain_id: "osmosis-1",
-        };
+        const icnsVerificationList = (
+          await request<IcnsVerificationResponse>("/api/icns-verification", {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              claimer: "osmo1y5mm5nj5m8ttddt5ccspek6xgyyavehrkak7gq",
+              authToken: newTwitterAuthInfo.accessToken,
+            }),
+          })
+        ).verificationList;
 
-        await request<IcnsVerificationResponse>("/api/icns-verification", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            msg: JSON.stringify(verifierMsg),
-            authToken: newTwitterAuthInfo.accessToken,
-          }),
-        });
+        console.log(icnsVerificationList);
 
         setIsLoading(false);
       }

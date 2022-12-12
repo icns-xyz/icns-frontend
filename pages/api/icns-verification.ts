@@ -9,21 +9,29 @@ export default withIronSessionApiRoute(async function handler(
   res: NextApiResponse,
 ) {
   try {
-    if (!process.env.ICNS_VERIFIER_URI) {
+    if (!process.env.ICNS_VERIFIER_ORIGIN_LIST) {
       console.log(".env is not set");
       return res.status(500).json({ error: "Internal server error" });
     }
-    const icnsVerificationInfo = await request<IcnsVerificationResponse>(
-      process.env.ICNS_VERIFIER_URI,
-      {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(req.body),
-      },
+    const verifierOriginList = process.env.ICNS_VERIFIER_ORIGIN_LIST.split(",");
+
+    const verificationList = await Promise.allSettled(
+      verifierOriginList.map((verfierOrigin) =>
+        request<IcnsVerificationResponse>(
+          `${verfierOrigin}/api/verify_twitter`,
+          {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(req.body),
+          },
+        ),
+      ),
     );
-    res.status(200).json(icnsVerificationInfo);
+    res.status(200).json({
+      verificationList,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
