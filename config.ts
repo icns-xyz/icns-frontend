@@ -1,6 +1,6 @@
-import { AccountInfo } from "./types";
+import { ChainItemType } from "./types";
 
-export const AccountInfos: AccountInfo[] = [
+export const AccountInfos: ChainItemType[] = [
   {
     prefix: "cosmos",
     address: "cosmos14ky6udatsvdx859050mrnr7rvml0huue2wszvs",
