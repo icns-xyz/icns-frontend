@@ -1,12 +1,8 @@
 // NextJs
 import Image from "next/image";
-import Link from "next/link";
-
-// Types
-import { TwitterAuthUrlResponse } from "../types/api-response";
 
 // Styles
-import styled, { useTheme } from "styled-components";
+import styled from "styled-components";
 import color from "../styles/color";
 
 // Components
@@ -17,14 +13,14 @@ import MainTitle from "../public/images/svg/main-title.svg";
 import MainLogo from "../public/images/svg/main-logo.svg";
 import CheckIcon from "../public/images/svg/check-icon.svg";
 import { Logo } from "../components/logo";
+import { useState } from "react";
+import { ConnectWalletModal } from "../components/connect-wallet-modal";
 
 export default function Home() {
-  const handleSignInWithTwitter = async () => {
-    const { authUrl }: TwitterAuthUrlResponse = await (
-      await fetch("/api/twitter-auth-url")
-    ).json();
+  const [isModalOpen, setModalOpen] = useState(false);
 
-    window.location.href = authUrl;
+  const onClickConnectWalletButton = async () => {
+    setModalOpen(true);
   };
 
   return (
@@ -40,7 +36,7 @@ export default function Home() {
           </MainTitleImageBackground>
 
           <ConnectButtonContainer>
-            <PrimaryButton onClick={handleSignInWithTwitter}>
+            <PrimaryButton onClick={onClickConnectWalletButton}>
               Connect Wallet
             </PrimaryButton>
           </ConnectButtonContainer>
@@ -66,6 +62,11 @@ export default function Home() {
           <Image src={MainLogo} layout="fixed" fill={true} alt="Main Logo" />
         </MainLogoContainer>
       </MainContainer>
+
+      <ConnectWalletModal
+        isModalOpen={isModalOpen}
+        onCloseModal={() => setModalOpen(false)}
+      />
     </Container>
   );
 }

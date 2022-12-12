@@ -8,6 +8,7 @@ import {
 
 import Image from "next/image";
 import color from "../../styles/color";
+import { Flex1 } from "../../styles/flex-1";
 import styled from "styled-components";
 
 interface Props {
@@ -51,10 +52,6 @@ const WalletAddress = styled.div`
   line-height: 1rem;
 
   color: ${color.grey["400"]};
-`;
-
-const Flex1 = styled.div`
-  flex: 1;
 `;
 
 const ChainCheckBox = styled.input.attrs({ type: "checkbox" })`
