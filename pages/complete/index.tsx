@@ -1,6 +1,7 @@
 import Image from "next/image";
-
 import styled from "styled-components";
+
+import Typed from "react-typed";
 
 import { Logo } from "../../components/logo";
 import color from "../../styles/color";
@@ -18,7 +19,17 @@ export default function CompletePage() {
         <ContentContainer>
           <RecipentContainer>
             <RecipentTitle>Recipent</RecipentTitle>
-            <AddressContainer>kingstarcookies.cosmos</AddressContainer>
+            <AddressContainer>
+              kingstarcookies.
+              <Typed
+                strings={["osmo", "cosmos"]}
+                typeSpeed={150}
+                backSpeed={150}
+                backDelay={1000}
+                loop
+                smartBackspace
+              />
+            </AddressContainer>
             <AvailableAddressText>available address</AvailableAddressText>
           </RecipentContainer>
         </ContentContainer>
