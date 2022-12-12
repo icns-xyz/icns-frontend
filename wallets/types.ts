@@ -10,7 +10,7 @@ export interface Wallet {
   getKey(chainId: string): Promise<{
     readonly name: string;
     readonly pubKey: Uint8Array;
-    readonly address: Uint8Array;
+    readonly bech32Address: string;
   }>;
   signAmino(
     chainId: string,
@@ -25,13 +25,15 @@ export interface Wallet {
     owner: string,
     username: string,
     addressChainIds: string[],
-  ): Promise<{
-    chainId: string;
-    bech32Prefix: string;
-    bech32Address: string;
-    addressHash: "cosmos" | "ethereum";
-    pubKey: Uint8Array;
-    signatureSalt: number;
-    signature: Uint8Array;
-  }>;
+  ): Promise<
+    {
+      chainId: string;
+      bech32Prefix: string;
+      bech32Address: string;
+      addressHash: "cosmos" | "ethereum";
+      pubKey: Uint8Array;
+      signatureSalt: number;
+      signature: Uint8Array;
+    }[]
+  >;
 }

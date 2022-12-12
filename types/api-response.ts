@@ -21,8 +21,12 @@ export interface IcnsVerificationResponse {
         value: {
           errors: Error[];
           data: {
+            // JSON string
             verifying_msg: string;
-            signature: number[];
+            // Base64 encoded
+            public_key: string;
+            // Base64 encoded
+            signature: string;
             algorithm: string;
           };
         };

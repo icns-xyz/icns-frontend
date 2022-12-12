@@ -54,7 +54,7 @@ export class KeplrWallet implements Wallet {
   getKey(chainId: string): Promise<{
     readonly name: string;
     readonly pubKey: Uint8Array;
-    readonly address: Uint8Array;
+    readonly bech32Address: string;
   }> {
     return this.keplr.getKey(chainId);
   }
@@ -77,15 +77,17 @@ export class KeplrWallet implements Wallet {
     owner: string,
     username: string,
     addressChainIds: string[],
-  ): Promise<{
-    chainId: string;
-    bech32Prefix: string;
-    bech32Address: string;
-    addressHash: "cosmos" | "ethereum";
-    pubKey: Uint8Array;
-    signatureSalt: number;
-    signature: Uint8Array;
-  }> {
+  ): Promise<
+    {
+      chainId: string;
+      bech32Prefix: string;
+      bech32Address: string;
+      addressHash: "cosmos" | "ethereum";
+      pubKey: Uint8Array;
+      signatureSalt: number;
+      signature: Uint8Array;
+    }[]
+  > {
     // TODO: Update @keplr-wallet/types
     return (this.keplr as any).signICNSAdr36(
       chainId,
