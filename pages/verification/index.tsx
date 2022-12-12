@@ -112,7 +112,7 @@ export default function VerificationPage() {
 
             const test = await wallet.signICNSAdr36(
               mainChainId,
-              "osmo1q2qpencrnnlamwalxt6tac2ytl35z5jejn0v4frnp6jff7gwp37sjcnhu5",
+              "osmo1kdwtz4vpc0p50c22w0rpsmrsfvkuh8gncark9j6vwxkma4s7jmwsaf8yds",
               key.bech32Address,
               newTwitterAuthInfo.username,
               chainIds,
@@ -123,7 +123,7 @@ export default function VerificationPage() {
 
               return makeCosmwasmExecMsg(
                 key.bech32Address,
-                "osmo1q2qpencrnnlamwalxt6tac2ytl35z5jejn0v4frnp6jff7gwp37sjcnhu5",
+                "osmo1kdwtz4vpc0p50c22w0rpsmrsfvkuh8gncark9j6vwxkma4s7jmwsaf8yds",
                 {
                   set_record: {
                     name: newTwitterAuthInfo.username,
