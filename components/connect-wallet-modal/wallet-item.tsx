@@ -4,8 +4,9 @@ import color from "../../styles/color";
 import { Flex1 } from "../../styles/flex-1";
 import styled from "styled-components";
 import Image from "next/image";
-import { WalletType } from "../../constants/wallet";
-import { TwitterAuthUrlResponse } from "../../types";
+import { SELECTED_WALLET_KEY, WalletType } from "../../constants/wallet";
+import { getKeplrFromWindow, KeplrWallet } from "../../wallets";
+import { loginWithTwitter } from "../../constants/twitter";
 
 interface Props {
   wallet: WalletType;
@@ -15,11 +16,34 @@ export const WalletItem: FunctionComponent<Props> = (props: Props) => {
   const { wallet } = props;
 
   const onClickWalletItem = async () => {
-    const { authUrl }: TwitterAuthUrlResponse = await (
-      await fetch("/api/twitter-auth-url")
-    ).json();
+    try {
+      if (wallet.name === "Keplr") {
+        await connectKeplr();
+        localStorage.setItem(SELECTED_WALLET_KEY, wallet.name);
+      }
 
-    window.location.href = authUrl;
+      await loginWithTwitter();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const connectKeplr = async () => {
+    const keplr = await getKeplrFromWindow();
+
+    if (keplr === undefined) {
+      window.location.href =
+        "https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap";
+    }
+
+    if (keplr) {
+      const wallet = new KeplrWallet(keplr);
+      const chainIds = (await wallet.getChainInfosWithoutEndpoints()).map(
+        (c) => c.chainId,
+      );
+
+      await wallet.init(chainIds);
+    }
   };
 
   return (

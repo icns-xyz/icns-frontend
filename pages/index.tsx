@@ -14,7 +14,8 @@ import MainTitle from "../public/images/svg/main-title.svg";
 import MainLogo from "../public/images/svg/main-logo.svg";
 import CheckIcon from "../public/images/svg/check-icon.svg";
 import { Logo } from "../components/logo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { SELECTED_WALLET_KEY } from "../constants/wallet";
 
 export default function Home() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -22,6 +23,10 @@ export default function Home() {
   const onClickConnectWalletButton = async () => {
     setModalOpen(true);
   };
+
+  useEffect(() => {
+    localStorage.removeItem(SELECTED_WALLET_KEY);
+  }, []);
 
   return (
     <Container>

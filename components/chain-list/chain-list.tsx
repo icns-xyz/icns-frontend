@@ -1,19 +1,38 @@
 import { FunctionComponent } from "react";
-import { AccountInfo, WidthHeightProps } from "../../types";
+import { ChainItemType, WidthHeightProps } from "../../types";
 import color from "../../styles/color";
 import styled from "styled-components";
 import { ChainItem } from "./chain-item";
 
 interface Props {
-  chainList: AccountInfo[];
+  chainList: ChainItemType[];
+  checkedItems: any;
+  setCheckedItems: any;
 }
 
 export const ChainList: FunctionComponent<Props> = (props) => {
-  const { chainList } = props;
+  const { chainList, checkedItems, setCheckedItems } = props;
+
+  const checkedItemHandler = (chainItem: ChainItemType, isChecked: boolean) => {
+    const tempSet = new Set(checkedItems);
+
+    if (isChecked) {
+      tempSet.add(chainItem);
+    } else if (!isChecked && checkedItems.has(chainItem)) {
+      tempSet.delete(chainItem);
+    }
+
+    setCheckedItems(tempSet);
+  };
+
   return (
     <ChainContainer color={color.grey["800"]}>
-      {chainList.map((chainInfo) => (
-        <ChainItem key={chainInfo.prefix} chainInfo={chainInfo} />
+      {chainList.map((chainItem) => (
+        <ChainItem
+          key={chainItem.address}
+          chainItem={chainItem}
+          checkedItemHandler={checkedItemHandler}
+        />
       ))}
     </ChainContainer>
   );

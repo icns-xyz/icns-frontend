@@ -1,4 +1,4 @@
-export interface AccountInfo {
+export interface ChainItemType {
   prefix: string;
   chainImageUrl: string;
   address: string;

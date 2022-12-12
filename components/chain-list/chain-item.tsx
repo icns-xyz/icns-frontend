@@ -1,39 +1,49 @@
-import { AccountInfo } from "../../types";
-import { FunctionComponent } from "react";
+import { ChainItemType } from "../../types";
+import { ChangeEvent, FunctionComponent, useState } from "react";
 import {
   ChainImageContainer,
   ChainInfoContainer,
   ChainItemContainer,
 } from "./chain-list";
 
-import Image from "next/image";
 import color from "../../styles/color";
 import { Flex1 } from "../../styles/flex-1";
 import styled from "styled-components";
+import { ChainImage } from "./chain-image";
 
 interface Props {
-  chainInfo: AccountInfo;
+  chainItem: ChainItemType;
+  checkedItemHandler: (chainItem: ChainItemType, isChecked: boolean) => void;
 }
 
 export const ChainItem: FunctionComponent<Props> = (props) => {
-  const { chainInfo } = props;
+  const { chainItem, checkedItemHandler } = props;
+  const [checked, setChecked] = useState(false);
+
+  const checkHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    setChecked(!checked);
+    checkedItemHandler(chainItem, event.target.checked);
+  };
   return (
-    <ChainItemContainer key={chainInfo.prefix} isLoading={false}>
+    <ChainItemContainer key={chainItem.prefix} isLoading={false}>
       <ChainImageContainer width="3rem" height="3rem">
-        <Image
-          src={chainInfo.chainImageUrl}
+        <ChainImage
+          src={chainItem.chainImageUrl}
           fill={true}
-          alt={`${chainInfo.prefix} chain image`}
+          alt={`${chainItem.prefix} chain image`}
         />
       </ChainImageContainer>
       <ChainInfoContainer>
-        <ChainName>{`.${chainInfo.prefix}`}</ChainName>
-        <WalletAddress>{chainInfo.address}</WalletAddress>
+        <ChainName>{`.${chainItem.prefix}`}</ChainName>
+        <WalletAddress>{chainItem.address}</WalletAddress>
       </ChainInfoContainer>
 
       <Flex1 />
 
-      <ChainCheckBox />
+      <ChainCheckBox
+        checked={checked}
+        onChange={(event) => checkHandler(event)}
+      />
     </ChainItemContainer>
   );
 };
