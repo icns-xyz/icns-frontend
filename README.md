@@ -12,7 +12,8 @@ TWITTER_AUTH_CALLBACK_URI=...
 
 IRON_PASSWORD=...
 
-ICNS_VERIFIER_URI=...
+# must be separated by commas
+ICNS_VERIFIER_ORIGIN_LIST=http:localhost:8080,http://localhost:8081
 ```
 
 Run the development server:
