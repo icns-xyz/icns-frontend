@@ -27,6 +27,7 @@ import { ChainIdHelper } from "@keplr-wallet/cosmos";
 
 import AllChainsIcon from "../../public/images/svg/all-chains-icon.svg";
 import { AllChainsItem } from "../../components/chain-list/all-chains-item";
+import { SearchInput } from "../../components/search-input";
 
 export default function VerificationPage() {
   const router = useRouter();
@@ -40,6 +41,7 @@ export default function VerificationPage() {
   const [chainList, setChainList] = useState<ChainItemType[]>([]);
   const [checkedItems, setCheckedItems] = useState(new Set());
   const [allChecked, setAllChecked] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     const handleVerification = async () => {
@@ -182,10 +184,13 @@ export default function VerificationPage() {
 
             <ChainListTitleContainer>
               <ChainListTitle>Chain List</ChainListTitle>
-              <SearchContainer>Search</SearchContainer>
+              <SearchInput
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+              />
             </ChainListTitleContainer>
 
-            {allChains ? (
+            {allChains && !searchValue ? (
               <AllChainsItem
                 allChecked={allChecked}
                 setAllChecked={setAllChecked}
@@ -196,7 +201,12 @@ export default function VerificationPage() {
             <ChainList
               allChecked={allChecked}
               setAllChecked={setAllChecked}
-              chainList={chainList}
+              chainList={chainList.filter(
+                (chain) =>
+                  chain.chainId.includes(searchValue) ||
+                  chain.address.includes(searchValue) ||
+                  chain.prefix.includes(searchValue),
+              )}
               checkedItems={checkedItems}
               setCheckedItems={setCheckedItems}
             />
@@ -263,16 +273,4 @@ const ChainListTitle = styled.div`
   line-height: 1.9rem;
 
   color: ${color.white};
-`;
-
-const SearchContainer = styled.div`
-  display: flex;
-  align-items: center;
-
-  border-radius: 3rem;
-
-  min-width: 10rem;
-  height: 2rem;
-
-  background-color: ${color.grey["700"]};
 `;
