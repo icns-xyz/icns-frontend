@@ -1,17 +1,25 @@
-import { FunctionComponent } from "react";
+import { Dispatch, FunctionComponent, SetStateAction, useEffect } from "react";
 import { ChainItemType, WidthHeightProps } from "../../types";
 import color from "../../styles/color";
 import styled from "styled-components";
 import { ChainItem } from "./chain-item";
 
 interface Props {
+  allChecked: boolean;
+  setAllChecked: Dispatch<SetStateAction<boolean>>;
   chainList: ChainItemType[];
-  checkedItems: any;
-  setCheckedItems: any;
+  checkedItems: Set<unknown>;
+  setCheckedItems: Dispatch<SetStateAction<Set<unknown>>>;
 }
 
 export const ChainList: FunctionComponent<Props> = (props) => {
-  const { chainList, checkedItems, setCheckedItems } = props;
+  const {
+    allChecked,
+    setAllChecked,
+    chainList,
+    checkedItems,
+    setCheckedItems,
+  } = props;
 
   const checkedItemHandler = (chainItem: ChainItemType, isChecked: boolean) => {
     const tempSet = new Set(checkedItems);
@@ -25,6 +33,22 @@ export const ChainList: FunctionComponent<Props> = (props) => {
     setCheckedItems(tempSet);
   };
 
+  useEffect(() => {
+    if (allChecked) {
+      setCheckedItems(new Set(chainList));
+    } else if (chainList.length === checkedItems.size) {
+      setCheckedItems(new Set());
+    }
+  }, [allChecked]);
+
+  useEffect(() => {
+    if (chainList.length === checkedItems.size && checkedItems.size !== 0) {
+      setAllChecked(true);
+    } else {
+      setAllChecked(false);
+    }
+  }, [checkedItems]);
+
   return (
     <ChainContainer color={color.grey["800"]}>
       {chainList.map((chainItem) => (
@@ -32,6 +56,7 @@ export const ChainList: FunctionComponent<Props> = (props) => {
           key={chainItem.address}
           chainItem={chainItem}
           checkedItemHandler={checkedItemHandler}
+          checkedItems={checkedItems}
         />
       ))}
     </ChainContainer>

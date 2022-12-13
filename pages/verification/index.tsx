@@ -25,26 +25,33 @@ import { MainChainId } from "../../constants/wallet";
 import { getKeplrFromWindow, KeplrWallet } from "../../wallets";
 import { ChainIdHelper } from "@keplr-wallet/cosmos";
 
+import AllChainsIcon from "../../public/images/svg/all-chains-icon.svg";
+import { AllChainsItem } from "../../components/chain-list/all-chains-item";
+
 export default function VerificationPage() {
   const router = useRouter();
   const [twitterAuthInfo, setTwitterAuthInfo] =
     useState<TwitterAuthInfoResponse | null>();
 
-  const [chainList, setChainList] = useState<ChainItemType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [wallet, setWallet] = useState<KeplrWallet>();
+  const [allChains, setAllChains] = useState<ChainItemType>();
+  const [chainList, setChainList] = useState<ChainItemType[]>([]);
   const [checkedItems, setCheckedItems] = useState(new Set());
+  const [allChecked, setAllChecked] = useState(false);
 
   useEffect(() => {
     const handleVerification = async () => {
       if (window.location.search) {
         if (window.location.search.match("error")) {
           await router.push("/");
+          return;
         }
 
         await fetchTwitterInfo();
 
-        await fetchChainList();
+        await initWallet();
 
         setIsLoading(false);
       }
@@ -66,11 +73,39 @@ export default function VerificationPage() {
     setTwitterAuthInfo(newTwitterAuthInfo);
   };
 
-  const fetchChainList = async () => {
+  const initWallet = async () => {
     const keplr = await getKeplrFromWindow();
 
     if (keplr) {
-      const wallet = new KeplrWallet(keplr);
+      const keplrWallet = new KeplrWallet(keplr);
+      setWallet(keplrWallet);
+    }
+  };
+
+  useEffect(() => {
+    if (wallet) {
+      fetchAllChains();
+      fetchChainList();
+    }
+  }, [wallet]);
+
+  const fetchAllChains = async () => {
+    if (wallet) {
+      const chainNames = (await wallet.getChainInfosWithoutEndpoints()).map(
+        (chainInfo) => chainInfo.chainName,
+      );
+
+      setAllChains({
+        chainId: "all chains",
+        prefix: `all chains(${chainNames.length})`,
+        address: chainNames.join(", "),
+        chainImageUrl: AllChainsIcon,
+      });
+    }
+  };
+
+  const fetchChainList = async () => {
+    if (wallet) {
       const chainIds = (await wallet.getChainInfosWithoutEndpoints()).map(
         (c) => c.chainId,
       );
@@ -81,6 +116,7 @@ export default function VerificationPage() {
       const chainInfos = (await wallet.getChainInfosWithoutEndpoints()).map(
         (chainInfo) => {
           return {
+            chainId: chainInfo.chainId,
             prefix: chainInfo.bech32Config.bech32PrefixAccAddr,
             chainImageUrl: `https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/${
               ChainIdHelper.parse(chainInfo.chainId).identifier
@@ -98,19 +134,16 @@ export default function VerificationPage() {
       }
 
       // remove duplicated item
-      // const filteredChainList = chainArray.filter((chain, index, self) => {
-      //   return index === self.findIndex((t) => chain.prefix === t.prefix);
-      // });
+      const filteredChainList = chainArray.filter((chain, index, self) => {
+        return index === self.findIndex((t) => chain.prefix === t.prefix);
+      });
 
-      setChainList(chainArray);
+      setChainList(filteredChainList);
     }
   };
 
   const verifyTwitterAccount = async () => {
-    const keplr = await getKeplrFromWindow();
-
-    if (twitterAuthInfo && keplr) {
-      const wallet = new KeplrWallet(keplr);
+    if (twitterAuthInfo && wallet) {
       const key = await wallet.getKey(MainChainId);
 
       const icnsVerificationList = (
@@ -132,6 +165,8 @@ export default function VerificationPage() {
 
   const onClickRegistration = async () => {
     await verifyTwitterAccount();
+
+    await router.push("/complete");
   };
 
   return (
@@ -150,7 +185,17 @@ export default function VerificationPage() {
               <SearchContainer>Search</SearchContainer>
             </ChainListTitleContainer>
 
+            {allChains ? (
+              <AllChainsItem
+                allChecked={allChecked}
+                setAllChecked={setAllChecked}
+                chainItem={allChains}
+              />
+            ) : null}
+
             <ChainList
+              allChecked={allChecked}
+              setAllChecked={setAllChecked}
               chainList={chainList}
               checkedItems={checkedItems}
               setCheckedItems={setCheckedItems}
