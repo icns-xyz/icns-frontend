@@ -73,7 +73,10 @@ export const ChainContainer = styled.div`
   background-color: ${(props) => props.color};
 `;
 
-export const ChainItemContainer = styled.div<{ isLoading: boolean }>`
+export const ChainItemContainer = styled.div<{
+  isLoading: boolean;
+  checked?: boolean;
+}>`
   display: flex;
   flex-direction: row;
   align-items: center;

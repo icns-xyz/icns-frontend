@@ -41,6 +41,7 @@ export const ChainItem: FunctionComponent<Props> = (props) => {
     <ChainItemContainer
       key={chainItem.prefix}
       isLoading={false}
+      checked={checked}
       onClick={checkHandler}
     >
       <ChainImageContainer width="3rem" height="3rem">
@@ -57,7 +58,7 @@ export const ChainItem: FunctionComponent<Props> = (props) => {
 
       <Flex1 />
 
-      <ChainCheckBox checked={checked} />
+      <ChainCheckBox checked={checked} readOnly />
     </ChainItemContainer>
   );
 };

@@ -22,12 +22,22 @@ import { TwitterProfile } from "../../components/twitter-profile";
 import { ChainList } from "../../components/chain-list";
 import { useRouter } from "next/router";
 import { MainChainId } from "../../constants/wallet";
-import { getKeplrFromWindow, KeplrWallet } from "../../wallets";
+import {
+  getKeplrFromWindow,
+  KeplrWallet,
+  makeCosmwasmExecMsg,
+  simulateMsgs,
+} from "../../wallets";
 import { ChainIdHelper } from "@keplr-wallet/cosmos";
 
 import AllChainsIcon from "../../public/images/svg/all-chains-icon.svg";
 import { AllChainsItem } from "../../components/chain-list/all-chains-item";
 import { SearchInput } from "../../components/search-input";
+import {
+  REGISTRAR_ADDRESS,
+  RESOLVER_ADDRESS,
+  REST_URL,
+} from "../../constants/icns";
 
 export default function VerificationPage() {
   const router = useRouter();
@@ -51,7 +61,8 @@ export default function VerificationPage() {
           return;
         }
 
-        await fetchTwitterInfo();
+        const twitterInfo = await fetchTwitterInfo();
+        setTwitterAuthInfo(twitterInfo);
 
         await initWallet();
 
@@ -62,7 +73,7 @@ export default function VerificationPage() {
     handleVerification();
   }, []);
 
-  const fetchTwitterInfo = async () => {
+  const fetchTwitterInfo = async (): Promise<TwitterAuthInfoResponse> => {
     const [, state, code] =
       window.location.search.match(
         /^(?=.*state=([^&]+)|)(?=.*code=([^&]+)|).+$/,
@@ -72,7 +83,7 @@ export default function VerificationPage() {
       `/api/twitter-auth-info?state=${state}&code=${code}`,
     );
 
-    setTwitterAuthInfo(newTwitterAuthInfo);
+    return newTwitterAuthInfo;
   };
 
   const initWallet = async () => {
@@ -144,8 +155,8 @@ export default function VerificationPage() {
     }
   };
 
-  const verifyTwitterAccount = async () => {
-    if (twitterAuthInfo && wallet) {
+  const verifyTwitterAccount = async (accessToken: string) => {
+    if (wallet) {
       const key = await wallet.getKey(MainChainId);
 
       const icnsVerificationList = (
@@ -156,19 +167,121 @@ export default function VerificationPage() {
           },
           body: JSON.stringify({
             claimer: key.bech32Address,
-            authToken: twitterAuthInfo.accessToken,
+            authToken: accessToken,
           }),
         })
       ).verificationList;
 
-      console.log(icnsVerificationList);
+      return icnsVerificationList;
+    }
+  };
+
+  const checkAdr36 = async () => {
+    if (twitterAuthInfo && wallet) {
+      const key = await wallet.getKey(MainChainId);
+
+      const chainIds = Array.from(checkedItems).map(
+        (chain) => (chain as ChainItemType).chainId,
+      );
+
+      const adr36Infos = await wallet.signICNSAdr36(
+        MainChainId,
+        RESOLVER_ADDRESS,
+        key.bech32Address,
+        twitterAuthInfo.username,
+        chainIds,
+      );
+
+      return adr36Infos;
     }
   };
 
   const onClickRegistration = async () => {
-    await verifyTwitterAccount();
+    const adr36Infos = await checkAdr36();
 
-    await router.push("/complete");
+    const twitterInfo = await fetchTwitterInfo();
+
+    const icnsVerificationList = await verifyTwitterAccount(
+      twitterInfo.accessToken,
+    );
+
+    if (wallet && icnsVerificationList && adr36Infos) {
+      const key = await wallet.getKey(MainChainId);
+
+      const registerMsg = makeCosmwasmExecMsg(
+        key.bech32Address,
+        REGISTRAR_ADDRESS,
+        {
+          claim: {
+            name: twitterInfo.username,
+            verifying_msg:
+              icnsVerificationList[0].status === "fulfilled"
+                ? icnsVerificationList[0].value.data.verifying_msg
+                : "",
+            verifications: icnsVerificationList.map((verification) => {
+              if (verification.status === "fulfilled") {
+                return {
+                  public_key: verification.value.data.public_key,
+                  signature: verification.value.data.signature,
+                };
+              }
+            }),
+          },
+        },
+        [
+          {
+            denom: "uosmo",
+            amount: "500000",
+          },
+        ],
+      );
+
+      const addressMsgs = adr36Infos.map((adr36Info) => {
+        return makeCosmwasmExecMsg(
+          key.bech32Address,
+          RESOLVER_ADDRESS,
+          {
+            set_record: {
+              name: twitterInfo.username,
+              bech32_prefix: adr36Info.bech32Prefix,
+              adr36_info: {
+                signer_bech32_address: adr36Info.bech32Address,
+                address_hash: adr36Info.addressHash,
+                pub_key: Buffer.from(adr36Info.pubKey).toString("base64"),
+                signature: Buffer.from(adr36Info.signature).toString("base64"),
+                signature_salt: adr36Info.signatureSalt.toString(),
+              },
+            },
+          },
+          [],
+        );
+      });
+
+      const aminoMsgs = [registerMsg.amino];
+      const protoMsgs = [registerMsg.proto];
+      for (const addressMsg of addressMsgs) {
+        aminoMsgs.push(addressMsg.amino);
+        protoMsgs.push(addressMsg.proto);
+      }
+
+      const chainInfo = {
+        chainId: MainChainId,
+        rest: REST_URL,
+      };
+
+      const simulated = await simulateMsgs(
+        chainInfo,
+        key.bech32Address,
+        {
+          proto: protoMsgs,
+        },
+        {
+          amount: [],
+        },
+      );
+
+      console.log("simulated", simulated);
+    }
   };
 
   return (

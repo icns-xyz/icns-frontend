@@ -52,7 +52,7 @@ export const AllChainsItem: FunctionComponent<Props> = (props) => {
 
         <Flex1 />
 
-        <ChainCheckBox checked={allChecked} />
+        <ChainCheckBox checked={allChecked} readOnly />
       </ChainItemContainer>
     </AllChainsContainer>
   );
