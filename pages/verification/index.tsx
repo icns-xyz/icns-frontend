@@ -32,7 +32,6 @@ import {
   simulateMsgs,
 } from "../../wallets";
 import { ChainIdHelper } from "@keplr-wallet/cosmos";
-import ErrorBoundary from "../../components/error-boundary";
 
 import AllChainsIcon from "../../public/images/svg/all-chains-icon.svg";
 import { AllChainsItem } from "../../components/chain-list/all-chains-item";
@@ -118,7 +117,7 @@ export default function VerificationPage() {
             );
           }
         } catch (e) {
-          console.log(e);
+          console.error(e);
         } finally {
           setIsLoading(false);
         }

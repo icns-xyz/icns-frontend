@@ -5,10 +5,8 @@ export function request<TResponse>(
   return fetch(url, config)
     .then((response) => {
       if (!response.ok) {
-        console.error(
-          new Error(
-            `This is an HTTP error: The status is ${response.status} ${response.statusText}`,
-          ),
+        throw new Error(
+          `This is an HTTP error: The status is ${response.status} ${response.statusText}`,
         );
       }
       return response.json();
