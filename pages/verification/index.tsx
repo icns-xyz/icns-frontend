@@ -24,6 +24,7 @@ import { useRouter } from "next/router";
 import { MainChainId } from "../../constants/wallet";
 import { getKeplrFromWindow, KeplrWallet } from "../../wallets";
 import { ChainIdHelper } from "@keplr-wallet/cosmos";
+import ErrorBoundary from "../../components/error-boundary";
 
 export default function VerificationPage() {
   const router = useRouter();
@@ -107,26 +108,30 @@ export default function VerificationPage() {
   };
 
   const verifyTwitterAccount = async () => {
-    const keplr = await getKeplrFromWindow();
+    try {
+      const keplr = await getKeplrFromWindow();
 
-    if (twitterAuthInfo && keplr) {
-      const wallet = new KeplrWallet(keplr);
-      const key = await wallet.getKey(MainChainId);
+      if (twitterAuthInfo && keplr) {
+        const wallet = new KeplrWallet(keplr);
+        const key = await wallet.getKey(MainChainId);
 
-      const icnsVerificationList = (
-        await request<IcnsVerificationResponse>("/api/icns-verification", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            claimer: key.bech32Address,
-            authToken: twitterAuthInfo.accessToken,
-          }),
-        })
-      ).verificationList;
+        const icnsVerificationList = (
+          await request<IcnsVerificationResponse>("/api/icns-verification", {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              claimer: key.bech32Address,
+              authToken: twitterAuthInfo.accessToken,
+            }),
+          })
+        ).verificationList;
 
-      console.log(icnsVerificationList);
+        console.log(icnsVerificationList);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -135,39 +140,41 @@ export default function VerificationPage() {
   };
 
   return (
-    <Container>
-      <Logo />
+    <ErrorBoundary>
+      <Container>
+        <Logo />
 
-      <MainContainer>
-        {isLoading ? (
-          <SkeletonChainList />
-        ) : (
-          <ContentContainer>
-            <TwitterProfile twitterProfileInformation={twitterAuthInfo} />
+        <MainContainer>
+          {isLoading ? (
+            <SkeletonChainList />
+          ) : (
+            <ContentContainer>
+              <TwitterProfile twitterProfileInformation={twitterAuthInfo} />
 
-            <ChainListTitleContainer>
-              <ChainListTitle>Chain List</ChainListTitle>
-              <SearchContainer>Search</SearchContainer>
-            </ChainListTitleContainer>
+              <ChainListTitleContainer>
+                <ChainListTitle>Chain List</ChainListTitle>
+                <SearchContainer>Search</SearchContainer>
+              </ChainListTitleContainer>
 
-            <ChainList
-              chainList={chainList}
-              checkedItems={checkedItems}
-              setCheckedItems={setCheckedItems}
-            />
+              <ChainList
+                chainList={chainList}
+                checkedItems={checkedItems}
+                setCheckedItems={setCheckedItems}
+              />
 
-            <ButtonContainer>
-              <PrimaryButton
-                disabled={checkedItems.size < 1}
-                onClick={onClickRegistration}
-              >
-                Register
-              </PrimaryButton>
-            </ButtonContainer>
-          </ContentContainer>
-        )}
-      </MainContainer>
-    </Container>
+              <ButtonContainer>
+                <PrimaryButton
+                  disabled={checkedItems.size < 1}
+                  onClick={onClickRegistration}
+                >
+                  Register
+                </PrimaryButton>
+              </ButtonContainer>
+            </ContentContainer>
+          )}
+        </MainContainer>
+      </Container>
+    </ErrorBoundary>
   );
 }
 
