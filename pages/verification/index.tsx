@@ -197,9 +197,9 @@ export default function VerificationPage() {
   };
 
   const onClickRegistration = async () => {
-    const adr36Infos = await checkAdr36();
-
     const twitterInfo = await fetchTwitterInfo();
+
+    const adr36Infos = await checkAdr36();
 
     const icnsVerificationList = await verifyTwitterAccount(
       twitterInfo.accessToken,
