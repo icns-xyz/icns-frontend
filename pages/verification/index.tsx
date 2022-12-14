@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import {
   ChainItemType,
   IcnsVerificationResponse,
+  RegisteredAddresses,
   TwitterAuthInfoResponse,
+  TwitterProfileType,
 } from "../../types";
 import { request } from "../../utils/url";
 
@@ -41,18 +43,24 @@ import {
   REST_URL,
 } from "../../constants/icns";
 
-import { fetchTwitterInfo } from "../../repository";
+import {
+  fetchTwitterInfo,
+  queryAddressesFromTwitterName,
+  queryRegisteredTwitterId,
+} from "../../repository";
 
 export default function VerificationPage() {
   const router = useRouter();
-  const [twitterAuthInfo, setTwitterAuthInfo] =
-    useState<TwitterAuthInfoResponse | null>();
+  const [twitterAuthInfo, setTwitterAuthInfo] = useState<TwitterProfileType>();
 
   const [isLoading, setIsLoading] = useState(true);
 
   const [wallet, setWallet] = useState<KeplrWallet>();
   const [allChains, setAllChains] = useState<ChainItemType>();
   const [chainList, setChainList] = useState<ChainItemType[]>([]);
+  const [registeredAddressList, setRegisteredAddressList] = useState<string[]>(
+    [],
+  );
   const [checkedItems, setCheckedItems] = useState(new Set());
   const [allChecked, setAllChecked] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -81,14 +89,38 @@ export default function VerificationPage() {
 
         const { state, code } = fetchUrlQueryParameter();
 
-        // Fetch Twitter Profile
-        const twitterInfo = await fetchTwitterInfo(state, code);
-        setTwitterAuthInfo(twitterInfo);
+        try {
+          // Initialize Wallet
+          await initWallet();
 
-        // Initialize Wallet
-        await initWallet();
+          // Fetch Twitter Profile
+          const twitterInfo = await fetchTwitterInfo(state, code);
 
-        setIsLoading(false);
+          const registeredQueryResponse = await queryRegisteredTwitterId(
+            twitterInfo.id,
+          );
+
+          setTwitterAuthInfo({
+            ...twitterInfo,
+            isRegistered: "data" in registeredQueryResponse,
+          });
+
+          if ("data" in registeredQueryResponse) {
+            const addressesQueryResponse = await queryAddressesFromTwitterName(
+              registeredQueryResponse.data.name,
+            );
+
+            setRegisteredAddressList(
+              addressesQueryResponse.data.addresses.map(
+                (address) => address.address,
+              ),
+            );
+          }
+        } catch (e) {
+          console.log(e);
+        } finally {
+          setIsLoading(false);
+        }
       }
     };
 
@@ -110,6 +142,14 @@ export default function VerificationPage() {
       fetchChainList();
     }
   }, [wallet]);
+
+  useEffect(() => {
+    const filteredChainList = chainList.filter((chain) => {
+      return registeredAddressList.includes(chain.address);
+    });
+
+    setCheckedItems(new Set(filteredChainList));
+  }, [registeredAddressList]);
 
   const fetchChainList = async () => {
     if (wallet) {
@@ -193,9 +233,9 @@ export default function VerificationPage() {
     if (twitterAuthInfo && wallet) {
       const key = await wallet.getKey(MainChainId);
 
-      const chainIds = Array.from(checkedItems).map(
-        (chain) => (chain as ChainItemType).chainId,
-      );
+      const chainIds = Array.from(checkedItems).map((chain) => {
+        return (chain as ChainItemType).chainId;
+      });
 
       return await wallet.signICNSAdr36(
         MainChainId,
@@ -264,12 +304,19 @@ export default function VerificationPage() {
         );
       });
 
-      const aminoMsgs = [registerMsg.amino];
-      const protoMsgs = [registerMsg.proto];
+      const aminoMsgs = twitterAuthInfo?.isRegistered
+        ? []
+        : [registerMsg.amino];
+      const protoMsgs = twitterAuthInfo?.isRegistered
+        ? []
+        : [registerMsg.proto];
+
       for (const addressMsg of addressMsgs) {
         aminoMsgs.push(addressMsg.amino);
         protoMsgs.push(addressMsg.proto);
       }
+
+      console.log(aminoMsgs);
 
       const chainInfo = {
         chainId: MainChainId,
