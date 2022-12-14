@@ -3,8 +3,9 @@ import { StaticImageData } from "next/image";
 import KeplrIcon from "../public/images/svg/keplr-icon.svg";
 import CosmostationIcon from "../public/images/svg/cosmostation-icon.svg";
 
+export const WALLET_INSTALL_URL =
+  "https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap";
 export const SELECTED_WALLET_KEY = "SELECTED_WALLET_KEY";
-export const MainChainId = "osmo-test-4";
 
 export type WalletName = "Keplr" | "Cosmostation";
 export interface WalletType {
@@ -25,3 +26,8 @@ export const WalletList: WalletType[] = [
     isReady: false,
   },
 ];
+
+export const ContractFee = {
+  denom: "uosmo",
+  amount: "500000",
+};

@@ -21,11 +21,12 @@ import { PrimaryButton } from "../../components/primary-button";
 import { TwitterProfile } from "../../components/twitter-profile";
 import { ChainList } from "../../components/chain-list";
 import { useRouter } from "next/router";
-import { MainChainId } from "../../constants/wallet";
+import { ContractFee } from "../../constants/wallet";
 import {
   getKeplrFromWindow,
   KeplrWallet,
   makeCosmwasmExecMsg,
+  sendMsgs,
   simulateMsgs,
 } from "../../wallets";
 import { ChainIdHelper } from "@keplr-wallet/cosmos";
@@ -34,10 +35,13 @@ import AllChainsIcon from "../../public/images/svg/all-chains-icon.svg";
 import { AllChainsItem } from "../../components/chain-list/all-chains-item";
 import { SearchInput } from "../../components/search-input";
 import {
+  MainChainId,
   REGISTRAR_ADDRESS,
   RESOLVER_ADDRESS,
   REST_URL,
 } from "../../constants/icns";
+
+import { fetchTwitterInfo } from "../../repository";
 
 export default function VerificationPage() {
   const router = useRouter();
@@ -53,38 +57,43 @@ export default function VerificationPage() {
   const [allChecked, setAllChecked] = useState(false);
   const [searchValue, setSearchValue] = useState("");
 
+  const fetchUrlQueryParameter = (): { state: string; code: string } => {
+    // Twitter state, auth code check
+    const [, state, code] =
+      window.location.search.match(
+        /^(?=.*state=([^&]+)|)(?=.*code=([^&]+)|).+$/,
+      ) || [];
+
+    return {
+      state,
+      code,
+    };
+  };
+
   useEffect(() => {
-    const handleVerification = async () => {
+    const init = async () => {
       if (window.location.search) {
+        // Twitter Login Error Check
         if (window.location.search.match("error")) {
           await router.push("/");
           return;
         }
 
-        const twitterInfo = await fetchTwitterInfo();
+        const { state, code } = fetchUrlQueryParameter();
+
+        // Fetch Twitter Profile
+        const twitterInfo = await fetchTwitterInfo(state, code);
         setTwitterAuthInfo(twitterInfo);
 
+        // Initialize Wallet
         await initWallet();
 
         setIsLoading(false);
       }
     };
 
-    handleVerification();
+    init();
   }, []);
-
-  const fetchTwitterInfo = async (): Promise<TwitterAuthInfoResponse> => {
-    const [, state, code] =
-      window.location.search.match(
-        /^(?=.*state=([^&]+)|)(?=.*code=([^&]+)|).+$/,
-      ) || [];
-
-    const newTwitterAuthInfo = await request<TwitterAuthInfoResponse>(
-      `/api/twitter-auth-info?state=${state}&code=${code}`,
-    );
-
-    return newTwitterAuthInfo;
-  };
 
   const initWallet = async () => {
     const keplr = await getKeplrFromWindow();
@@ -96,26 +105,11 @@ export default function VerificationPage() {
   };
 
   useEffect(() => {
+    // After Wallet Initialize
     if (wallet) {
-      fetchAllChains();
       fetchChainList();
     }
   }, [wallet]);
-
-  const fetchAllChains = async () => {
-    if (wallet) {
-      const chainNames = (await wallet.getChainInfosWithoutEndpoints()).map(
-        (chainInfo) => chainInfo.chainName,
-      );
-
-      setAllChains({
-        chainId: "all chains",
-        prefix: `all chains(${chainNames.length})`,
-        address: chainNames.join(", "),
-        chainImageUrl: AllChainsIcon,
-      });
-    }
-  };
 
   const fetchChainList = async () => {
     if (wallet) {
@@ -130,6 +124,7 @@ export default function VerificationPage() {
         (chainInfo) => {
           return {
             chainId: chainInfo.chainId,
+            chainName: chainInfo.chainName,
             prefix: chainInfo.bech32Config.bech32PrefixAccAddr,
             chainImageUrl: `https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/${
               ChainIdHelper.parse(chainInfo.chainId).identifier
@@ -138,7 +133,7 @@ export default function VerificationPage() {
         },
       );
 
-      const chainArray: ChainItemType[] = [];
+      const chainArray = [];
       for (let i = 0; i < chainKeys.length; i++) {
         chainArray.push({
           address: chainKeys[i].bech32Address,
@@ -147,8 +142,28 @@ export default function VerificationPage() {
       }
 
       // remove duplicated item
-      const filteredChainList = chainArray.filter((chain, index, self) => {
-        return index === self.findIndex((t) => chain.prefix === t.prefix);
+      const filteredChainList = chainArray.filter((nextChain, index, self) => {
+        return (
+          index ===
+          self.findIndex((prevChain) => {
+            const isDuplicated = prevChain.prefix === nextChain.prefix;
+
+            if (isDuplicated && prevChain.chainName !== nextChain.chainName) {
+              console.log(
+                `${nextChain.chainName} has been deleted due to a duplicate name with ${prevChain.chainName}`,
+              );
+            }
+
+            return isDuplicated;
+          })
+        );
+      });
+
+      setAllChains({
+        chainId: "all chains",
+        prefix: `all chains(${filteredChainList.length})`,
+        address: chainInfos.map((chainInfo) => chainInfo.chainName).join(", "),
+        chainImageUrl: AllChainsIcon,
       });
 
       setChainList(filteredChainList);
@@ -159,7 +174,7 @@ export default function VerificationPage() {
     if (wallet) {
       const key = await wallet.getKey(MainChainId);
 
-      const icnsVerificationList = (
+      return (
         await request<IcnsVerificationResponse>("/api/icns-verification", {
           method: "post",
           headers: {
@@ -171,8 +186,6 @@ export default function VerificationPage() {
           }),
         })
       ).verificationList;
-
-      return icnsVerificationList;
     }
   };
 
@@ -184,20 +197,19 @@ export default function VerificationPage() {
         (chain) => (chain as ChainItemType).chainId,
       );
 
-      const adr36Infos = await wallet.signICNSAdr36(
+      return await wallet.signICNSAdr36(
         MainChainId,
         RESOLVER_ADDRESS,
         key.bech32Address,
         twitterAuthInfo.username,
         chainIds,
       );
-
-      return adr36Infos;
     }
   };
 
   const onClickRegistration = async () => {
-    const twitterInfo = await fetchTwitterInfo();
+    const { state, code } = fetchUrlQueryParameter();
+    const twitterInfo = await fetchTwitterInfo(state, code);
 
     const adr36Infos = await checkAdr36();
 
@@ -228,12 +240,7 @@ export default function VerificationPage() {
             }),
           },
         },
-        [
-          {
-            denom: "uosmo",
-            amount: "500000",
-          },
-        ],
+        [ContractFee],
       );
 
       const addressMsgs = adr36Infos.map((adr36Info) => {
@@ -280,7 +287,24 @@ export default function VerificationPage() {
         },
       );
 
-      console.log("simulated", simulated);
+      const txHash = await sendMsgs(
+        wallet,
+        chainInfo,
+        key.bech32Address,
+        {
+          amino: aminoMsgs,
+          proto: protoMsgs,
+        },
+        {
+          amount: [],
+          gas: Math.floor(simulated.gasUsed * 1.5).toString(),
+        },
+      );
+
+      router.push({
+        pathname: "complete",
+        query: { txHash: Buffer.from(txHash).toString("hex") },
+      });
     }
   };
 

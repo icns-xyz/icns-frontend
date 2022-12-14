@@ -1,3 +1,5 @@
+export const MainChainId = "osmo-test-4";
+
 export const RPC_URL = "";
 export const REST_URL = "https://lcd.testnet.osmosis.zone";
 

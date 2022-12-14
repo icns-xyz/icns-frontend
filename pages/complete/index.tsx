@@ -8,8 +8,32 @@ import color from "../../styles/color";
 
 import AlertCircleOutlineIcon from "../../public/images/svg/alert-circle-outline.svg";
 import TwitterIcon from "../../public/images/svg/twitter-icon.svg";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { TendermintTxTracer } from "@keplr-wallet/cosmos";
 
 export default function CompletePage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const { txHash } = router.query;
+
+    if (txHash) {
+      traceTX(txHash as string);
+    }
+  }, []);
+
+  const traceTX = async (txHash: string) => {
+    const txTracer = new TendermintTxTracer(
+      "https://rpc.testnet.osmosis.zone",
+      "/websocket",
+    );
+
+    const result = await txTracer.traceTx(Buffer.from(txHash, "hex"));
+
+    console.log(result);
+  };
+
   return (
     <Container>
       <Logo />
