@@ -37,3 +37,25 @@ export interface IcnsVerificationResponse {
       }
   )[];
 }
+
+export interface NameByTwitterIdQueryResponse {
+  data: {
+    name: string;
+  };
+}
+
+export interface AddressesQueryResponse {
+  data: {
+    addresses: RegisteredAddresses[];
+  };
+}
+
+export interface RegisteredAddresses {
+  address: string;
+  bech32_prefix: string;
+}
+
+export interface QueryError {
+  code: number;
+  message: string;
+}

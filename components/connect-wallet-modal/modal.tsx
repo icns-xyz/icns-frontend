@@ -17,6 +17,7 @@ export const ConnectWalletModal: FunctionComponent<Props> = (props) => {
     <ReactModal
       isOpen={isModalOpen}
       onRequestClose={onCloseModal}
+      ariaHideApp={false}
       style={{
         overlay: { background: "#181818b3" },
         content: {

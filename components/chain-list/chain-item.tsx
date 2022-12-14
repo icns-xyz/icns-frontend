@@ -1,5 +1,12 @@
 import { ChainItemType } from "../../types";
-import { ChangeEvent, FunctionComponent, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  FunctionComponent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import {
   ChainImageContainer,
   ChainInfoContainer,
@@ -14,18 +21,29 @@ import { ChainImage } from "./chain-image";
 interface Props {
   chainItem: ChainItemType;
   checkedItemHandler: (chainItem: ChainItemType, isChecked: boolean) => void;
+  checkedItems: Set<unknown>;
 }
 
 export const ChainItem: FunctionComponent<Props> = (props) => {
-  const { chainItem, checkedItemHandler } = props;
+  const { chainItem, checkedItemHandler, checkedItems } = props;
   const [checked, setChecked] = useState(false);
 
-  const checkHandler = (event: ChangeEvent<HTMLInputElement>) => {
+  const checkHandler = () => {
     setChecked(!checked);
-    checkedItemHandler(chainItem, event.target.checked);
+    checkedItemHandler(chainItem, !checked);
   };
+
+  useEffect(() => {
+    setChecked(checkedItems.has(chainItem));
+  }, [checkedItems]);
+
   return (
-    <ChainItemContainer key={chainItem.prefix} isLoading={false}>
+    <ChainItemContainer
+      key={chainItem.prefix}
+      isLoading={false}
+      checked={checked}
+      onClick={checkHandler}
+    >
       <ChainImageContainer width="3rem" height="3rem">
         <ChainImage
           src={chainItem.chainImageUrl}
@@ -40,31 +58,36 @@ export const ChainItem: FunctionComponent<Props> = (props) => {
 
       <Flex1 />
 
-      <ChainCheckBox
-        checked={checked}
-        onChange={(event) => checkHandler(event)}
-      />
+      <ChainCheckBox checked={checked} readOnly />
     </ChainItemContainer>
   );
 };
 
-const ChainName = styled.div`
+export const ChainName = styled.div`
   font-weight: 600;
   font-size: 0.8rem;
   line-height: 1rem;
 
-  color: ${color.grey["100"]};
+  color: ${color.white};
 `;
 
-const WalletAddress = styled.div`
+export const WalletAddress = styled.div`
   font-weight: 500;
   font-size: 0.8rem;
   line-height: 1rem;
 
+  max-height: 2rem;
+  max-width: 27rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   color: ${color.grey["400"]};
 `;
 
-const ChainCheckBox = styled.input.attrs({ type: "checkbox" })`
+export const ChainCheckBox = styled.input.attrs({ type: "checkbox" })`
   width: 1.5rem;
   height: 1.5rem;
 `;
