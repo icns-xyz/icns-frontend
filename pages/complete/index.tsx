@@ -32,6 +32,8 @@ export default function CompletePage() {
     const result = await txTracer.traceTx(Buffer.from(txHash, "hex"));
 
     console.log(result);
+
+    // Todo rsult => 확인 후에 확인
   };
 
   return (

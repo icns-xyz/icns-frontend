@@ -1,5 +1,5 @@
 import { Dispatch, FunctionComponent, SetStateAction, useEffect } from "react";
-import { ChainItemType, WidthHeightProps } from "../../types";
+import { ChainItemType } from "../../types";
 import color from "../../styles/color";
 import styled from "styled-components";
 import { ChainItem } from "./chain-item";
@@ -8,6 +8,7 @@ interface Props {
   allChecked: boolean;
   setAllChecked: Dispatch<SetStateAction<boolean>>;
   chainList: ChainItemType[];
+  disabledChainList: ChainItemType[];
   checkedItems: Set<unknown>;
   setCheckedItems: Dispatch<SetStateAction<Set<unknown>>>;
 }
@@ -17,6 +18,7 @@ export const ChainList: FunctionComponent<Props> = (props) => {
     allChecked,
     setAllChecked,
     chainList,
+    disabledChainList,
     checkedItems,
     setCheckedItems,
   } = props;
@@ -59,6 +61,15 @@ export const ChainList: FunctionComponent<Props> = (props) => {
           checkedItems={checkedItems}
         />
       ))}
+      {disabledChainList.map((chainItem) => (
+        <ChainItem
+          key={chainItem.address}
+          chainItem={chainItem}
+          checkedItemHandler={checkedItemHandler}
+          checkedItems={checkedItems}
+          disabled={true}
+        />
+      ))}
     </ChainContainer>
   );
 };
@@ -71,36 +82,4 @@ export const ChainContainer = styled.div`
   overflow: scroll;
 
   background-color: ${(props) => props.color};
-`;
-
-export const ChainItemContainer = styled.div<{
-  isLoading: boolean;
-  checked?: boolean;
-}>`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  gap: 1rem;
-
-  padding: 1.5rem;
-
-  cursor: pointer;
-
-  &:hover {
-    background: ${(props) => (props.isLoading ? null : color.grey["700"])};
-  }
-`;
-
-export const ChainImageContainer = styled.div<WidthHeightProps>`
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
-
-  position: relative;
-`;
-
-export const ChainInfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
 `;

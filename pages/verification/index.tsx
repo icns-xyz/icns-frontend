@@ -2,8 +2,12 @@
 import { useEffect, useState } from "react";
 
 // Types
-import { ChainItemType, TwitterProfileType } from "../../types";
-import { checkTwitterAuthQueryParameter, request } from "../../utils/url";
+import {
+  ChainItemType,
+  RegisteredAddresses,
+  TwitterProfileType,
+} from "../../types";
+import { checkTwitterAuthQueryParameter } from "../../utils/url";
 
 // Styles
 import styled from "styled-components";
@@ -20,7 +24,6 @@ import { useRouter } from "next/router";
 import {
   getKeplrFromWindow,
   KeplrWallet,
-  makeCosmwasmExecMsg,
   sendMsgs,
   simulateMsgs,
 } from "../../wallets";
@@ -29,26 +32,20 @@ import { ChainIdHelper } from "@keplr-wallet/cosmos";
 import AllChainsIcon from "../../public/images/svg/all-chains-icon.svg";
 import { AllChainsItem } from "../../components/chain-list/all-chains-item";
 import { SearchInput } from "../../components/search-input";
-import {
-  MainChainId,
-  REGISTRAR_ADDRESS,
-  RESOLVER_ADDRESS,
-  REST_URL,
-} from "../../constants/icns";
+import { MainChainId, RESOLVER_ADDRESS, REST_URL } from "../../constants/icns";
 
 import {
   fetchTwitterInfo,
-  makeClaimMessage,
-  makeSetRecordMessage,
   queryAddressesFromTwitterName,
   queryRegisteredTwitterId,
   verifyTwitterAccount,
-} from "../../repository";
+} from "../../queries";
 import { ErrorHandler } from "../../utils/error";
 import {
   KEPLR_NOT_FOUND_ERROR,
   TWITTER_LOGIN_ERROR,
 } from "../../constants/error-message";
+import { makeClaimMessage, makeSetRecordMessage } from "../../messages";
 
 export default function VerificationPage() {
   const router = useRouter();
@@ -57,13 +54,19 @@ export default function VerificationPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   const [wallet, setWallet] = useState<KeplrWallet>();
-  const [allChains, setAllChains] = useState<ChainItemType>();
+
   const [chainList, setChainList] = useState<ChainItemType[]>([]);
-  const [registeredAddressList, setRegisteredAddressList] = useState<string[]>(
+  const [disabledChainList, setDisabledChainList] = useState<ChainItemType[]>(
     [],
   );
-  const [checkedItems, setCheckedItems] = useState(new Set());
+  const [registeredChainList, setRegisteredChainList] = useState<
+    RegisteredAddresses[]
+  >([]);
+
+  const [allChains, setAllChains] = useState<ChainItemType>();
   const [allChecked, setAllChecked] = useState(false);
+  const [checkedItems, setCheckedItems] = useState(new Set());
+
   const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
@@ -80,7 +83,7 @@ export default function VerificationPage() {
           // Fetch Twitter Profile
           const twitterInfo = await fetchTwitterInfo(state, code);
 
-          // check registered
+          // contract check registered
           const registeredQueryResponse = await queryRegisteredTwitterId(
             twitterInfo.id,
           );
@@ -95,11 +98,7 @@ export default function VerificationPage() {
               registeredQueryResponse.data.name,
             );
 
-            setRegisteredAddressList(
-              addressesQueryResponse.data.addresses.map(
-                (address) => address.address,
-              ),
-            );
+            setRegisteredChainList(addressesQueryResponse.data.addresses);
           }
         } catch (error) {
           if (error instanceof Error && error.message === TWITTER_LOGIN_ERROR) {
@@ -117,89 +116,96 @@ export default function VerificationPage() {
   }, []);
 
   useEffect(() => {
-    // After Wallet Initialize
-    if (wallet) {
-      fetchChainList();
-    }
-  }, [wallet]);
+    const disabledChainList = chainList.filter((chain) => {
+      for (const registeredChain of registeredChainList) {
+        if (
+          chain.prefix === registeredChain.bech32_prefix &&
+          chain.address === registeredChain.address
+        ) {
+          return true;
+        }
+      }
 
-  useEffect(() => {
-    // To check registered chain
-    const filteredChainList = chainList.filter((chain) => {
-      return registeredAddressList.includes(chain.address);
+      return false;
     });
 
-    setCheckedItems(new Set(filteredChainList));
-  }, [registeredAddressList]);
+    const filteredChainList = chainList.filter(
+      (chain) => !disabledChainList.includes(chain),
+    );
+
+    setAllChains({
+      chainId: "all chains",
+      chainName: "all chains",
+      prefix: `all chains(${filteredChainList.length})`,
+      address: filteredChainList.map((chain) => chain.chainName).join(", "),
+      chainImageUrl: AllChainsIcon,
+    });
+
+    setChainList(filteredChainList);
+    setDisabledChainList(disabledChainList);
+  }, [registeredChainList]);
 
   const initWallet = async () => {
     const keplr = await getKeplrFromWindow();
 
     if (keplr) {
       const keplrWallet = new KeplrWallet(keplr);
+
+      await fetchChainList(keplrWallet);
       setWallet(keplrWallet);
     } else {
       ErrorHandler(KEPLR_NOT_FOUND_ERROR);
     }
   };
 
-  const fetchChainList = async () => {
-    if (wallet) {
-      const chainIds = (await wallet.getChainInfosWithoutEndpoints()).map(
-        (c) => c.chainId,
-      );
-      const chainKeys = await Promise.all(
-        chainIds.map((chainId) => wallet.getKey(chainId)),
-      );
+  const fetchChainList = async (wallet: KeplrWallet) => {
+    const chainIds = (await wallet.getChainInfosWithoutEndpoints()).map(
+      (c) => c.chainId,
+    );
+    const chainKeys = await Promise.all(
+      chainIds.map((chainId) => wallet.getKey(chainId)),
+    );
 
-      const chainInfos = (await wallet.getChainInfosWithoutEndpoints()).map(
-        (chainInfo) => {
-          return {
-            chainId: chainInfo.chainId,
-            chainName: chainInfo.chainName,
-            prefix: chainInfo.bech32Config.bech32PrefixAccAddr,
-            chainImageUrl: `https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/${
-              ChainIdHelper.parse(chainInfo.chainId).identifier
-            }/chain.png`,
-          };
-        },
-      );
+    const chainInfos = (await wallet.getChainInfosWithoutEndpoints()).map(
+      (chainInfo) => {
+        return {
+          chainId: chainInfo.chainId,
+          chainName: chainInfo.chainName,
+          prefix: chainInfo.bech32Config.bech32PrefixAccAddr,
+          chainImageUrl: `https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/${
+            ChainIdHelper.parse(chainInfo.chainId).identifier
+          }/chain.png`,
+        };
+      },
+    );
 
-      const chainArray = [];
-      for (let i = 0; i < chainKeys.length; i++) {
-        chainArray.push({
-          address: chainKeys[i].bech32Address,
-          ...chainInfos[i],
-        });
-      }
-
-      // remove duplicated item
-      const filteredChainList = chainArray.filter((nextChain, index, self) => {
-        return (
-          index ===
-          self.findIndex((prevChain) => {
-            const isDuplicated = prevChain.prefix === nextChain.prefix;
-
-            if (isDuplicated && prevChain.chainName !== nextChain.chainName) {
-              console.log(
-                `${nextChain.chainName} has been deleted due to a duplicate name with ${prevChain.chainName}`,
-              );
-            }
-
-            return isDuplicated;
-          })
-        );
+    const chainArray = [];
+    for (let i = 0; i < chainKeys.length; i++) {
+      chainArray.push({
+        address: chainKeys[i].bech32Address,
+        ...chainInfos[i],
       });
-
-      setAllChains({
-        chainId: "all chains",
-        prefix: `all chains(${filteredChainList.length})`,
-        address: chainInfos.map((chainInfo) => chainInfo.chainName).join(", "),
-        chainImageUrl: AllChainsIcon,
-      });
-
-      setChainList(filteredChainList);
     }
+
+    // remove duplicated item
+    const filteredChainList = chainArray.filter((nextChain, index, self) => {
+      return (
+        index ===
+        self.findIndex((prevChain) => {
+          const isDuplicated = prevChain.prefix === nextChain.prefix;
+
+          if (isDuplicated && prevChain.chainName !== nextChain.chainName) {
+            console.log(
+              `${nextChain.chainName} has been deleted due to a duplicate name with ${prevChain.chainName}`,
+            );
+          }
+
+          return isDuplicated;
+        })
+      );
+    });
+
+    setChainList(filteredChainList);
   };
 
   const checkAdr36 = async () => {
@@ -224,7 +230,6 @@ export default function VerificationPage() {
     const { state, code } = checkTwitterAuthQueryParameter(
       window.location.search,
     );
-
     const twitterInfo = await fetchTwitterInfo(state, code);
 
     const adr36Infos = await checkAdr36();
@@ -331,6 +336,12 @@ export default function VerificationPage() {
               allChecked={allChecked}
               setAllChecked={setAllChecked}
               chainList={chainList.filter(
+                (chain) =>
+                  chain.chainId.includes(searchValue) ||
+                  chain.address.includes(searchValue) ||
+                  chain.prefix.includes(searchValue),
+              )}
+              disabledChainList={disabledChainList.filter(
                 (chain) =>
                   chain.chainId.includes(searchValue) ||
                   chain.address.includes(searchValue) ||

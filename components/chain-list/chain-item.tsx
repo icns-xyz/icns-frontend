@@ -1,17 +1,5 @@
-import { ChainItemType } from "../../types";
-import {
-  ChangeEvent,
-  Dispatch,
-  FunctionComponent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
-import {
-  ChainImageContainer,
-  ChainInfoContainer,
-  ChainItemContainer,
-} from "./chain-list";
+import { ChainItemType, WidthHeightProps } from "../../types";
+import { FunctionComponent, useEffect, useState } from "react";
 
 import color from "../../styles/color";
 import { Flex1 } from "../../styles/flex-1";
@@ -22,26 +10,31 @@ interface Props {
   chainItem: ChainItemType;
   checkedItemHandler: (chainItem: ChainItemType, isChecked: boolean) => void;
   checkedItems: Set<unknown>;
+  disabled?: boolean;
 }
 
 export const ChainItem: FunctionComponent<Props> = (props) => {
-  const { chainItem, checkedItemHandler, checkedItems } = props;
-  const [checked, setChecked] = useState(false);
+  const { chainItem, checkedItemHandler, checkedItems, disabled } = props;
+  const [checked, setChecked] = useState(disabled);
 
   const checkHandler = () => {
-    setChecked(!checked);
-    checkedItemHandler(chainItem, !checked);
+    if (!disabled) {
+      setChecked(!checked);
+      checkedItemHandler(chainItem, !checked);
+    }
   };
 
   useEffect(() => {
-    setChecked(checkedItems.has(chainItem));
+    if (!disabled) {
+      setChecked(checkedItems.has(chainItem));
+    }
   }, [checkedItems]);
 
   return (
     <ChainItemContainer
       key={chainItem.prefix}
       isLoading={false}
-      checked={checked}
+      disabled={disabled}
       onClick={checkHandler}
     >
       <ChainImageContainer width="3rem" height="3rem">
@@ -62,6 +55,41 @@ export const ChainItem: FunctionComponent<Props> = (props) => {
     </ChainItemContainer>
   );
 };
+
+export const ChainItemContainer = styled.div<{
+  isLoading: boolean;
+  checked?: boolean;
+  disabled?: boolean;
+}>`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: 1rem;
+
+  padding: 1.5rem;
+
+  cursor: pointer;
+
+  opacity: ${(props) => (props.disabled ? "0.3" : "1")};
+
+  &:hover {
+    background: ${(props) => (props.isLoading ? null : color.grey["600"])};
+  }
+`;
+
+export const ChainImageContainer = styled.div<WidthHeightProps>`
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+
+  position: relative;
+`;
+
+export const ChainInfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
 
 export const ChainName = styled.div`
   font-weight: 600;

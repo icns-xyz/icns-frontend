@@ -10,12 +10,13 @@ import {
   WalletType,
 } from "../../constants/wallet";
 import { getKeplrFromWindow, KeplrWallet } from "../../wallets";
-import { loginWithTwitter } from "../../repository";
+import { loginWithTwitter } from "../../queries";
 
 interface Props {
   wallet: WalletType;
 }
 
+// Todo: Wallet 관련된 부분을 Context로 빼는 부분
 export const WalletItem: FunctionComponent<Props> = (props: Props) => {
   const { wallet } = props;
 

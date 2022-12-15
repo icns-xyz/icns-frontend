@@ -1,50 +1,7 @@
-import { request } from "../utils/url";
-import {
-  REGISTRAR_ADDRESS,
-  RESOLVER_ADDRESS,
-  REST_URL,
-} from "../constants/icns";
-import { Buffer } from "buffer/";
-import {
-  AddressesQueryResponse,
-  CosmwasmExecuteMessageResult,
-  NameByTwitterIdQueryResponse,
-  QueryError,
-} from "../types";
+import { CosmwasmExecuteMessageResult } from "../types";
 import { makeCosmwasmExecMsg } from "../wallets";
+import { REGISTRAR_ADDRESS, RESOLVER_ADDRESS } from "../constants/icns";
 import { ContractFee } from "../constants/wallet";
-
-const getCosmwasmQueryUrl = (contractAddress: string, queryMsg: string) =>
-  `${REST_URL}/cosmwasm/wasm/v1/contract/${contractAddress}/smart/${queryMsg}`;
-
-export const queryRegisteredTwitterId = async (
-  twitterId: string,
-): Promise<NameByTwitterIdQueryResponse | QueryError> => {
-  const msg = {
-    name_by_twitter_id: { twitter_id: twitterId },
-  };
-  return request<NameByTwitterIdQueryResponse>(
-    getCosmwasmQueryUrl(
-      REGISTRAR_ADDRESS,
-      Buffer.from(JSON.stringify(msg)).toString("base64"),
-    ),
-  );
-};
-
-export const queryAddressesFromTwitterName = async (
-  twitterUsername: string,
-): Promise<AddressesQueryResponse> => {
-  const msg = {
-    addresses: { name: twitterUsername },
-  };
-
-  return request<AddressesQueryResponse>(
-    getCosmwasmQueryUrl(
-      RESOLVER_ADDRESS,
-      Buffer.from(JSON.stringify(msg)).toString("base64"),
-    ),
-  );
-};
 
 export const makeClaimMessage = (
   senderAddress: string,

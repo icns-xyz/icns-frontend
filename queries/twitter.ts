@@ -6,9 +6,9 @@ import {
 import { request } from "../utils/url";
 
 export const loginWithTwitter = async () => {
-  const { authUrl }: TwitterAuthUrlResponse = await (
-    await fetch("/api/twitter-auth-url")
-  ).json();
+  const { authUrl } = await request<TwitterAuthUrlResponse>(
+    "/api/twitter-auth-url",
+  );
 
   window.location.href = authUrl;
 };

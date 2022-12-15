@@ -1,20 +1,16 @@
 import { ChainItemType } from "../../types";
+import { Dispatch, FunctionComponent, SetStateAction } from "react";
+
+import { ChainImage } from "./chain-image";
+import { Flex1 } from "../../styles/flex-1";
 import {
-  ChangeEvent,
-  Dispatch,
-  FunctionComponent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
-import {
+  ChainCheckBox,
   ChainImageContainer,
   ChainInfoContainer,
   ChainItemContainer,
-} from "./chain-list";
-import { ChainImage } from "./chain-image";
-import { Flex1 } from "../../styles/flex-1";
-import { ChainCheckBox, ChainName, WalletAddress } from "./chain-item";
+  ChainName,
+  WalletAddress,
+} from "./chain-item";
 import color from "../../styles/color";
 import styled from "styled-components";
 
