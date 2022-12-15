@@ -390,16 +390,13 @@ export default function VerificationPage() {
               setCheckedItems={setCheckedItems}
             />
 
-            <AgreeContainer>
-              <AgreeCheckBox
-                type="checkbox"
-                checked={isAgree}
-                onClick={() => {
-                  setIsAgree(!isAgree);
-                }}
-                readOnly
-              />
-              I check that Osmo is required for this transaction
+            <AgreeContainer
+              onClick={() => {
+                setIsAgree(!isAgree);
+              }}
+            >
+              <AgreeCheckBox type="checkbox" checked={isAgree} readOnly />I
+              check that Osmo is required for this transaction
             </AgreeContainer>
 
             <ButtonContainer disabled={isRegisterButtonDisable}>
@@ -481,10 +478,13 @@ const AgreeContainer = styled.div`
   line-height: 0.8rem;
 
   text-transform: uppercase;
+  user-select: none;
 
   color: ${color.grey["400"]};
 
   padding: 2rem 0;
+
+  cursor: pointer;
 `;
 
 const AgreeCheckBox = styled.input.attrs({ type: "checkbox" })`
