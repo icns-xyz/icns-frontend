@@ -15,7 +15,7 @@ interface Props {
 
 export const ChainItem: FunctionComponent<Props> = (props) => {
   const { chainItem, checkedItemHandler, checkedItems, disabled } = props;
-  const [checked, setChecked] = useState(disabled);
+  const [checked, setChecked] = useState(!!disabled);
 
   const checkHandler = () => {
     if (!disabled) {
@@ -35,6 +35,7 @@ export const ChainItem: FunctionComponent<Props> = (props) => {
       key={chainItem.prefix}
       isLoading={false}
       disabled={disabled}
+      checked={checked}
       onClick={checkHandler}
     >
       <ChainImageContainer width="3rem" height="3rem">
@@ -71,10 +72,17 @@ export const ChainItemContainer = styled.div<{
 
   cursor: pointer;
 
-  opacity: ${(props) => (props.disabled ? "0.3" : "1")};
+  opacity: ${(props) => (props.disabled ? "0.5" : "1")};
+
+  background-color: ${(props) =>
+    props.disabled
+      ? color.black
+      : props.checked
+      ? color.grey["800"]
+      : color.grey["900"]};
 
   &:hover {
-    background: ${(props) => (props.isLoading ? null : color.grey["600"])};
+    background: ${(props) => (props.isLoading ? null : color.grey["700"])};
   }
 `;
 

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 // Types
 import {
   ChainItemType,
+  QueryError,
   RegisteredAddresses,
   TwitterProfileType,
 } from "../../types";
@@ -32,11 +33,17 @@ import { ChainIdHelper } from "@keplr-wallet/cosmos";
 import AllChainsIcon from "../../public/images/svg/all-chains-icon.svg";
 import { AllChainsItem } from "../../components/chain-list/all-chains-item";
 import { SearchInput } from "../../components/search-input";
-import { MainChainId, RESOLVER_ADDRESS, REST_URL } from "../../constants/icns";
+import {
+  MainChainId,
+  REFERRAL_KEY,
+  RESOLVER_ADDRESS,
+  REST_URL,
+} from "../../constants/icns";
 
 import {
   fetchTwitterInfo,
   queryAddressesFromTwitterName,
+  queryOwnerOfTwitterName,
   queryRegisteredTwitterId,
   verifyTwitterAccount,
 } from "../../queries";
@@ -46,6 +53,8 @@ import {
   TWITTER_LOGIN_ERROR,
 } from "../../constants/error-message";
 import { makeClaimMessage, makeSetRecordMessage } from "../../messages";
+import Axios, { AxiosError } from "axios";
+import { BackButton } from "../../components/back-button";
 
 export default function VerificationPage() {
   const router = useRouter();
@@ -69,6 +78,9 @@ export default function VerificationPage() {
 
   const [searchValue, setSearchValue] = useState("");
 
+  const [isOwner, setIsOwner] = useState(false);
+  const [isAgree, setIsAgree] = useState(false);
+
   useEffect(() => {
     const init = async () => {
       if (window.location.search) {
@@ -78,7 +90,7 @@ export default function VerificationPage() {
           );
 
           // Initialize Wallet
-          await initWallet();
+          const keplrWallet = await initWallet();
 
           // Fetch Twitter Profile
           const twitterInfo = await fetchTwitterInfo(state, code);
@@ -94,9 +106,18 @@ export default function VerificationPage() {
           });
 
           if ("data" in registeredQueryResponse) {
+            const ownerOfQueryResponse = await queryOwnerOfTwitterName(
+              registeredQueryResponse.data.name,
+            );
+
             const addressesQueryResponse = await queryAddressesFromTwitterName(
               registeredQueryResponse.data.name,
             );
+
+            if (keplrWallet) {
+              const key = await keplrWallet.getKey(MainChainId);
+              setIsOwner(ownerOfQueryResponse.data.owner === key.bech32Address);
+            }
 
             setRegisteredChainList(addressesQueryResponse.data.addresses);
           }
@@ -153,6 +174,8 @@ export default function VerificationPage() {
 
       await fetchChainList(keplrWallet);
       setWallet(keplrWallet);
+
+      return keplrWallet;
     } else {
       ErrorHandler(KEPLR_NOT_FOUND_ERROR);
     }
@@ -227,83 +250,98 @@ export default function VerificationPage() {
   };
 
   const onClickRegistration = async () => {
-    const { state, code } = checkTwitterAuthQueryParameter(
-      window.location.search,
-    );
-    const twitterInfo = await fetchTwitterInfo(state, code);
-
-    const adr36Infos = await checkAdr36();
-
-    if (wallet && adr36Infos) {
-      const key = await wallet.getKey(MainChainId);
-
-      const icnsVerificationList = await verifyTwitterAccount(
-        key.bech32Address,
-        twitterInfo.accessToken,
+    try {
+      const { state, code } = checkTwitterAuthQueryParameter(
+        window.location.search,
       );
+      const twitterInfo = await fetchTwitterInfo(state, code);
 
-      const registerMsg = makeClaimMessage(
-        key.bech32Address,
-        twitterInfo.username,
-        icnsVerificationList,
-      );
+      const adr36Infos = await checkAdr36();
 
-      const addressMsgs = adr36Infos.map((adr36Info) => {
-        return makeSetRecordMessage(
+      if (wallet && adr36Infos) {
+        const key = await wallet.getKey(MainChainId);
+
+        const icnsVerificationList = await verifyTwitterAccount(
+          key.bech32Address,
+          twitterInfo.accessToken,
+        );
+
+        const registerMsg = makeClaimMessage(
           key.bech32Address,
           twitterInfo.username,
-          adr36Info,
+          icnsVerificationList,
+          localStorage.getItem(REFERRAL_KEY) ?? undefined,
         );
-      });
 
-      const aminoMsgs = twitterAuthInfo?.isRegistered
-        ? []
-        : [registerMsg.amino];
-      const protoMsgs = twitterAuthInfo?.isRegistered
-        ? []
-        : [registerMsg.proto];
+        const addressMsgs = adr36Infos.map((adr36Info) => {
+          return makeSetRecordMessage(
+            key.bech32Address,
+            twitterInfo.username,
+            adr36Info,
+          );
+        });
 
-      for (const addressMsg of addressMsgs) {
-        aminoMsgs.push(addressMsg.amino);
-        protoMsgs.push(addressMsg.proto);
+        const aminoMsgs = twitterAuthInfo?.isRegistered
+          ? []
+          : [registerMsg.amino];
+        const protoMsgs = twitterAuthInfo?.isRegistered
+          ? []
+          : [registerMsg.proto];
+
+        for (const addressMsg of addressMsgs) {
+          aminoMsgs.push(addressMsg.amino);
+          protoMsgs.push(addressMsg.proto);
+        }
+
+        const chainInfo = {
+          chainId: MainChainId,
+          rest: REST_URL,
+        };
+
+        const simulated = await simulateMsgs(
+          chainInfo,
+          key.bech32Address,
+          {
+            proto: protoMsgs,
+          },
+          {
+            amount: [],
+          },
+        );
+
+        const txHash = await sendMsgs(
+          wallet,
+          chainInfo,
+          key.bech32Address,
+          {
+            amino: aminoMsgs,
+            proto: protoMsgs,
+          },
+          {
+            amount: [],
+            gas: Math.floor(simulated.gasUsed * 1.5).toString(),
+          },
+        );
+
+        await router.push({
+          pathname: "complete",
+          query: {
+            txHash: Buffer.from(txHash).toString("hex"),
+            twitterUsername: twitterInfo.username,
+          },
+        });
       }
-
-      const chainInfo = {
-        chainId: MainChainId,
-        rest: REST_URL,
-      };
-
-      const simulated = await simulateMsgs(
-        chainInfo,
-        key.bech32Address,
-        {
-          proto: protoMsgs,
-        },
-        {
-          amount: [],
-        },
-      );
-
-      const txHash = await sendMsgs(
-        wallet,
-        chainInfo,
-        key.bech32Address,
-        {
-          amino: aminoMsgs,
-          proto: protoMsgs,
-        },
-        {
-          amount: [],
-          gas: Math.floor(simulated.gasUsed * 1.5).toString(),
-        },
-      );
-
-      await router.push({
-        pathname: "complete",
-        query: { txHash: Buffer.from(txHash).toString("hex") },
-      });
+    } catch (error) {
+      if (Axios.isAxiosError(error)) {
+        console.error((error?.response?.data as QueryError).message);
+      }
     }
   };
+
+  const isRegisterButtonDisable =
+    checkedItems.size < 1 ||
+    (!isOwner && registeredChainList.length > 0) ||
+    !isAgree;
 
   return (
     <Container>
@@ -314,6 +352,7 @@ export default function VerificationPage() {
           <SkeletonChainList />
         ) : (
           <ContentContainer>
+            <BackButton />
             <TwitterProfile twitterProfileInformation={twitterAuthInfo} />
 
             <ChainListTitleContainer>
@@ -351,9 +390,21 @@ export default function VerificationPage() {
               setCheckedItems={setCheckedItems}
             />
 
-            <ButtonContainer>
+            <AgreeContainer>
+              <AgreeCheckBox
+                type="checkbox"
+                checked={isAgree}
+                onClick={() => {
+                  setIsAgree(!isAgree);
+                }}
+                readOnly
+              />
+              I check that Osmo is required for this transaction
+            </AgreeContainer>
+
+            <ButtonContainer disabled={isRegisterButtonDisable}>
               <PrimaryButton
-                disabled={checkedItems.size < 1}
+                disabled={isRegisterButtonDisable}
                 onClick={onClickRegistration}
               >
                 Register
@@ -375,6 +426,10 @@ const MainContainer = styled.div`
   display: flex;
   justify-content: center;
 
+  height: 100vh;
+
+  padding: 2.7rem 0;
+
   color: white;
 `;
 
@@ -384,15 +439,14 @@ export const ContentContainer = styled.div`
   align-items: center;
 
   width: 40rem;
-
-  margin-top: 5rem;
 `;
 
-export const ButtonContainer = styled.div`
+export const ButtonContainer = styled.div<{ disabled?: boolean }>`
   width: 12rem;
   height: 4rem;
 
-  margin-top: 2rem;
+  background-color: ${(props) =>
+    props.disabled ? color.orange["300"] : color.orange["100"]};
 `;
 
 export const ChainListTitleContainer = styled.div`
@@ -413,4 +467,27 @@ const ChainListTitle = styled.div`
   line-height: 1.9rem;
 
   color: ${color.white};
+`;
+
+const AgreeContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  font-family: "Inter", serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.8rem;
+  line-height: 0.8rem;
+
+  text-transform: uppercase;
+
+  color: ${color.grey["400"]};
+
+  padding: 2rem 0;
+`;
+
+const AgreeCheckBox = styled.input.attrs({ type: "checkbox" })`
+  width: 1.2rem;
+  height: 1.2rem;
 `;

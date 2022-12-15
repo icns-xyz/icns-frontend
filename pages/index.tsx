@@ -16,6 +16,8 @@ import CheckIcon from "../public/images/svg/check-icon.svg";
 import { Logo } from "../components/logo";
 import { useEffect, useState } from "react";
 import { SELECTED_WALLET_KEY } from "../constants/wallet";
+import { replaceToInstallPage } from "../utils/url";
+import { REFERRAL_KEY } from "../constants/icns";
 
 export default function Home() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -25,6 +27,17 @@ export default function Home() {
   };
 
   useEffect(() => {
+    localStorage.removeItem(REFERRAL_KEY);
+
+    if (window.location.search) {
+      const [, referral] =
+        window.location.search.match(/^(?=.*referral=([^&]+)|).+$/) || [];
+
+      if (referral) {
+        localStorage.setItem(REFERRAL_KEY, referral);
+      }
+    }
+
     localStorage.removeItem(SELECTED_WALLET_KEY);
   }, []);
 
@@ -62,7 +75,8 @@ export default function Home() {
                 />
               </CheckIconContainer>
               You are a <CheckBoldText>&nbsp;keplr&nbsp;</CheckBoldText> user.
-              if not, you can install here
+              if not, you can install&nbsp;
+              <InstallLInk onClick={replaceToInstallPage}>HERE</InstallLInk>
             </CheckContainer>
             <CheckContainer>
               <CheckIconContainer>
@@ -182,7 +196,16 @@ const CheckContainer = styled.div`
 
   text-transform: uppercase;
 
-  color: ${color.grey["300"]};
+  padding-left: 0.75rem;
+
+  color: ${color.grey["400"]};
+`;
+
+const InstallLInk = styled.a`
+  color: ${color.grey["400"]};
+  text-decoration: underline;
+
+  cursor: pointer;
 `;
 
 const CheckBoldText = styled.span`

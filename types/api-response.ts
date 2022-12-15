@@ -59,3 +59,9 @@ export interface QueryError {
   code: number;
   message: string;
 }
+
+export interface OwnerOfQueryResponse {
+  data: {
+    owner: string;
+  };
+}

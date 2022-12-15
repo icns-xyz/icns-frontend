@@ -7,6 +7,7 @@ export const makeClaimMessage = (
   senderAddress: string,
   twitterUserName: string,
   verificationList: any[],
+  referral?: string,
 ): CosmwasmExecuteMessageResult => {
   return makeCosmwasmExecMsg(
     senderAddress,
@@ -26,6 +27,7 @@ export const makeClaimMessage = (
             };
           }
         }),
+        referral,
       },
     },
     [ContractFee],

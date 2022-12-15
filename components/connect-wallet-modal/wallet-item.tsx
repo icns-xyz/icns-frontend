@@ -1,24 +1,34 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import ArrowRightIcon from "../../public/images/svg/arrow-right.svg";
 import color from "../../styles/color";
 import { Flex1 } from "../../styles/flex-1";
 import styled from "styled-components";
 import Image from "next/image";
 import {
+  MINIMUM_VERSION,
   SELECTED_WALLET_KEY,
   WALLET_INSTALL_URL,
   WalletType,
 } from "../../constants/wallet";
 import { getKeplrFromWindow, KeplrWallet } from "../../wallets";
 import { loginWithTwitter } from "../../queries";
+import {
+  KEPLR_NOT_FOUND_ERROR,
+  KEPLR_VERSION_ERROR,
+} from "../../constants/error-message";
+import semver from "semver/preload";
 
 interface Props {
   wallet: WalletType;
 }
 
-// Todo: Wallet 관련된 부분을 Context로 빼는 부분
 export const WalletItem: FunctionComponent<Props> = (props: Props) => {
   const { wallet } = props;
+  const [isInstalled, setIsInstalled] = useState<boolean>();
+
+  useEffect(() => {
+    setIsInstalled(!!window.keplr);
+  }, []);
 
   const onClickWalletItem = async () => {
     try {
@@ -38,6 +48,11 @@ export const WalletItem: FunctionComponent<Props> = (props: Props) => {
 
     if (keplr === undefined) {
       window.location.href = WALLET_INSTALL_URL;
+      throw new Error(KEPLR_NOT_FOUND_ERROR);
+    }
+
+    if (semver.lt(keplr.version, MINIMUM_VERSION)) {
+      throw new Error(KEPLR_VERSION_ERROR);
     }
 
     if (keplr) {
@@ -62,7 +77,11 @@ export const WalletItem: FunctionComponent<Props> = (props: Props) => {
       </WalletIcon>
       <WalletContentContainer>
         <WalletName>{wallet.name}</WalletName>
-        {wallet.isReady ? null : (
+        {wallet.isReady ? (
+          isInstalled ? null : (
+            <WalletDescription>Go to install Keplr Extension</WalletDescription>
+          )
+        ) : (
           <WalletDescription>Comming soon</WalletDescription>
         )}
       </WalletContentContainer>

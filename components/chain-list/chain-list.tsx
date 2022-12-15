@@ -52,7 +52,7 @@ export const ChainList: FunctionComponent<Props> = (props) => {
   }, [checkedItems]);
 
   return (
-    <ChainContainer color={color.grey["800"]}>
+    <ChainContainer color={color.grey["900"]}>
       {chainList.map((chainItem) => (
         <ChainItem
           key={chainItem.address}
@@ -78,8 +78,10 @@ export const ChainContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-height: 33rem;
+  //max-height: 33rem;
   overflow: scroll;
+
+  flex: 1;
 
   background-color: ${(props) => props.color};
 `;

@@ -7,6 +7,8 @@ export const WALLET_INSTALL_URL =
   "https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap";
 export const SELECTED_WALLET_KEY = "SELECTED_WALLET_KEY";
 
+export const MINIMUM_VERSION = "0.11.22";
+
 export type WalletName = "Keplr" | "Cosmostation";
 export interface WalletType {
   name: WalletName;

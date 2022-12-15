@@ -9,31 +9,56 @@ import color from "../../styles/color";
 import AlertCircleOutlineIcon from "../../public/images/svg/alert-circle-outline.svg";
 import TwitterIcon from "../../public/images/svg/twitter-icon.svg";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { TendermintTxTracer } from "@keplr-wallet/cosmos";
+import { queryAddressesFromTwitterName } from "../../queries";
+import { RegisteredAddresses } from "../../types";
+import { SHARE_URL } from "../../constants/twitter";
 
 export default function CompletePage() {
   const router = useRouter();
 
+  const [registeredAddressed, setRegisteredAddressed] =
+    useState<RegisteredAddresses[]>();
+
+  const [availableAddress, setAvailableAddress] = useState("");
+
   useEffect(() => {
-    const { txHash } = router.query;
+    const { txHash, twitterUsername } = router.query;
 
-    if (txHash) {
-      traceTX(txHash as string);
+    if (txHash && twitterUsername) {
+      initialize(txHash as string, twitterUsername as string);
     }
-  }, []);
+  }, [router.query]);
 
-  const traceTX = async (txHash: string) => {
+  const initialize = async (txHash: string, twitterUserName: string) => {
     const txTracer = new TendermintTxTracer(
       "https://rpc.testnet.osmosis.zone",
       "/websocket",
     );
 
-    const result = await txTracer.traceTx(Buffer.from(txHash, "hex"));
+    const result: { code?: number } = await txTracer.traceTx(
+      Buffer.from(txHash, "hex"),
+    );
 
-    console.log(result);
+    if (result.code || result.code === 0) {
+      const addresses = await queryAddressesFromTwitterName(twitterUserName);
+      setRegisteredAddressed(addresses.data.addresses);
+    }
+  };
 
-    // Todo rsult => 확인 후에 확인
+  const onClickShareButton = () => {
+    const { twitterUsername } = router.query;
+
+    const width = 500;
+    const height = 700;
+    window.open(
+      `${SHARE_URL}?url=https://www.icns.xyz/&text=${twitterUsername}`,
+      "Share Twitter",
+      `top=${(window.screen.height - height) / 2}, left=${
+        (window.screen.width - width) / 2
+      }, width=${width}, height=${height}, status=no, menubar=no, toolbar=no, resizable=no`,
+    );
   };
 
   return (
@@ -41,22 +66,31 @@ export default function CompletePage() {
       <Logo />
 
       <MainContainer>
-        <MainTitle>Your Name is Active Now!</MainTitle>
+        <MainTitle>
+          <div>Your Name is Active Now!</div>
+        </MainTitle>
         <ContentContainer>
           <RecipentContainer>
             <RecipentTitle>Recipent</RecipentTitle>
             <AddressContainer>
-              kingstarcookies.
-              <Typed
-                strings={["osmo", "cosmos"]}
-                typeSpeed={150}
-                backSpeed={150}
-                backDelay={1000}
-                loop
-                smartBackspace
-              />
+              {`${router.query.twitterUsername}.`}
+              {registeredAddressed && (
+                <Typed
+                  strings={registeredAddressed.map(
+                    (address) => address.bech32_prefix,
+                  )}
+                  typeSpeed={150}
+                  backSpeed={150}
+                  backDelay={1000}
+                  loop
+                  smartBackspace
+                  onStringTyped={(arrayPos: number) => {
+                    setAvailableAddress(registeredAddressed[arrayPos].address);
+                  }}
+                />
+              )}
             </AddressContainer>
-            <AvailableAddressText>available address</AvailableAddressText>
+            <AvailableAddressText>{availableAddress}</AvailableAddressText>
           </RecipentContainer>
         </ContentContainer>
 
@@ -70,7 +104,7 @@ export default function CompletePage() {
           </DescriptionText>
         </DescriptionContainer>
 
-        <ShareButtonContainer>
+        <ShareButtonContainer onClick={onClickShareButton}>
           <ShareButtonText>SHARE MY NAME</ShareButtonText>
           <Image src={TwitterIcon} alt="twitter icon" />
         </ShareButtonContainer>
@@ -95,19 +129,22 @@ const MainContainer = styled.div`
 `;
 
 const MainTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   font-family: "Inter", serif;
   font-style: normal;
   font-weight: 700;
   font-size: 2rem;
   line-height: 2rem;
 
-  padding: 1rem;
+  height: 5rem;
 `;
 
 const ContentContainer = styled.div`
   width: 30rem;
 
-  margin-top: 1rem;
   padding: 2rem 2rem;
 
   background-color: ${color.grey["900"]};
@@ -152,19 +189,22 @@ const AvailableAddressText = styled.div`
   font-size: 0.75rem;
   line-height: 0.75rem;
 
+  min-height: 0.75rem;
+
   color: ${color.blue};
 `;
 
 const DescriptionContainer = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
 
   gap: 1rem;
 
   width: 30rem;
 
   margin-top: 1.5rem;
-  padding: 1.5rem 2rem;
+  padding: 1.25rem 2rem;
 
   background-color: ${color.grey["900"]};
 `;
@@ -183,7 +223,7 @@ const DescriptionText = styled.div`
   font-style: normal;
   font-weight: 400;
   font-size: 0.8rem;
-  line-height: 0.8rem;
+  line-height: 140%;
 
   color: ${color.grey["400"]};
 `;

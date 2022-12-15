@@ -12,7 +12,7 @@ export const TwitterProfile: FunctionComponent<Props> = (props) => {
   const { twitterProfileInformation } = props;
 
   return (
-    <ProfileContainer color={color.grey["800"]}>
+    <ProfileContainer color={color.grey["900"]}>
       <ProfileImageContainer>
         <Image
           src={twitterProfileInformation?.profile_image_url ?? ""}

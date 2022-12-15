@@ -1,13 +1,15 @@
 import { TwitterLoginSuccess } from "../types";
 import { TWITTER_LOGIN_ERROR } from "../constants/error-message";
+import { WALLET_INSTALL_URL } from "../constants/wallet";
 
 export function request<TResponse>(
   url: string,
   config: RequestInit = {},
+  isIgnore?: boolean,
 ): Promise<TResponse> {
   return fetch(url, config)
     .then((response) => {
-      if (!response.ok) {
+      if (!response.ok && !isIgnore) {
         throw new Error(
           `This is an HTTP error: The status is ${response.status} ${response.statusText}`,
         );
@@ -43,4 +45,8 @@ export const checkTwitterAuthQueryParameter = (
     state,
     code,
   };
+};
+
+export const replaceToInstallPage = () => {
+  window.location.href = WALLET_INSTALL_URL;
 };

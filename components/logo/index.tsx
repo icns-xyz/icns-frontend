@@ -31,10 +31,9 @@ export const LogoContainer = styled.div`
   justify-content: center;
 
   position: absolute;
-
   width: 10rem;
   height: 5rem;
 
-  margin-top: 80px;
-  margin-left: 80px;
+  margin-top: 5rem;
+  margin-left: 5rem;
 `;
