@@ -1,10 +1,4 @@
-import {
-  Dispatch,
-  FunctionComponent,
-  SetStateAction,
-  useRef,
-  useState,
-} from "react";
+import { Dispatch, FunctionComponent, SetStateAction } from "react";
 
 import Image from "next/image";
 
@@ -24,7 +18,7 @@ export const SearchInput: FunctionComponent<Props> = (props) => {
   return (
     <SearchContainer>
       <SearchIconContainer>
-        <Image src={SearchIcon} fill={true} alt="search icon" />
+        <Image src={SearchIcon} fill={true} sizes="1.3rem" alt="search icon" />
       </SearchIconContainer>
 
       <SearchText

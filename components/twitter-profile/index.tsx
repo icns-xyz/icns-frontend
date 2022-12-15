@@ -17,6 +17,7 @@ export const TwitterProfile: FunctionComponent<Props> = (props) => {
         <Image
           src={twitterProfileInformation?.profile_image_url ?? ""}
           fill={true}
+          sizes="5rem"
           alt="twitter profile image"
         />
       </ProfileImageContainer>

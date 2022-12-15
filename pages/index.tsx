@@ -36,7 +36,13 @@ export default function Home() {
         <MainTitleContainer>
           <MainTitleImageBackground>
             <MainTitleImageContainer>
-              <Image src={MainTitle} fill={true} alt="Main Title" />
+              <Image
+                src={MainTitle}
+                fill={true}
+                sizes="60rem"
+                alt="Main Title"
+                priority
+              />
             </MainTitleImageContainer>
           </MainTitleImageBackground>
 
@@ -48,14 +54,24 @@ export default function Home() {
           <SubContainer>
             <CheckContainer>
               <CheckIconContainer>
-                <Image src={CheckIcon} fill={true} alt="Check Icon" />
+                <Image
+                  src={CheckIcon}
+                  fill={true}
+                  sizes="1.6rem"
+                  alt="Check Icon"
+                />
               </CheckIconContainer>
               You are a <CheckBoldText>&nbsp;keplr&nbsp;</CheckBoldText> user.
               if not, you can install here
             </CheckContainer>
             <CheckContainer>
               <CheckIconContainer>
-                <Image src={CheckIcon} fill={true} alt="Check Icon" />
+                <Image
+                  src={CheckIcon}
+                  fill={true}
+                  sizes="1.6rem"
+                  alt="Check Icon"
+                />
               </CheckIconContainer>
               <CheckBoldText>Osmo&nbsp;</CheckBoldText> is required for this
               transaction
@@ -64,7 +80,7 @@ export default function Home() {
         </MainTitleContainer>
 
         <MainLogoContainer>
-          <Image src={MainLogo} layout="fixed" fill={true} alt="Main Logo" />
+          <Image src={MainLogo} fill={true} sizes="25rem" alt="Main Logo" />
         </MainLogoContainer>
       </MainContainer>
 

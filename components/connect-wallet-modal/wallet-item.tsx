@@ -52,7 +52,12 @@ export const WalletItem: FunctionComponent<Props> = (props: Props) => {
   return (
     <WalletContainer isReady={wallet.isReady} onClick={onClickWalletItem}>
       <WalletIcon>
-        <Image src={wallet.image} fill={true} alt="wallet Icon" />
+        <Image
+          src={wallet.image}
+          fill={true}
+          sizes="3.75rem"
+          alt="wallet Icon"
+        />
       </WalletIcon>
       <WalletContentContainer>
         <WalletName>{wallet.name}</WalletName>
