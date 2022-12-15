@@ -1,3 +1,6 @@
+import { TwitterLoginSuccess } from "../types";
+import { TWITTER_LOGIN_ERROR } from "../constants/error-message";
+
 export function request<TResponse>(
   url: string,
   config: RequestInit = {},
@@ -23,3 +26,21 @@ export function buildQueryString(query: Record<string, any>): string {
     )
     .join("&");
 }
+
+export const checkTwitterAuthQueryParameter = (
+  query: string,
+): TwitterLoginSuccess => {
+  // Twitter Login Error Check
+  if (query.match("error")) {
+    throw new Error(TWITTER_LOGIN_ERROR);
+  }
+
+  // Twitter state, auth code check
+  const [, state, code] =
+    query.match(/^(?=.*state=([^&]+)|)(?=.*code=([^&]+)|).+$/) || [];
+
+  return {
+    state,
+    code,
+  };
+};

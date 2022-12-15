@@ -1,4 +1,8 @@
-import { TwitterAuthInfoResponse, TwitterAuthUrlResponse } from "../types";
+import {
+  IcnsVerificationResponse,
+  TwitterAuthInfoResponse,
+  TwitterAuthUrlResponse,
+} from "../types";
 import { request } from "../utils/url";
 
 export const loginWithTwitter = async () => {
@@ -13,9 +17,25 @@ export const fetchTwitterInfo = async (
   state: string,
   code: string,
 ): Promise<TwitterAuthInfoResponse> => {
-  const newTwitterAuthInfo = await request<TwitterAuthInfoResponse>(
+  return await request<TwitterAuthInfoResponse>(
     `/api/twitter-auth-info?state=${state}&code=${code}`,
   );
+};
 
-  return newTwitterAuthInfo;
+export const verifyTwitterAccount = async (
+  claimer: string,
+  accessToken: string,
+) => {
+  return (
+    await request<IcnsVerificationResponse>("/api/icns-verification", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        claimer: claimer,
+        authToken: accessToken,
+      }),
+    })
+  ).verificationList;
 };

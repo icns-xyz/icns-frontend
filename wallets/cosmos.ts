@@ -15,6 +15,7 @@ import { Any } from "@keplr-wallet/proto-types/google/protobuf/any";
 import { PubKey } from "@keplr-wallet/proto-types/cosmos/crypto/secp256k1/keys";
 import { SignMode } from "@keplr-wallet/proto-types/cosmos/tx/signing/v1beta1/signing";
 import { MsgExecuteContract } from "@keplr-wallet/proto-types/cosmwasm/wasm/v1/tx";
+import { CosmwasmExecuteMessageResult } from "../types";
 
 export async function sendMsgs(
   wallet: Wallet,
@@ -189,13 +190,7 @@ export function makeCosmwasmExecMsg(
   // eslint-disable-next-line @typescript-eslint/ban-types
   obj: object,
   funds: { readonly amount: string; readonly denom: string }[],
-): {
-  amino: {
-    readonly type: string;
-    readonly value: any;
-  };
-  proto: Any;
-} {
+): CosmwasmExecuteMessageResult {
   const amino = {
     type: "wasm/MsgExecuteContract",
     value: {
