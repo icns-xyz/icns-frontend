@@ -15,7 +15,7 @@ import MainLogo from "../public/images/svg/main-logo.svg";
 import CheckIcon from "../public/images/svg/check-icon.svg";
 import { Logo } from "../components/logo";
 import { useEffect, useState } from "react";
-import { SELECTED_WALLET_KEY } from "../constants/wallet";
+import { MINIMUM_OSMO_FEE, SELECTED_WALLET_KEY } from "../constants/wallet";
 import { replaceToInstallPage } from "../utils/url";
 import { REFERRAL_KEY } from "../constants/icns";
 
@@ -87,8 +87,8 @@ export default function Home() {
                   alt="Check Icon"
                 />
               </CheckIconContainer>
-              <CheckBoldText>Osmo&nbsp;</CheckBoldText> is required for this
-              transaction
+              <CheckBoldText>{MINIMUM_OSMO_FEE}&nbsp;</CheckBoldText> is
+              required for this transaction
             </CheckContainer>
           </SubContainer>
         </MainTitleContainer>

@@ -23,9 +23,10 @@ export default function CompletePage() {
 
   const [availableAddress, setAvailableAddress] = useState("");
 
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+
   useEffect(() => {
     const { txHash, twitterUsername } = router.query;
-
     if (txHash && twitterUsername) {
       initialize(txHash as string, twitterUsername as string);
     }
@@ -37,23 +38,30 @@ export default function CompletePage() {
       "/websocket",
     );
 
-    const result: { code?: number } = await txTracer.traceTx(
-      Buffer.from(txHash, "hex"),
-    );
+    try {
+      const result: { code?: number } = await txTracer.traceTx(
+        Buffer.from(txHash, "hex"),
+      );
 
-    if (result.code || result.code === 0) {
-      const addresses = await queryAddressesFromTwitterName(twitterUserName);
-      setRegisteredAddressed(addresses.data.addresses);
+      if (!result.code || result.code === 0) {
+        const addresses = await queryAddressesFromTwitterName(twitterUserName);
+        setRegisteredAddressed(addresses.data.addresses);
+        setIsSuccess(true);
+      }
+    } catch (e) {
+      console.log("error", e);
     }
   };
 
   const onClickShareButton = () => {
     const { twitterUsername } = router.query;
 
+    const shareMessage = `👨‍🚀 To Interchain... And Beyond!%0a%0aHey frens, I just minted my name for the interchain on @icns_xyz: ${twitterUsername}%0a%0aClaim yours now ▶`;
+
     const width = 500;
     const height = 700;
     window.open(
-      `${SHARE_URL}?url=https://www.icns.xyz/&text=${twitterUsername}`,
+      `${SHARE_URL}?url=https://www.icns.xyz?referral=${twitterUsername}/&text=${shareMessage}`,
       "Share Twitter",
       `top=${(window.screen.height - height) / 2}, left=${
         (window.screen.width - width) / 2
@@ -67,7 +75,13 @@ export default function CompletePage() {
 
       <MainContainer>
         <MainTitle>
-          <div>Your Name is Active Now!</div>
+          {isSuccess && (
+            <Typed
+              strings={["Your Name is Active Now!"]}
+              stopped={!isSuccess}
+              typeSpeed={100}
+            />
+          )}
         </MainTitle>
         <ContentContainer>
           <RecipentContainer>
