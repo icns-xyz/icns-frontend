@@ -9,6 +9,18 @@ export const makeClaimMessage = (
   verificationList: any[],
   referral?: string,
 ): CosmwasmExecuteMessageResult => {
+  verificationList = verificationList.filter((verification) => {
+    if (verification.status !== "fulfilled") {
+      console.log("verification", verification);
+    }
+
+    return verification.status === "fulfilled";
+  });
+
+  if (verificationList.length === 0) {
+    throw new Error("Verifications rejected all");
+  }
+
   return makeCosmwasmExecMsg(
     senderAddress,
     REGISTRAR_ADDRESS,
