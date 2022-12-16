@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 import { DefaultTheme, ThemeProvider } from "styled-components";
 import ErrorBoundary from "../components/error-boundary";
-import { PageBackground } from "../styles/background";
 
 import { GlobalStyle } from "../styles/global";
 
@@ -29,9 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <React.Fragment>
         <GlobalStyle />
         <ErrorBoundary>
-          <PageBackground>
-            <Component {...pageProps} />
-          </PageBackground>
+          <Component {...pageProps} />
         </ErrorBoundary>
       </React.Fragment>
     </ThemeProvider>

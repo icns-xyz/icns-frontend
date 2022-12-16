@@ -137,6 +137,16 @@ export default function VerificationPage() {
   }, []);
 
   useEffect(() => {
+    setAllChains({
+      chainId: "all chains",
+      chainName: "all chains",
+      prefix: `all chains(${chainList.length})`,
+      address: chainList.map((chain) => chain.chainName).join(", "),
+      chainImageUrl: AllChainsIcon,
+    });
+  }, [chainList]);
+
+  useEffect(() => {
     const disabledChainList = chainList.filter((chain) => {
       for (const registeredChain of registeredChainList) {
         if (

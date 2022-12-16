@@ -5,24 +5,39 @@ import Document, {
   Main,
   NextScript,
 } from "next/document";
+import { ServerStyleSheet } from "styled-components";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
+    const sheet = new ServerStyleSheet();
     const originalRenderPage = ctx.renderPage;
 
-    // Run the React rendering logic synchronously
-    ctx.renderPage = () =>
-      originalRenderPage({
-        // Useful for wrapping the whole react tree
-        enhanceApp: (App) => App,
-        // Useful for wrapping in a per-page basis
-        enhanceComponent: (Component) => Component,
-      });
+    try {
+      // Run the React rendering logic synchronously
+      ctx.renderPage = () =>
+        originalRenderPage({
+          // Useful for wrapping the whole react tree
+          enhanceApp: (App) => (props) =>
+            sheet.collectStyles(<App {...props} />),
+          // Useful for wrapping in a per-page basis
+          enhanceComponent: (Component) => Component,
+        });
 
-    // Run the parent `getInitialProps`, it now includes the custom `renderPage`
-    const initialProps = await Document.getInitialProps(ctx);
+      // Run the parent `getInitialProps`, it now includes the custom `renderPage`
+      const initialProps = await Document.getInitialProps(ctx);
 
-    return initialProps;
+      return {
+        ...initialProps,
+        styles: (
+          <div>
+            {initialProps.styles}
+            {sheet.getStyleElement()}
+          </div>
+        ),
+      };
+    } finally {
+      sheet.seal();
+    }
   }
 
   render() {

@@ -14,15 +14,13 @@ export const GlobalStyle = createGlobalStyle`
     background-size: 5rem 5rem;
     background-position: top left;
     background-repeat: repeat;
-    background-image: linear-gradient(
-            ${({ theme }) => theme.bgGridColor ?? color.grey[600]} 0.1rem,
-            transparent 0.1rem
-    ),
+    background-image: linear-gradient(${({ theme }) =>
+      theme.bgGridColor ?? color.grey[600]} 0.1rem,
+    transparent 0.1rem),
     linear-gradient(90deg, ${({ theme }) =>
       theme.bgGridColor ?? color.grey[600]} 0.1rem, transparent 0.1rem);
   }
-  }
-
+    
   * {
     box-sizing: border-box;
   }

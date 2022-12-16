@@ -1,7 +1,7 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { ironOptions } from "../../iron.config";
-import { IcnsVerificationResponse } from "../../types/api-response";
+import { IcnsVerificationResponse } from "../../types";
 import { request } from "../../utils/url";
 
 export default withIronSessionApiRoute(async function handler(
