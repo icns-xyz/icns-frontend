@@ -2,16 +2,26 @@ import { useState } from "react";
 import Image, { ImageProps } from "next/image";
 
 import KeplrIcon from "../../public/images/svg/keplr-icon.svg";
+import styled from "styled-components";
 
-export const ChainImage = (props: ImageProps) => {
-  const [src, setSrc] = useState(props.src);
+export const ChainImage = ({ src, ...props }: ImageProps) => {
+  const [srcState, setSrcState] = useState(src);
 
   return (
-    <Image
-      {...props}
-      src={src}
-      sizes="3rem"
-      onError={() => setSrc(KeplrIcon)}
-    />
+    <ImageWrapper>
+      <Image
+        {...props}
+        src={srcState}
+        alt="chain image"
+        sizes="3rem"
+        onError={() => setSrcState(KeplrIcon)}
+      />
+    </ImageWrapper>
   );
 };
+
+const ImageWrapper = styled.div`
+  img {
+    border-radius: 50%;
+  }
+`;
