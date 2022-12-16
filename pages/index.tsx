@@ -2,7 +2,7 @@
 import Image from "next/image";
 
 // Styles
-import styled, { Theme, ThemeProvider } from "styled-components";
+import styled from "styled-components";
 import color from "../styles/color";
 
 // Components
@@ -18,13 +18,6 @@ import { useEffect, useState } from "react";
 import { SELECTED_WALLET_KEY } from "../constants/wallet";
 import { replaceToInstallPage } from "../utils/url";
 import { REFERRAL_KEY } from "../constants/icns";
-
-import { PageBackground } from "../styles/background";
-
-const theme: Theme = {
-  bgColor: "rgba(18, 18, 18, 1)",
-  bgGridColor: "rgba(51, 51, 51, 1)",
-};
 
 export default function Home() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -49,71 +42,67 @@ export default function Home() {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <PageBackground>
-        <Container>
-          <Logo />
+    <Container>
+      <Logo />
 
-          <MainContainer>
-            <MainTitleContainer>
-              <MainTitleImageBackground>
-                <MainTitleImageContainer>
-                  <Image
-                    src={MainTitle}
-                    fill={true}
-                    sizes="60rem"
-                    alt="Main Title"
-                    priority
-                  />
-                </MainTitleImageContainer>
-              </MainTitleImageBackground>
+      <MainContainer>
+        <MainTitleContainer>
+          <MainTitleImageBackground>
+            <MainTitleImageContainer>
+              <Image
+                src={MainTitle}
+                fill={true}
+                sizes="60rem"
+                alt="Main Title"
+                priority
+              />
+            </MainTitleImageContainer>
+          </MainTitleImageBackground>
 
-              <ConnectButtonContainer>
-                <PrimaryButton onClick={onClickConnectWalletButton}>
-                  Connect Wallet
-                </PrimaryButton>
-              </ConnectButtonContainer>
-              <SubContainer>
-                <CheckContainer>
-                  <CheckIconContainer>
-                    <Image
-                      src={CheckIcon}
-                      fill={true}
-                      sizes="1.6rem"
-                      alt="Check Icon"
-                    />
-                  </CheckIconContainer>
-                  You are a <CheckBoldText>&nbsp;keplr&nbsp;</CheckBoldText>{" "}
-                  user. if not, you can install&nbsp;
-                  <InstallLInk onClick={replaceToInstallPage}>HERE</InstallLInk>
-                </CheckContainer>
-                <CheckContainer>
-                  <CheckIconContainer>
-                    <Image
-                      src={CheckIcon}
-                      fill={true}
-                      sizes="1.6rem"
-                      alt="Check Icon"
-                    />
-                  </CheckIconContainer>
-                  <CheckBoldText>Osmo&nbsp;</CheckBoldText> is required for this
-                  transaction
-                </CheckContainer>
-              </SubContainer>
-            </MainTitleContainer>
+          <ConnectButtonContainer>
+            <PrimaryButton onClick={onClickConnectWalletButton}>
+              Connect Wallet
+            </PrimaryButton>
+          </ConnectButtonContainer>
+          <SubContainer>
+            <CheckContainer>
+              <CheckIconContainer>
+                <Image
+                  src={CheckIcon}
+                  fill={true}
+                  sizes="1.6rem"
+                  alt="Check Icon"
+                />
+              </CheckIconContainer>
+              You are a <CheckBoldText>&nbsp;keplr&nbsp;</CheckBoldText> user.
+              if not, you can install&nbsp;
+              <InstallLInk onClick={replaceToInstallPage}>HERE</InstallLInk>
+            </CheckContainer>
+            <CheckContainer>
+              <CheckIconContainer>
+                <Image
+                  src={CheckIcon}
+                  fill={true}
+                  sizes="1.6rem"
+                  alt="Check Icon"
+                />
+              </CheckIconContainer>
+              <CheckBoldText>Osmo&nbsp;</CheckBoldText> is required for this
+              transaction
+            </CheckContainer>
+          </SubContainer>
+        </MainTitleContainer>
 
-            <MainLogoContainer>
-              <Image src={MainLogo} fill={true} sizes="25rem" alt="Main Logo" />
-            </MainLogoContainer>
-          </MainContainer>
+        <MainLogoContainer>
+          <Image src={MainLogo} fill={true} sizes="25rem" alt="Main Logo" />
+        </MainLogoContainer>
+      </MainContainer>
 
-          <ConnectWalletModal
-            isModalOpen={isModalOpen}
-            onCloseModal={() => setModalOpen(false)}
-          />
-        </Container>
-      </PageBackground>
-    </ThemeProvider>
+      <ConnectWalletModal
+        isModalOpen={isModalOpen}
+        onCloseModal={() => setModalOpen(false)}
+      />
+    </Container>
   );
 }
 
