@@ -118,10 +118,10 @@ export default function CompletePage() {
           </DescriptionText>
         </DescriptionContainer>
 
-        <ShareButtonContainer onClick={onClickShareButton}>
-          <ShareButtonText>SHARE MY NAME</ShareButtonText>
-          <Image src={TwitterIcon} alt="twitter icon" />
-        </ShareButtonContainer>
+        {/*<ShareButtonContainer onClick={onClickShareButton}>*/}
+        {/*  <ShareButtonText>SHARE MY NAME</ShareButtonText>*/}
+        {/*  <Image src={TwitterIcon} alt="twitter icon" />*/}
+        {/*</ShareButtonContainer>*/}
       </MainContainer>
     </Container>
   );
