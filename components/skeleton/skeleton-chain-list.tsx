@@ -27,98 +27,106 @@ import {
 } from "../chain-list";
 
 export const SkeletonChainList: FunctionComponent = () => (
-  <ContentContainer>
-    <ProfileContainer color={color.grey["700"]}>
-      <SkeletonCircle width="5.5rem" height="5.5rem" />
+  <SkeletonContainer>
+    <ContentContainer>
+      <ProfileContainer color={color.grey["700"]}>
+        <SkeletonCircle width="5.5rem" height="5.5rem" />
 
-      <ProfileContentContainer>
-        <ProfileNameContainer>
-          <SkeletonText width="5rem" height="1.5rem" />
-        </ProfileNameContainer>
-        <ProfileUserNameContainer>
-          <SkeletonText width="5rem" height="1rem" />
-        </ProfileUserNameContainer>
+        <ProfileContentContainer>
+          <ProfileNameContainer>
+            <SkeletonText width="5rem" height="1.5rem" />
+          </ProfileNameContainer>
+          <ProfileUserNameContainer>
+            <SkeletonText width="5rem" height="1rem" />
+          </ProfileUserNameContainer>
 
-        <ProfileFollowContainer>
-          <SkeletonText width="8rem" height="1rem" />
-          <SkeletonText width="8rem" height="1rem" />
-        </ProfileFollowContainer>
+          <ProfileFollowContainer>
+            <SkeletonText width="8rem" height="1rem" />
+            <SkeletonText width="8rem" height="1rem" />
+          </ProfileFollowContainer>
 
-        <SkeletonText width="20rem" height="1rem" />
-      </ProfileContentContainer>
-    </ProfileContainer>
+          <SkeletonText width="20rem" height="1rem" />
+        </ProfileContentContainer>
+      </ProfileContainer>
 
-    <ChainListTitleContainer>
-      <SkeletonTitle />
-    </ChainListTitleContainer>
+      <ChainListTitleContainer>
+        <SkeletonTitle />
+      </ChainListTitleContainer>
 
-    <ChainContainer color={color.grey["700"]}>
-      <ChainItemContainer isLoading={true}>
-        <ChainImageContainer width="3rem" height="3rem">
-          <SkeletonCircle width="3rem" height="3rem" />
-        </ChainImageContainer>
-        <ChainInfoContainer>
-          <SkeletonText width="4rem" height="1rem" />
-          <SkeletonText width="12rem" height="1rem" />
-        </ChainInfoContainer>
-      </ChainItemContainer>
+      <ChainContainer color={color.grey["700"]}>
+        <ChainItemContainer isLoading={true}>
+          <ChainImageContainer width="3rem" height="3rem">
+            <SkeletonCircle width="3rem" height="3rem" />
+          </ChainImageContainer>
+          <ChainInfoContainer>
+            <SkeletonText width="4rem" height="1rem" />
+            <SkeletonText width="12rem" height="1rem" />
+          </ChainInfoContainer>
+        </ChainItemContainer>
 
-      <SkeletonDivider />
+        <SkeletonDivider />
 
-      <ChainItemContainer isLoading={true}>
-        <ChainImageContainer width="3rem" height="3rem">
-          <SkeletonCircle width="3rem" height="3rem" />
-        </ChainImageContainer>
-        <ChainInfoContainer>
-          <SkeletonText width="4rem" height="1rem" />
-          <SkeletonText width="12rem" height="1rem" />
-        </ChainInfoContainer>
-      </ChainItemContainer>
+        <ChainItemContainer isLoading={true}>
+          <ChainImageContainer width="3rem" height="3rem">
+            <SkeletonCircle width="3rem" height="3rem" />
+          </ChainImageContainer>
+          <ChainInfoContainer>
+            <SkeletonText width="4rem" height="1rem" />
+            <SkeletonText width="12rem" height="1rem" />
+          </ChainInfoContainer>
+        </ChainItemContainer>
 
-      <SkeletonDivider />
+        <SkeletonDivider />
 
-      <ChainItemContainer isLoading={true}>
-        <ChainImageContainer width="3rem" height="3rem">
-          <SkeletonCircle width="3rem" height="3rem" />
-        </ChainImageContainer>
-        <ChainInfoContainer>
-          <SkeletonText width="4rem" height="1rem" />
-          <SkeletonText width="12rem" height="1rem" />
-        </ChainInfoContainer>
-      </ChainItemContainer>
+        <ChainItemContainer isLoading={true}>
+          <ChainImageContainer width="3rem" height="3rem">
+            <SkeletonCircle width="3rem" height="3rem" />
+          </ChainImageContainer>
+          <ChainInfoContainer>
+            <SkeletonText width="4rem" height="1rem" />
+            <SkeletonText width="12rem" height="1rem" />
+          </ChainInfoContainer>
+        </ChainItemContainer>
 
-      <SkeletonDivider />
+        <SkeletonDivider />
 
-      <ChainItemContainer isLoading={true}>
-        <ChainImageContainer width="3rem" height="3rem">
-          <SkeletonCircle width="3rem" height="3rem" />
-        </ChainImageContainer>
-        <ChainInfoContainer>
-          <SkeletonText width="4rem" height="1rem" />
-          <SkeletonText width="12rem" height="1rem" />
-        </ChainInfoContainer>
-      </ChainItemContainer>
+        <ChainItemContainer isLoading={true}>
+          <ChainImageContainer width="3rem" height="3rem">
+            <SkeletonCircle width="3rem" height="3rem" />
+          </ChainImageContainer>
+          <ChainInfoContainer>
+            <SkeletonText width="4rem" height="1rem" />
+            <SkeletonText width="12rem" height="1rem" />
+          </ChainInfoContainer>
+        </ChainItemContainer>
 
-      <SkeletonDivider />
+        <SkeletonDivider />
 
-      <ChainItemContainer isLoading={true}>
-        <ChainImageContainer width="3rem" height="3rem">
-          <SkeletonCircle width="3rem" height="3rem" />
-        </ChainImageContainer>
-        <ChainInfoContainer>
-          <SkeletonText width="4rem" height="1rem" />
-          <SkeletonText width="12rem" height="1rem" />
-        </ChainInfoContainer>
-      </ChainItemContainer>
+        <ChainItemContainer isLoading={true}>
+          <ChainImageContainer width="3rem" height="3rem">
+            <SkeletonCircle width="3rem" height="3rem" />
+          </ChainImageContainer>
+          <ChainInfoContainer>
+            <SkeletonText width="4rem" height="1rem" />
+            <SkeletonText width="12rem" height="1rem" />
+          </ChainInfoContainer>
+        </ChainItemContainer>
 
-      <SkeletonDivider />
-    </ChainContainer>
+        <SkeletonDivider />
+      </ChainContainer>
 
-    <ButtonContainer>
-      <SkeletonButton />
-    </ButtonContainer>
-  </ContentContainer>
+      <SkeletonButtonContainer>
+        <ButtonContainer>
+          <SkeletonButton />
+        </ButtonContainer>
+      </SkeletonButtonContainer>
+    </ContentContainer>
+  </SkeletonContainer>
 );
+
+const SkeletonContainer = styled.div`
+  padding: 2.4rem 0;
+`;
 
 const SkeletonTitle = styled.div`
   width: 8rem;
@@ -126,9 +134,15 @@ const SkeletonTitle = styled.div`
   background-color: ${color.grey["700"]};
 `;
 
+const SkeletonButtonContainer = styled.div`
+  margin-top: 1.5rem;
+`;
+
 const SkeletonButton = styled.div`
   width: 12rem;
   height: 4rem;
+
+  padding-top: 1.5rem;
 
   background-color: ${color.grey["700"]};
 `;

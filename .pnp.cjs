@@ -38,6 +38,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react", "npm:18.0.25"],\
             ["@types/react-dom", "npm:18.0.9"],\
             ["@types/react-modal", "npm:3.13.1"],\
+            ["@types/semver", "npm:7.3.13"],\
             ["@types/styled-components", "npm:5.1.26"],\
             ["@typescript-eslint/eslint-plugin", "virtual:4b77e00d446246df1ed27001550885fbf1b51be18c660c1b5c357d3d763078ecef2a676194291a120f149b87573081e5af0621dc83cf1f83383639f39ac133c7#npm:5.45.0"],\
             ["@typescript-eslint/parser", "virtual:4b77e00d446246df1ed27001550885fbf1b51be18c660c1b5c357d3d763078ecef2a676194291a120f149b87573081e5af0621dc83cf1f83383639f39ac133c7#npm:5.45.0"],\
@@ -62,6 +63,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-is", "npm:18.2.0"],\
             ["react-modal", "virtual:4b77e00d446246df1ed27001550885fbf1b51be18c660c1b5c357d3d763078ecef2a676194291a120f149b87573081e5af0621dc83cf1f83383639f39ac133c7#npm:3.16.1"],\
             ["react-typed", "virtual:4b77e00d446246df1ed27001550885fbf1b51be18c660c1b5c357d3d763078ecef2a676194291a120f149b87573081e5af0621dc83cf1f83383639f39ac133c7#npm:1.2.0"],\
+            ["semver", "npm:7.3.8"],\
             ["styled-components", "virtual:4b77e00d446246df1ed27001550885fbf1b51be18c660c1b5c357d3d763078ecef2a676194291a120f149b87573081e5af0621dc83cf1f83383639f39ac133c7#npm:5.3.6"],\
             ["typescript", "patch:typescript@npm%3A4.9.3#~builtin<compat/typescript>::version=4.9.3&hash=d73830"]\
           ],\
@@ -3985,6 +3987,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react", "npm:18.0.25"],\
             ["@types/react-dom", "npm:18.0.9"],\
             ["@types/react-modal", "npm:3.13.1"],\
+            ["@types/semver", "npm:7.3.13"],\
             ["@types/styled-components", "npm:5.1.26"],\
             ["@typescript-eslint/eslint-plugin", "virtual:4b77e00d446246df1ed27001550885fbf1b51be18c660c1b5c357d3d763078ecef2a676194291a120f149b87573081e5af0621dc83cf1f83383639f39ac133c7#npm:5.45.0"],\
             ["@typescript-eslint/parser", "virtual:4b77e00d446246df1ed27001550885fbf1b51be18c660c1b5c357d3d763078ecef2a676194291a120f149b87573081e5af0621dc83cf1f83383639f39ac133c7#npm:5.45.0"],\
@@ -4009,6 +4012,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-is", "npm:18.2.0"],\
             ["react-modal", "virtual:4b77e00d446246df1ed27001550885fbf1b51be18c660c1b5c357d3d763078ecef2a676194291a120f149b87573081e5af0621dc83cf1f83383639f39ac133c7#npm:3.16.1"],\
             ["react-typed", "virtual:4b77e00d446246df1ed27001550885fbf1b51be18c660c1b5c357d3d763078ecef2a676194291a120f149b87573081e5af0621dc83cf1f83383639f39ac133c7#npm:1.2.0"],\
+            ["semver", "npm:7.3.8"],\
             ["styled-components", "virtual:4b77e00d446246df1ed27001550885fbf1b51be18c660c1b5c357d3d763078ecef2a676194291a120f149b87573081e5af0621dc83cf1f83383639f39ac133c7#npm:5.3.6"],\
             ["typescript", "patch:typescript@npm%3A4.9.3#~builtin<compat/typescript>::version=4.9.3&hash=d73830"]\
           ],\

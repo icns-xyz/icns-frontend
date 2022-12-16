@@ -7,16 +7,18 @@ export const PrimaryButton = styled.button`
 
   border: none;
 
-  background-color: ${color.orange["100"]};
   padding: 11px 30px;
 
   font-family: "Inter", serif;
   font-style: normal;
   font-weight: 600;
-  font-size: 1.5rem;
-  line-height: 20px;
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
 
   color: ${color.orange["50"]};
+  background-color: ${color.orange["100"]};
 
   cursor: pointer;
 
@@ -26,6 +28,8 @@ export const PrimaryButton = styled.button`
   }
 
   &:disabled {
-    background-color: ${color.orange["200"]};
+    opacity: 0.5;
+
+    background-color: ${color.orange["300"]};
   }
 `;

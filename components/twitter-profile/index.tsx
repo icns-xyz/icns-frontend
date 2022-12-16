@@ -12,7 +12,7 @@ export const TwitterProfile: FunctionComponent<Props> = (props) => {
   const { twitterProfileInformation } = props;
 
   return (
-    <ProfileContainer color={color.grey["800"]}>
+    <ProfileContainer color={color.grey["900"]}>
       <ProfileImageContainer>
         <Image
           src={twitterProfileInformation?.profile_image_url ?? ""}
@@ -129,6 +129,11 @@ export const ProfileDescriptionContainer = styled.div`
   font-weight: 500;
   font-size: 0.8rem;
   line-height: 1rem;
+
+  max-width: 27.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   color: ${color.grey["100"]};
 `;

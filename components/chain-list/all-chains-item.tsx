@@ -32,6 +32,7 @@ export const AllChainsItem: FunctionComponent<Props> = (props) => {
       <ChainItemContainer
         key={chainItem.prefix}
         isLoading={false}
+        checked={allChecked}
         onClick={checkHandler}
       >
         <ChainImageContainer width="3rem" height="3rem">
@@ -57,5 +58,5 @@ export const AllChainsItem: FunctionComponent<Props> = (props) => {
 const AllChainsContainer = styled.div`
   width: 100%;
 
-  background-color: ${color.grey["800"]};
+  background-color: ${color.grey["900"]};
 `;

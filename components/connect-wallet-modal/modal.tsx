@@ -19,7 +19,7 @@ export const ConnectWalletModal: FunctionComponent<Props> = (props) => {
       onRequestClose={onCloseModal}
       ariaHideApp={false}
       style={{
-        overlay: { background: "#181818b3" },
+        overlay: { background: "#121212cc" },
         content: {
           top: "50%",
           left: "50%",
@@ -52,6 +52,8 @@ const ModalContainer = styled.div`
   flex-direction: column;
   gap: 0.9rem;
   padding: 2.2rem;
+
+  min-width: 28rem;
 `;
 
 const ModalTitle = styled.div`

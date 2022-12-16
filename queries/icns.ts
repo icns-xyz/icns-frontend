@@ -1,5 +1,6 @@
 import { request } from "../utils/url";
 import {
+  NAME_NFT_ADDRESS,
   REGISTRAR_ADDRESS,
   RESOLVER_ADDRESS,
   REST_URL,
@@ -8,6 +9,7 @@ import { Buffer } from "buffer/";
 import {
   AddressesQueryResponse,
   NameByTwitterIdQueryResponse,
+  OwnerOfQueryResponse,
   QueryError,
 } from "../types";
 
@@ -20,11 +22,14 @@ export const queryRegisteredTwitterId = async (
   const msg = {
     name_by_twitter_id: { twitter_id: twitterId },
   };
+
   return request<NameByTwitterIdQueryResponse>(
     getCosmwasmQueryUrl(
       REGISTRAR_ADDRESS,
       Buffer.from(JSON.stringify(msg)).toString("base64"),
     ),
+    {},
+    true,
   );
 };
 
@@ -40,5 +45,22 @@ export const queryAddressesFromTwitterName = async (
       RESOLVER_ADDRESS,
       Buffer.from(JSON.stringify(msg)).toString("base64"),
     ),
+  );
+};
+
+export const queryOwnerOfTwitterName = async (
+  twitterUsername: string,
+): Promise<OwnerOfQueryResponse> => {
+  const msg = {
+    owner_of: { token_id: twitterUsername },
+  };
+
+  return request<OwnerOfQueryResponse>(
+    getCosmwasmQueryUrl(
+      NAME_NFT_ADDRESS,
+      Buffer.from(JSON.stringify(msg)).toString("base64"),
+    ),
+    {},
+    true,
   );
 };

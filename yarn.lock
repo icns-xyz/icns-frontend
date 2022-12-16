@@ -1109,7 +1109,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/semver@npm:^7.3.12":
+"@types/semver@npm:^7, @types/semver@npm:^7.3.12":
   version: 7.3.13
   resolution: "@types/semver@npm:7.3.13"
   checksum: 00c0724d54757c2f4bc60b5032fe91cda6410e48689633d5f35ece8a0a66445e3e57fa1d6e07eb780f792e82ac542948ec4d0b76eb3484297b79bd18b8cf1cb0
@@ -3175,6 +3175,7 @@ __metadata:
     "@types/react": 18.0.25
     "@types/react-dom": 18.0.9
     "@types/react-modal": ^3
+    "@types/semver": ^7
     "@types/styled-components": ^5
     "@typescript-eslint/eslint-plugin": ^5.45.0
     "@typescript-eslint/parser": ^5.45.0
@@ -3199,6 +3200,7 @@ __metadata:
     react-is: ^18.2.0
     react-modal: ^3.16.1
     react-typed: ^1.2.0
+    semver: ^7.3.8
     styled-components: ^5.3.6
     typescript: 4.9.3
   languageName: unknown
