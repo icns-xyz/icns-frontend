@@ -126,4 +126,6 @@ export const WalletAddress = styled.div`
 export const ChainCheckBox = styled.input.attrs({ type: "checkbox" })`
   width: 1.5rem;
   height: 1.5rem;
+
+  accent-color: ${color.orange["200"]};
 `;

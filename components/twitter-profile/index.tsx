@@ -130,5 +130,10 @@ export const ProfileDescriptionContainer = styled.div`
   font-size: 0.8rem;
   line-height: 1rem;
 
+  max-width: 27.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   color: ${color.grey["100"]};
 `;

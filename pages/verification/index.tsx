@@ -439,8 +439,8 @@ export const ContentContainer = styled.div`
 `;
 
 export const ButtonContainer = styled.div<{ disabled?: boolean }>`
-  width: 12rem;
-  height: 4rem;
+  width: 11rem;
+  height: 3.5rem;
 
   background-color: ${(props) =>
     props.disabled ? color.orange["300"] : color.orange["100"]};
@@ -490,4 +490,6 @@ const AgreeContainer = styled.div`
 const AgreeCheckBox = styled.input.attrs({ type: "checkbox" })`
   width: 1.2rem;
   height: 1.2rem;
+
+  accent-color: ${color.orange["200"]};
 `;

@@ -12,8 +12,10 @@ export const PrimaryButton = styled.button`
   font-family: "Inter", serif;
   font-style: normal;
   font-weight: 600;
-  font-size: 1.5rem;
-  line-height: 20px;
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
 
   color: ${color.orange["50"]};
   background-color: ${color.orange["100"]};

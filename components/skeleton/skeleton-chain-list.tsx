@@ -115,9 +115,11 @@ export const SkeletonChainList: FunctionComponent = () => (
         <SkeletonDivider />
       </ChainContainer>
 
-      <ButtonContainer>
-        <SkeletonButton />
-      </ButtonContainer>
+      <SkeletonButtonContainer>
+        <ButtonContainer>
+          <SkeletonButton />
+        </ButtonContainer>
+      </SkeletonButtonContainer>
     </ContentContainer>
   </SkeletonContainer>
 );
@@ -132,9 +134,15 @@ const SkeletonTitle = styled.div`
   background-color: ${color.grey["700"]};
 `;
 
+const SkeletonButtonContainer = styled.div`
+  margin-top: 1.5rem;
+`;
+
 const SkeletonButton = styled.div`
   width: 12rem;
   height: 4rem;
+
+  padding-top: 1.5rem;
 
   background-color: ${color.grey["700"]};
 `;
