@@ -38,10 +38,9 @@ const SearchContainer = styled.div`
   align-items: center;
   gap: 0.625rem;
 
-  min-width: 10rem;
   height: 2.3rem;
 
-  padding: 0.5rem 1.3rem;
+  padding: 0.6rem 1.4rem;
 
   border-radius: 3rem;
   background-color: ${color.grey["700"]};
@@ -66,6 +65,9 @@ const SearchText = styled.input`
   font-size: 1rem;
   line-height: 1.2rem;
 
+  width: 5.5rem;
+  transition: width 0.2s ease-out;
+
   ::placeholder,
   ::-webkit-input-placeholder {
     color: ${color.grey["400"]};
@@ -73,5 +75,7 @@ const SearchText = styled.input`
 
   &:focus {
     outline: none;
+
+    width: 10rem;
   }
 `;

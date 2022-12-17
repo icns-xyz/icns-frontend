@@ -5,6 +5,7 @@ import color from "../../styles/color";
 import { Flex1 } from "../../styles/flex-1";
 import styled from "styled-components";
 import { ChainImage } from "./chain-image";
+import { Checkbox } from "../checkbox";
 
 interface Props {
   chainItem: ChainItemType;
@@ -52,7 +53,7 @@ export const ChainItem: FunctionComponent<Props> = (props) => {
 
       <Flex1 />
 
-      <ChainCheckBox checked={checked} readOnly />
+      <Checkbox checked={checked} />
     </ChainItemContainer>
   );
 };
@@ -124,11 +125,4 @@ export const WalletAddress = styled.div`
   text-overflow: ellipsis;
 
   color: ${color.grey["400"]};
-`;
-
-export const ChainCheckBox = styled.input.attrs({ type: "checkbox" })`
-  width: 1.5rem;
-  height: 1.5rem;
-
-  accent-color: ${color.orange["200"]};
 `;
