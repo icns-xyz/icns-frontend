@@ -4,7 +4,6 @@ import { Dispatch, FunctionComponent, SetStateAction } from "react";
 import { ChainImage } from "./chain-image";
 import { Flex1 } from "../../styles/flex-1";
 import {
-  ChainCheckBox,
   ChainImageContainer,
   ChainInfoContainer,
   ChainItemContainer,
@@ -13,6 +12,7 @@ import {
 } from "./chain-item";
 import color from "../../styles/color";
 import styled from "styled-components";
+import { Checkbox } from "../checkbox";
 
 interface Props {
   allChecked: boolean;
@@ -49,7 +49,7 @@ export const AllChainsItem: FunctionComponent<Props> = (props) => {
 
         <Flex1 />
 
-        <ChainCheckBox checked={allChecked} readOnly />
+        <Checkbox checked={allChecked} />
       </ChainItemContainer>
     </AllChainsContainer>
   );
