@@ -53,7 +53,7 @@ import {
   TWITTER_LOGIN_ERROR,
 } from "../../constants/error-message";
 import { makeClaimMessage, makeSetRecordMessage } from "../../messages";
-import Axios, { AxiosError } from "axios";
+import Axios from "axios";
 import { BackButton } from "../../components/back-button";
 
 export default function VerificationPage() {
@@ -82,59 +82,16 @@ export default function VerificationPage() {
   const [isAgree, setIsAgree] = useState(false);
 
   useEffect(() => {
-    const init = async () => {
-      if (window.location.search) {
-        try {
-          const { state, code } = checkTwitterAuthQueryParameter(
-            window.location.search,
-          );
-
-          // Initialize Wallet
-          const keplrWallet = await initWallet();
-
-          // Fetch Twitter Profile
-          const twitterInfo = await fetchTwitterInfo(state, code);
-
-          // contract check registered
-          const registeredQueryResponse = await queryRegisteredTwitterId(
-            twitterInfo.id,
-          );
-
-          setTwitterAuthInfo({
-            ...twitterInfo,
-            isRegistered: "data" in registeredQueryResponse,
-          });
-
-          if ("data" in registeredQueryResponse) {
-            const ownerOfQueryResponse = await queryOwnerOfTwitterName(
-              registeredQueryResponse.data.name,
-            );
-
-            const addressesQueryResponse = await queryAddressesFromTwitterName(
-              registeredQueryResponse.data.name,
-            );
-
-            if (keplrWallet) {
-              const key = await keplrWallet.getKey(MainChainId);
-              setIsOwner(ownerOfQueryResponse.data.owner === key.bech32Address);
-            }
-
-            setRegisteredChainList(addressesQueryResponse.data.addresses);
-          }
-        } catch (error) {
-          if (error instanceof Error && error.message === TWITTER_LOGIN_ERROR) {
-            await router.push("/");
-          }
-
-          console.error(error);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
-
     init();
   }, []);
+
+  useEffect(() => {
+    if (wallet) {
+      window.addEventListener("keplr_keystorechange", async () => {
+        init();
+      });
+    }
+  }, [wallet]);
 
   useEffect(() => {
     setAllChains({
@@ -175,6 +132,57 @@ export default function VerificationPage() {
     setChainList(filteredChainList);
     setDisabledChainList(disabledChainList);
   }, [registeredChainList]);
+
+  const init = async () => {
+    if (window.location.search) {
+      try {
+        const { state, code } = checkTwitterAuthQueryParameter(
+          window.location.search,
+        );
+
+        // Initialize Wallet
+        const keplrWallet = await initWallet();
+
+        // Fetch Twitter Profile
+        const twitterInfo = await fetchTwitterInfo(state, code);
+
+        // contract check registered
+        const registeredQueryResponse = await queryRegisteredTwitterId(
+          twitterInfo.id,
+        );
+
+        setTwitterAuthInfo({
+          ...twitterInfo,
+          isRegistered: "data" in registeredQueryResponse,
+        });
+
+        if ("data" in registeredQueryResponse) {
+          const ownerOfQueryResponse = await queryOwnerOfTwitterName(
+            registeredQueryResponse.data.name,
+          );
+
+          const addressesQueryResponse = await queryAddressesFromTwitterName(
+            registeredQueryResponse.data.name,
+          );
+
+          if (keplrWallet) {
+            const key = await keplrWallet.getKey(MainChainId);
+            setIsOwner(ownerOfQueryResponse.data.owner === key.bech32Address);
+          }
+
+          setRegisteredChainList(addressesQueryResponse.data.addresses);
+        }
+      } catch (error) {
+        if (error instanceof Error && error.message === TWITTER_LOGIN_ERROR) {
+          await router.push("/");
+        }
+
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
 
   const initWallet = async () => {
     const keplr = await getKeplrFromWindow();
