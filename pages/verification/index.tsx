@@ -1,3 +1,5 @@
+import * as amplitude from "@amplitude/analytics-browser";
+
 // React
 import { useEffect, useState } from "react";
 
@@ -260,6 +262,7 @@ export default function VerificationPage() {
   };
 
   const onClickRegistration = async () => {
+    amplitude.track("click register button");
     try {
       const { state, code } = checkTwitterAuthQueryParameter(
         window.location.search,

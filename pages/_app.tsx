@@ -35,7 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
     const handleRouteChangeComplete = (url: string) => {
       const pathname = url.split("?")[0];
 
-      amplitude.track("View page", {
+      amplitude.track("view page", {
         pathname,
       });
     };

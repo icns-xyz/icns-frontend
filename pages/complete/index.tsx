@@ -1,3 +1,4 @@
+import * as amplitude from "@amplitude/analytics-browser";
 import Image from "next/image";
 import styled from "styled-components";
 
@@ -44,6 +45,8 @@ export default function CompletePage() {
       );
 
       if (!result.code || result.code === 0) {
+        amplitude.track("complete registration");
+
         const addresses = await queryAddressesFromTwitterName(twitterUserName);
         setRegisteredAddressed(addresses.data.addresses);
         setIsSuccess(true);
@@ -54,6 +57,8 @@ export default function CompletePage() {
   };
 
   const onClickShareButton = () => {
+    amplitude.track("click share button");
+
     const { twitterUsername } = router.query;
 
     const shareMessage = `👨‍🚀 To Interchain... And Beyond!%0a%0aHey frens, I just minted my name for the interchain on @icns_xyz: ${twitterUsername}%0a%0aClaim yours now ▶`;
