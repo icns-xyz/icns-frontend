@@ -32,7 +32,6 @@ import {
 } from "../../wallets";
 import { ChainIdHelper } from "@keplr-wallet/cosmos";
 
-import AllChainsIcon from "../../public/images/svg/all-chains-icon.svg";
 import { AllChainsItem } from "../../components/chain-list/all-chains-item";
 import { SearchInput } from "../../components/search-input";
 import {
@@ -55,7 +54,7 @@ import {
   TWITTER_LOGIN_ERROR,
 } from "../../constants/error-message";
 import { makeClaimMessage, makeSetRecordMessage } from "../../messages";
-import Axios, { AxiosError } from "axios";
+import Axios from "axios";
 import { BackButton } from "../../components/back-button";
 
 export default function VerificationPage() {
@@ -73,9 +72,6 @@ export default function VerificationPage() {
   const [registeredChainList, setRegisteredChainList] = useState<
     RegisteredAddresses[]
   >([]);
-
-  const [allChains, setAllChains] = useState<ChainItemType>();
-  const [allChecked, setAllChecked] = useState(false);
   const [checkedItems, setCheckedItems] = useState(new Set());
 
   const [searchValue, setSearchValue] = useState("");
@@ -84,69 +80,16 @@ export default function VerificationPage() {
   const [isAgree, setIsAgree] = useState(false);
 
   useEffect(() => {
-    const init = async () => {
-      if (window.location.search) {
-        try {
-          const { state, code } = checkTwitterAuthQueryParameter(
-            window.location.search,
-          );
-
-          // Initialize Wallet
-          const keplrWallet = await initWallet();
-
-          // Fetch Twitter Profile
-          const twitterInfo = await fetchTwitterInfo(state, code);
-
-          // contract check registered
-          const registeredQueryResponse = await queryRegisteredTwitterId(
-            twitterInfo.id,
-          );
-
-          setTwitterAuthInfo({
-            ...twitterInfo,
-            isRegistered: "data" in registeredQueryResponse,
-          });
-
-          if ("data" in registeredQueryResponse) {
-            const ownerOfQueryResponse = await queryOwnerOfTwitterName(
-              registeredQueryResponse.data.name,
-            );
-
-            const addressesQueryResponse = await queryAddressesFromTwitterName(
-              registeredQueryResponse.data.name,
-            );
-
-            if (keplrWallet) {
-              const key = await keplrWallet.getKey(MainChainId);
-              setIsOwner(ownerOfQueryResponse.data.owner === key.bech32Address);
-            }
-
-            setRegisteredChainList(addressesQueryResponse.data.addresses);
-          }
-        } catch (error) {
-          if (error instanceof Error && error.message === TWITTER_LOGIN_ERROR) {
-            await router.push("/");
-          }
-
-          console.error(error);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
-
     init();
   }, []);
 
   useEffect(() => {
-    setAllChains({
-      chainId: "all chains",
-      chainName: "all chains",
-      prefix: `all chains(${chainList.length})`,
-      address: chainList.map((chain) => chain.chainName).join(", "),
-      chainImageUrl: AllChainsIcon,
-    });
-  }, [chainList]);
+    if (wallet) {
+      window.addEventListener("keplr_keystorechange", async () => {
+        await init();
+      });
+    }
+  }, [wallet]);
 
   useEffect(() => {
     const disabledChainList = chainList.filter((chain) => {
@@ -166,17 +109,66 @@ export default function VerificationPage() {
       (chain) => !disabledChainList.includes(chain),
     );
 
-    setAllChains({
-      chainId: "all chains",
-      chainName: "all chains",
-      prefix: `all chains(${filteredChainList.length})`,
-      address: filteredChainList.map((chain) => chain.chainName).join(", "),
-      chainImageUrl: AllChainsIcon,
-    });
-
     setChainList(filteredChainList);
     setDisabledChainList(disabledChainList);
+
+    setCheckedItems(new Set(filteredChainList));
   }, [registeredChainList]);
+
+  useEffect(() => {
+    setCheckedItems(new Set(chainList));
+  }, [chainList]);
+
+  const init = async () => {
+    if (window.location.search) {
+      try {
+        const { state, code } = checkTwitterAuthQueryParameter(
+          window.location.search,
+        );
+
+        // Initialize Wallet
+        const keplrWallet = await initWallet();
+
+        // Fetch Twitter Profile
+        const twitterInfo = await fetchTwitterInfo(state, code);
+
+        // contract check registered
+        const registeredQueryResponse = await queryRegisteredTwitterId(
+          twitterInfo.id,
+        );
+
+        setTwitterAuthInfo({
+          ...twitterInfo,
+          isRegistered: "data" in registeredQueryResponse,
+        });
+
+        if ("data" in registeredQueryResponse) {
+          const ownerOfQueryResponse = await queryOwnerOfTwitterName(
+            registeredQueryResponse.data.name,
+          );
+
+          const addressesQueryResponse = await queryAddressesFromTwitterName(
+            registeredQueryResponse.data.name,
+          );
+
+          if (keplrWallet) {
+            const key = await keplrWallet.getKey(MainChainId);
+            setIsOwner(ownerOfQueryResponse.data.owner === key.bech32Address);
+          }
+
+          setRegisteredChainList(addressesQueryResponse.data.addresses);
+        }
+      } catch (error) {
+        if (error instanceof Error && error.message === TWITTER_LOGIN_ERROR) {
+          await router.push("/");
+        }
+
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
 
   const initWallet = async () => {
     const keplr = await getKeplrFromWindow();
@@ -351,10 +343,15 @@ export default function VerificationPage() {
     }
   };
 
-  const isRegisterButtonDisable =
-    checkedItems.size < 1 ||
-    (!isOwner && registeredChainList.length > 0) ||
-    !isAgree;
+  const isRegisterButtonDisable = (() => {
+    const hasCheckedItem = checkedItems.size > 0;
+
+    if (isOwner) {
+      return !hasCheckedItem;
+    } else {
+      return !(isAgree && hasCheckedItem);
+    }
+  })();
 
   return (
     <Container>
@@ -376,17 +373,15 @@ export default function VerificationPage() {
               />
             </ChainListTitleContainer>
 
-            {allChains && !searchValue ? (
+            {!searchValue ? (
               <AllChainsItem
-                allChecked={allChecked}
-                setAllChecked={setAllChecked}
-                chainItem={allChains}
+                chainList={chainList}
+                checkedItems={checkedItems}
+                setCheckedItems={setCheckedItems}
               />
             ) : null}
 
             <ChainList
-              allChecked={allChecked}
-              setAllChecked={setAllChecked}
               chainList={chainList.filter(
                 (chain) =>
                   chain.chainId.includes(searchValue) ||
@@ -403,23 +398,27 @@ export default function VerificationPage() {
               setCheckedItems={setCheckedItems}
             />
 
-            <AgreeContainer
-              onClick={() => {
-                setIsAgree(!isAgree);
-              }}
-            >
-              <AgreeCheckBox type="checkbox" checked={isAgree} readOnly />I
-              check that Osmo is required for this transaction
-            </AgreeContainer>
-
-            <ButtonContainer disabled={isRegisterButtonDisable}>
-              <PrimaryButton
-                disabled={isRegisterButtonDisable}
-                onClick={onClickRegistration}
+            {!isOwner && (
+              <AgreeContainer
+                onClick={() => {
+                  setIsAgree(!isAgree);
+                }}
               >
-                Register
-              </PrimaryButton>
-            </ButtonContainer>
+                <AgreeCheckBox type="checkbox" checked={isAgree} readOnly />I
+                check that Osmo is required for this transaction
+              </AgreeContainer>
+            )}
+
+            {chainList.length > 0 && (
+              <ButtonContainer disabled={isRegisterButtonDisable}>
+                <PrimaryButton
+                  disabled={isRegisterButtonDisable}
+                  onClick={onClickRegistration}
+                >
+                  Register
+                </PrimaryButton>
+              </ButtonContainer>
+            )}
           </ContentContainer>
         )}
       </MainContainer>

@@ -1,10 +1,15 @@
 import { ChainItemType } from "../../types";
-import { Dispatch, FunctionComponent, SetStateAction } from "react";
+import {
+  Dispatch,
+  FunctionComponent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 
 import { ChainImage } from "./chain-image";
 import { Flex1 } from "../../styles/flex-1";
 import {
-  ChainImageContainer,
   ChainInfoContainer,
   ChainItemContainer,
   ChainName,
@@ -13,43 +18,54 @@ import {
 import color from "../../styles/color";
 import styled from "styled-components";
 import { Checkbox } from "../checkbox";
+import AllChainsIcon from "../../public/images/svg/all-chains-icon.svg";
 
 interface Props {
-  allChecked: boolean;
-  setAllChecked: Dispatch<SetStateAction<boolean>>;
-  chainItem: ChainItemType;
+  chainList: ChainItemType[];
+  checkedItems: Set<unknown>;
+  setCheckedItems: Dispatch<SetStateAction<Set<unknown>>>;
 }
 
 export const AllChainsItem: FunctionComponent<Props> = (props) => {
-  const { allChecked, setAllChecked, chainItem } = props;
+  const { chainList, checkedItems, setCheckedItems } = props;
+
+  const [checked, setChecked] = useState(false);
 
   const checkHandler = () => {
-    setAllChecked(!allChecked);
+    if (checked) {
+      setCheckedItems(new Set());
+    } else if (chainList.length !== checkedItems.size) {
+      setCheckedItems(new Set(chainList));
+    }
   };
+
+  useEffect(() => {
+    if (chainList.length === checkedItems.size && checkedItems.size !== 0) {
+      setChecked(true);
+    } else {
+      setChecked(false);
+    }
+  }, [checkedItems]);
 
   return (
     <AllChainsContainer>
       <ChainItemContainer
-        key={chainItem.prefix}
+        key="all chains"
         isLoading={false}
-        checked={allChecked}
+        checked={checked}
         onClick={checkHandler}
       >
-        <ChainImageContainer width="3rem" height="3rem">
-          <ChainImage
-            src={chainItem.chainImageUrl}
-            fill={true}
-            alt={`${chainItem.prefix} chain image`}
-          />
-        </ChainImageContainer>
+        <ChainImage src={AllChainsIcon} fill={true} alt={`all chain images`} />
         <ChainInfoContainer>
-          <ChainName>{`.${chainItem.prefix}`}</ChainName>
-          <WalletAddress>{chainItem.address}</WalletAddress>
+          <ChainName>{`.all chains(${chainList.length})`}</ChainName>
+          <WalletAddress>
+            {chainList.map((chain) => chain.chainName).join(", ")}
+          </WalletAddress>
         </ChainInfoContainer>
 
         <Flex1 />
 
-        <Checkbox checked={allChecked} />
+        <Checkbox checked={checked} />
       </ChainItemContainer>
     </AllChainsContainer>
   );
