@@ -438,6 +438,13 @@ const MainContainer = styled.div`
   padding: 2.7rem 0;
 
   color: white;
+
+  background-image: url("/images/svg/bg-asset-3.svg"),
+    url("/images/svg/bg-asset-3.svg"), url("/images/svg/bg-asset-3.svg"),
+    url("/images/svg/bg-asset-3.svg");
+  background-size: 3.125rem 3.125rem;
+  background-position: 296px 536px, 1256px 216px, 376px 776px, 1176px 856px;
+  background-repeat: no-repeat;
 `;
 
 export const ContentContainer = styled.div`
