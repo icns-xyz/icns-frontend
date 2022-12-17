@@ -107,8 +107,6 @@ const SkeletonButton = styled.div`
   width: 12rem;
   height: 4rem;
 
-  padding-top: 1.5rem;
-
   background-color: ${color.grey["800"]};
 `;
 

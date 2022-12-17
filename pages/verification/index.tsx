@@ -56,6 +56,7 @@ import {
 import { makeClaimMessage, makeSetRecordMessage } from "../../messages";
 import Axios from "axios";
 import { BackButton } from "../../components/back-button";
+import { FinalCheckModal } from "../../components/final-check-modal";
 
 export default function VerificationPage() {
   const router = useRouter();
@@ -64,6 +65,11 @@ export default function VerificationPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   const [wallet, setWallet] = useState<KeplrWallet>();
+  const [walletKey, setWalletKey] = useState<{
+    name: string;
+    pubKey: Uint8Array;
+    bech32Address: string;
+  }>();
 
   const [chainList, setChainList] = useState<ChainItemType[]>([]);
   const [disabledChainList, setDisabledChainList] = useState<ChainItemType[]>(
@@ -77,7 +83,9 @@ export default function VerificationPage() {
   const [searchValue, setSearchValue] = useState("");
 
   const [isOwner, setIsOwner] = useState(false);
-  const [isAgree, setIsAgree] = useState(false);
+  // const [isAgree, setIsAgree] = useState(false);
+
+  const [isModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     init();
@@ -147,14 +155,14 @@ export default function VerificationPage() {
             registeredQueryResponse.data.name,
           );
 
-          const addressesQueryResponse = await queryAddressesFromTwitterName(
-            registeredQueryResponse.data.name,
-          );
-
           if (keplrWallet) {
             const key = await keplrWallet.getKey(MainChainId);
             setIsOwner(ownerOfQueryResponse.data.owner === key.bech32Address);
           }
+
+          const addressesQueryResponse = await queryAddressesFromTwitterName(
+            registeredQueryResponse.data.name,
+          );
 
           setRegisteredChainList(addressesQueryResponse.data.addresses);
         }
@@ -175,9 +183,11 @@ export default function VerificationPage() {
 
     if (keplr) {
       const keplrWallet = new KeplrWallet(keplr);
+      const key = await keplrWallet.getKey(MainChainId);
 
       await fetchChainList(keplrWallet);
       setWallet(keplrWallet);
+      setWalletKey(key);
 
       return keplrWallet;
     } else {
@@ -253,8 +263,18 @@ export default function VerificationPage() {
     }
   };
 
-  const onClickRegistration = async () => {
+  const onClickRegistration = () => {
     amplitude.track("click register button");
+
+    console.log(isOwner);
+    if (isOwner) {
+      handleRegistration();
+    } else {
+      setModalOpen(true);
+    }
+  };
+
+  const handleRegistration = async () => {
     try {
       const { state, code } = checkTwitterAuthQueryParameter(
         window.location.search,
@@ -263,16 +283,14 @@ export default function VerificationPage() {
 
       const adr36Infos = await checkAdr36();
 
-      if (wallet && adr36Infos) {
-        const key = await wallet.getKey(MainChainId);
-
+      if (wallet && walletKey && adr36Infos) {
         const icnsVerificationList = await verifyTwitterAccount(
-          key.bech32Address,
+          walletKey.bech32Address,
           twitterInfo.accessToken,
         );
 
         const registerMsg = makeClaimMessage(
-          key.bech32Address,
+          walletKey.bech32Address,
           twitterInfo.username,
           icnsVerificationList,
           localStorage.getItem(REFERRAL_KEY) ?? undefined,
@@ -280,7 +298,7 @@ export default function VerificationPage() {
 
         const addressMsgs = adr36Infos.map((adr36Info) => {
           return makeSetRecordMessage(
-            key.bech32Address,
+            walletKey.bech32Address,
             twitterInfo.username,
             adr36Info,
           );
@@ -305,7 +323,7 @@ export default function VerificationPage() {
 
         const simulated = await simulateMsgs(
           chainInfo,
-          key.bech32Address,
+          walletKey.bech32Address,
           {
             proto: protoMsgs,
           },
@@ -317,7 +335,7 @@ export default function VerificationPage() {
         const txHash = await sendMsgs(
           wallet,
           chainInfo,
-          key.bech32Address,
+          walletKey.bech32Address,
           {
             amino: aminoMsgs,
             proto: protoMsgs,
@@ -346,11 +364,7 @@ export default function VerificationPage() {
   const isRegisterButtonDisable = (() => {
     const hasCheckedItem = checkedItems.size > 0;
 
-    if (isOwner) {
-      return !hasCheckedItem;
-    } else {
-      return !(isAgree && hasCheckedItem);
-    }
+    return !hasCheckedItem;
   })();
 
   return (
@@ -398,16 +412,14 @@ export default function VerificationPage() {
               setCheckedItems={setCheckedItems}
             />
 
-            {!isOwner && (
-              <AgreeContainer
-                onClick={() => {
-                  setIsAgree(!isAgree);
-                }}
-              >
-                <AgreeCheckBox type="checkbox" checked={isAgree} readOnly />I
-                check that Osmo is required for this transaction
-              </AgreeContainer>
-            )}
+            {/*<AgreeContainer*/}
+            {/*  onClick={() => {*/}
+            {/*    setIsAgree(!isAgree);*/}
+            {/*  }}*/}
+            {/*>*/}
+            {/*  <AgreeCheckBox type="checkbox" checked={isAgree} readOnly />I*/}
+            {/*  check that Osmo is required for this transaction*/}
+            {/*</AgreeContainer>*/}
 
             {chainList.length > 0 && (
               <ButtonContainer disabled={isRegisterButtonDisable}>
@@ -422,6 +434,14 @@ export default function VerificationPage() {
           </ContentContainer>
         )}
       </MainContainer>
+
+      <FinalCheckModal
+        twitterUserName={twitterAuthInfo?.username}
+        walletInfo={walletKey}
+        isModalOpen={isModalOpen}
+        onCloseModal={() => setModalOpen(false)}
+        onClickRegisterButton={handleRegistration}
+      />
     </Container>
   );
 }
@@ -461,6 +481,8 @@ export const ButtonContainer = styled.div<{ disabled?: boolean }>`
   width: 11rem;
   height: 3.5rem;
 
+  margin-top: 1.5rem;
+
   background-color: ${(props) =>
     props.disabled ? color.orange["300"] : color.orange["100"]};
 `;
@@ -485,30 +507,30 @@ const ChainListTitle = styled.div`
   color: ${color.white};
 `;
 
-const AgreeContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  font-family: "Inter", serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 0.8rem;
-  line-height: 0.8rem;
-
-  text-transform: uppercase;
-  user-select: none;
-
-  color: ${color.grey["400"]};
-
-  padding: 2rem 0;
-
-  cursor: pointer;
-`;
-
-const AgreeCheckBox = styled.input.attrs({ type: "checkbox" })`
-  width: 1.2rem;
-  height: 1.2rem;
-
-  accent-color: ${color.orange["200"]};
-`;
+// const AgreeContainer = styled.div`
+//   display: flex;
+//   align-items: center;
+//   gap: 0.5rem;
+//
+//   font-family: "Inter", serif;
+//   font-style: normal;
+//   font-weight: 500;
+//   font-size: 0.8rem;
+//   line-height: 0.8rem;
+//
+//   text-transform: uppercase;
+//   user-select: none;
+//
+//   color: ${color.grey["400"]};
+//
+//   padding: 2rem 0;
+//
+//   cursor: pointer;
+// `;
+//
+// const AgreeCheckBox = styled.input.attrs({ type: "checkbox" })`
+//   width: 1.2rem;
+//   height: 1.2rem;
+//
+//   accent-color: ${color.orange["200"]};
+// `;
