@@ -28,6 +28,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {\
           "packageLocation": "./",\
           "packageDependencies": [\
+            ["@amplitude/analytics-browser", "npm:1.6.6"],\
             ["@keplr-wallet/common", "npm:0.11.23"],\
             ["@keplr-wallet/cosmos", "npm:0.11.23"],\
             ["@keplr-wallet/proto-types", "npm:0.11.23"],\
@@ -69,6 +70,72 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["typescript", "patch:typescript@npm%3A4.9.3#~builtin<compat/typescript>::version=4.9.3&hash=d73830"]\
           ],\
           "linkType": "SOFT"\
+        }]\
+      ]],\
+      ["@amplitude/analytics-browser", [\
+        ["npm:1.6.6", {\
+          "packageLocation": "./.yarn/cache/@amplitude-analytics-browser-npm-1.6.6-d1c69ae672-a43eb0dab5.zip/node_modules/@amplitude/analytics-browser/",\
+          "packageDependencies": [\
+            ["@amplitude/analytics-browser", "npm:1.6.6"],\
+            ["@amplitude/analytics-client-common", "npm:0.5.0"],\
+            ["@amplitude/analytics-core", "npm:0.11.0"],\
+            ["@amplitude/analytics-types", "npm:0.14.0"],\
+            ["@amplitude/ua-parser-js", "npm:0.7.31"],\
+            ["tslib", "npm:2.4.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@amplitude/analytics-client-common", [\
+        ["npm:0.5.0", {\
+          "packageLocation": "./.yarn/cache/@amplitude-analytics-client-common-npm-0.5.0-07e963d4fd-eebf391f64.zip/node_modules/@amplitude/analytics-client-common/",\
+          "packageDependencies": [\
+            ["@amplitude/analytics-client-common", "npm:0.5.0"],\
+            ["@amplitude/analytics-connector", "npm:1.4.6"],\
+            ["@amplitude/analytics-core", "npm:0.11.0"],\
+            ["@amplitude/analytics-types", "npm:0.14.0"],\
+            ["tslib", "npm:2.4.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@amplitude/analytics-connector", [\
+        ["npm:1.4.6", {\
+          "packageLocation": "./.yarn/cache/@amplitude-analytics-connector-npm-1.4.6-d9e949e37c-0a2acfa54e.zip/node_modules/@amplitude/analytics-connector/",\
+          "packageDependencies": [\
+            ["@amplitude/analytics-connector", "npm:1.4.6"],\
+            ["@amplitude/ua-parser-js", "npm:0.7.31"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@amplitude/analytics-core", [\
+        ["npm:0.11.0", {\
+          "packageLocation": "./.yarn/cache/@amplitude-analytics-core-npm-0.11.0-e8af53e9ab-be98d2614b.zip/node_modules/@amplitude/analytics-core/",\
+          "packageDependencies": [\
+            ["@amplitude/analytics-core", "npm:0.11.0"],\
+            ["@amplitude/analytics-types", "npm:0.14.0"],\
+            ["tslib", "npm:2.4.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@amplitude/analytics-types", [\
+        ["npm:0.14.0", {\
+          "packageLocation": "./.yarn/cache/@amplitude-analytics-types-npm-0.14.0-7b5c807dc5-23972f7869.zip/node_modules/@amplitude/analytics-types/",\
+          "packageDependencies": [\
+            ["@amplitude/analytics-types", "npm:0.14.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@amplitude/ua-parser-js", [\
+        ["npm:0.7.31", {\
+          "packageLocation": "./.yarn/cache/@amplitude-ua-parser-js-npm-0.7.31-540ed0892d-c72e7c8656.zip/node_modules/@amplitude/ua-parser-js/",\
+          "packageDependencies": [\
+            ["@amplitude/ua-parser-js", "npm:0.7.31"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["@babel/code-frame", [\
@@ -4367,6 +4434,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["icns-frontend", "workspace:."],\
+            ["@amplitude/analytics-browser", "npm:1.6.6"],\
             ["@keplr-wallet/common", "npm:0.11.23"],\
             ["@keplr-wallet/cosmos", "npm:0.11.23"],\
             ["@keplr-wallet/proto-types", "npm:0.11.23"],\

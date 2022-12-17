@@ -5,6 +5,64 @@ __metadata:
   version: 6
   cacheKey: 8
 
+"@amplitude/analytics-browser@npm:^1.6.6":
+  version: 1.6.6
+  resolution: "@amplitude/analytics-browser@npm:1.6.6"
+  dependencies:
+    "@amplitude/analytics-client-common": ^0.5.0
+    "@amplitude/analytics-core": ^0.11.0
+    "@amplitude/analytics-types": ^0.14.0
+    "@amplitude/ua-parser-js": ^0.7.31
+    tslib: ^2.3.1
+  checksum: a43eb0dab51b77ef2529f4be6eee90e90a43d3e7d1d54da4edf33cea476889328f22aa238590420a8568a913174b1cab55b3d6a1a76d3c4e6aebe25a0e8c02b8
+  languageName: node
+  linkType: hard
+
+"@amplitude/analytics-client-common@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@amplitude/analytics-client-common@npm:0.5.0"
+  dependencies:
+    "@amplitude/analytics-connector": ^1.4.5
+    "@amplitude/analytics-core": ^0.11.0
+    "@amplitude/analytics-types": ^0.14.0
+    tslib: ^2.3.1
+  checksum: eebf391f64fc5287ddb3a1f23c78fff9c63e7f1dd96dd5466d9549d08c24764b6a49d0c0d1552d3784902be00108913b6669699fffefd7f623a0db9854ce8d94
+  languageName: node
+  linkType: hard
+
+"@amplitude/analytics-connector@npm:^1.4.5":
+  version: 1.4.6
+  resolution: "@amplitude/analytics-connector@npm:1.4.6"
+  dependencies:
+    "@amplitude/ua-parser-js": 0.7.31
+  checksum: 0a2acfa54e02b405e1b66ec522aa5802f938f525ad0e81a864f9370b53a3a18f166962d891a5372c12938ec7c3fbbb3453304261845bd57e5617963c8285c2dc
+  languageName: node
+  linkType: hard
+
+"@amplitude/analytics-core@npm:^0.11.0":
+  version: 0.11.0
+  resolution: "@amplitude/analytics-core@npm:0.11.0"
+  dependencies:
+    "@amplitude/analytics-types": ^0.14.0
+    tslib: ^2.3.1
+  checksum: be98d2614bbb22dfae03dfc4f79766ffb71c9f6b0b2fe88ea1b3ea4beae0f69f4d3add0a1dd6f0658300e14ca7d61d45d42f356653c19ba7cf87bcc9443cb7f1
+  languageName: node
+  linkType: hard
+
+"@amplitude/analytics-types@npm:^0.14.0":
+  version: 0.14.0
+  resolution: "@amplitude/analytics-types@npm:0.14.0"
+  checksum: 23972f7869b1020d86a6b1d427b003e6bfed6ffae37dd755a86b7d78310568b381b0b7d8970ba468894efb6d775e3b885ed8ac4548d6c15413ed02548dfa9d00
+  languageName: node
+  linkType: hard
+
+"@amplitude/ua-parser-js@npm:0.7.31, @amplitude/ua-parser-js@npm:^0.7.31":
+  version: 0.7.31
+  resolution: "@amplitude/ua-parser-js@npm:0.7.31"
+  checksum: c72e7c8656dd77a6c2ece9e3817929022aeadf731470e53fecddce03232d87977fd5b09d76c570a2a5bed97f5dd463fe6379aac7a6c4b2d2393f14486d385eec
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.18.6":
   version: 7.18.6
   resolution: "@babel/code-frame@npm:7.18.6"
@@ -3487,6 +3545,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "icns-frontend@workspace:."
   dependencies:
+    "@amplitude/analytics-browser": ^1.6.6
     "@keplr-wallet/common": ^0.11.23
     "@keplr-wallet/cosmos": ^0.11.23
     "@keplr-wallet/proto-types": ^0.11.23
@@ -6003,7 +6062,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.0, tslib@npm:^2.4.0, tslib@npm:^2.4.1":
+"tslib@npm:^2.0.0, tslib@npm:^2.3.1, tslib@npm:^2.4.0, tslib@npm:^2.4.1":
   version: 2.4.1
   resolution: "tslib@npm:2.4.1"
   checksum: 19480d6e0313292bd6505d4efe096a6b31c70e21cf08b5febf4da62e95c265c8f571f7b36fcc3d1a17e068032f59c269fab3459d6cd3ed6949eafecf64315fca
