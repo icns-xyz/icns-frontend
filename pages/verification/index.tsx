@@ -340,10 +340,15 @@ export default function VerificationPage() {
     }
   };
 
-  const isRegisterButtonDisable =
-    checkedItems.size < 1 ||
-    (!isOwner && registeredChainList.length > 0) ||
-    !isAgree;
+  const isRegisterButtonDisable = (() => {
+    const hasCheckedItem = checkedItems.size > 0;
+
+    if (isOwner) {
+      return !hasCheckedItem;
+    } else {
+      return !(isAgree && hasCheckedItem);
+    }
+  })();
 
   return (
     <Container>
@@ -390,23 +395,27 @@ export default function VerificationPage() {
               setCheckedItems={setCheckedItems}
             />
 
-            <AgreeContainer
-              onClick={() => {
-                setIsAgree(!isAgree);
-              }}
-            >
-              <AgreeCheckBox type="checkbox" checked={isAgree} readOnly />I
-              check that Osmo is required for this transaction
-            </AgreeContainer>
-
-            <ButtonContainer disabled={isRegisterButtonDisable}>
-              <PrimaryButton
-                disabled={isRegisterButtonDisable}
-                onClick={onClickRegistration}
+            {!isOwner && (
+              <AgreeContainer
+                onClick={() => {
+                  setIsAgree(!isAgree);
+                }}
               >
-                Register
-              </PrimaryButton>
-            </ButtonContainer>
+                <AgreeCheckBox type="checkbox" checked={isAgree} readOnly />I
+                check that Osmo is required for this transaction
+              </AgreeContainer>
+            )}
+
+            {chainList.length > 0 && (
+              <ButtonContainer disabled={isRegisterButtonDisable}>
+                <PrimaryButton
+                  disabled={isRegisterButtonDisable}
+                  onClick={onClickRegistration}
+                >
+                  Register
+                </PrimaryButton>
+              </ButtonContainer>
+            )}
           </ContentContainer>
         )}
       </MainContainer>
