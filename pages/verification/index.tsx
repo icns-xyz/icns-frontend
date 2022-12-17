@@ -51,7 +51,11 @@ import {
   KEPLR_NOT_FOUND_ERROR,
   TWITTER_LOGIN_ERROR,
 } from "../../constants/error-message";
-import { makeClaimMessage, makeSetRecordMessage } from "../../messages";
+import {
+  makeClaimMessage,
+  makeRemoveRecordMessage,
+  makeSetRecordMessage,
+} from "../../messages";
 import Axios from "axios";
 import { BackButton } from "../../components/back-button";
 
@@ -360,6 +364,67 @@ export default function VerificationPage() {
         ) : (
           <ContentContainer>
             <BackButton />
+            <div>
+              <button
+                onClick={async () => {
+                  if (twitterAuthInfo && wallet) {
+                    const key = await wallet.getKey(MainChainId);
+
+                    const removeMessages = registeredChainList.map((chain) => {
+                      return makeRemoveRecordMessage(
+                        twitterAuthInfo.username,
+                        key.bech32Address,
+                        chain.address,
+                      );
+                    });
+
+                    const aminoMsgs = [];
+                    const protoMsgs = [];
+
+                    for (const msg of removeMessages) {
+                      aminoMsgs.push(msg.amino);
+                      protoMsgs.push(msg.proto);
+                    }
+
+                    console.log(aminoMsgs);
+
+                    const chainInfo = {
+                      chainId: MainChainId,
+                      rest: REST_URL,
+                    };
+
+                    const simulated = await simulateMsgs(
+                      chainInfo,
+                      key.bech32Address,
+                      {
+                        proto: protoMsgs,
+                      },
+                      {
+                        amount: [],
+                      },
+                    );
+
+                    const txHash = await sendMsgs(
+                      wallet,
+                      chainInfo,
+                      key.bech32Address,
+                      {
+                        amino: aminoMsgs,
+                        proto: protoMsgs,
+                      },
+                      {
+                        amount: [],
+                        gas: Math.floor(simulated.gasUsed * 1.5).toString(),
+                      },
+                    );
+
+                    console.log(txHash);
+                  }
+                }}
+              >
+                All Remove
+              </button>
+            </div>
             <TwitterProfile twitterProfileInformation={twitterAuthInfo} />
 
             <ChainListTitleContainer>

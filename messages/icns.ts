@@ -70,3 +70,21 @@ export const makeSetRecordMessage = (
     [],
   );
 };
+
+export const makeRemoveRecordMessage = (
+  twitterUserName: string,
+  senderAddress: string,
+  removeAddress: string,
+): CosmwasmExecuteMessageResult => {
+  return makeCosmwasmExecMsg(
+    senderAddress,
+    RESOLVER_ADDRESS,
+    {
+      remove_record: {
+        name: twitterUserName,
+        bech32_address: removeAddress,
+      },
+    },
+    [],
+  );
+};
