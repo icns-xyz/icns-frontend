@@ -61,6 +61,7 @@ export const ChainItemContainer = styled.div<{
   isLoading: boolean;
   checked?: boolean;
   disabled?: boolean;
+  isSkeleton?: boolean;
 }>`
   display: flex;
   flex-direction: row;
@@ -78,6 +79,8 @@ export const ChainItemContainer = styled.div<{
     props.disabled
       ? color.black
       : props.checked
+      ? color.grey["800"]
+      : props.isSkeleton
       ? color.grey["800"]
       : color.grey["900"]};
 

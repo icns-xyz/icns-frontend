@@ -12,6 +12,6 @@ export const SkeletonCircle = styled(SkeletonAnimation)<WidthHeightProps>`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
 
-  background-color: ${color.grey["500"]};
+  background-color: ${color.grey["600"]};
   border-radius: 50%;
 `;
