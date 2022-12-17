@@ -13,6 +13,7 @@ import { ConnectWalletModal } from "../components/connect-wallet-modal";
 import MainTitle from "../public/images/svg/main-title.svg";
 import MainLogo from "../public/images/svg/main-logo.svg";
 import CheckIcon from "../public/images/svg/check-icon.svg";
+import StarIcon from "../public/images/svg/bg-asset-3.svg";
 import { Logo } from "../components/logo";
 import { useEffect, useState } from "react";
 import { MINIMUM_OSMO_FEE, SELECTED_WALLET_KEY } from "../constants/wallet";
@@ -48,6 +49,20 @@ export default function Home() {
       <MainContainer>
         <MainTitleContainer>
           <MainTitleImageBackground>
+            <Image
+              src={StarIcon}
+              width={50}
+              height={50}
+              alt="Star Icon"
+              className="starIcon first"
+            />
+            <Image
+              src={StarIcon}
+              width={50}
+              height={50}
+              alt="Star Icon"
+              className="starIcon last"
+            />
             <MainTitleImageContainer>
               <Image
                 src={MainTitle}
@@ -112,6 +127,15 @@ const Container = styled.div`
 
   width: 100vw;
   height: 100vh;
+
+  background-image: url("/images/svg/bg-asset-1.svg"),
+    url("/images/svg/bg-asset-2.svg"), url("/images/svg/bg-asset-2.svg"),
+    url("/images/svg/bg-asset-3.svg"), url("/images/svg/bg-asset-3.svg");
+  background-size: 5rem 5rem, 5rem 5rem, 5rem 5rem, 3.125rem 3.125rem,
+    3.125rem 3.125rem;
+  background-position: 80px 640px, 960px 80px, 1200px 720px, 136px 776px,
+    1016px 696px;
+  background-repeat: no-repeat;
 `;
 
 const MainContainer = styled.div`
@@ -120,6 +144,20 @@ const MainContainer = styled.div`
 
   margin-top: 15rem;
   margin-left: 10rem;
+
+  img.starIcon {
+    position: absolute;
+
+    &.first {
+      left: -24px;
+      top: -24px;
+    }
+
+    &.last {
+      right: -23px;
+      top: -24px;
+    }
+  }
 `;
 
 const MainTitleContainer = styled.div`
