@@ -28,10 +28,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {\
           "packageLocation": "./",\
           "packageDependencies": [\
-            ["@keplr-wallet/common", "npm:0.11.23"],\
-            ["@keplr-wallet/cosmos", "npm:0.11.23"],\
-            ["@keplr-wallet/proto-types", "npm:0.11.23"],\
-            ["@keplr-wallet/types", "npm:0.11.23"],\
+            ["@keplr-wallet/common", "npm:0.11.25"],\
+            ["@keplr-wallet/cosmos", "npm:0.11.25"],\
+            ["@keplr-wallet/proto-types", "npm:0.11.25"],\
+            ["@keplr-wallet/types", "npm:0.11.25"],\
             ["@next/eslint-plugin-next", "npm:13.0.5"],\
             ["@types/eslint", "npm:8.4.10"],\
             ["@types/node", "npm:18.11.9"],\
@@ -575,11 +575,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@keplr-wallet/common", [\
-        ["npm:0.11.23", {\
-          "packageLocation": "./.yarn/cache/@keplr-wallet-common-npm-0.11.23-21e0bff02f-fa756241d0.zip/node_modules/@keplr-wallet/common/",\
+        ["npm:0.11.25", {\
+          "packageLocation": "./.yarn/cache/@keplr-wallet-common-npm-0.11.25-9963e214ee-30aed28c56.zip/node_modules/@keplr-wallet/common/",\
           "packageDependencies": [\
-            ["@keplr-wallet/common", "npm:0.11.23"],\
-            ["@keplr-wallet/crypto", "npm:0.11.23"],\
+            ["@keplr-wallet/common", "npm:0.11.25"],\
+            ["@keplr-wallet/crypto", "npm:0.11.25"],\
             ["buffer", "npm:6.0.3"],\
             ["delay", "npm:4.4.1"]\
           ],\
@@ -587,16 +587,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@keplr-wallet/cosmos", [\
-        ["npm:0.11.23", {\
-          "packageLocation": "./.yarn/cache/@keplr-wallet-cosmos-npm-0.11.23-e909d29c73-3777ad82ee.zip/node_modules/@keplr-wallet/cosmos/",\
+        ["npm:0.11.25", {\
+          "packageLocation": "./.yarn/cache/@keplr-wallet-cosmos-npm-0.11.25-5a72ef6016-25a540d80f.zip/node_modules/@keplr-wallet/cosmos/",\
           "packageDependencies": [\
-            ["@keplr-wallet/cosmos", "npm:0.11.23"],\
+            ["@keplr-wallet/cosmos", "npm:0.11.25"],\
             ["@ethersproject/address", "npm:5.7.0"],\
-            ["@keplr-wallet/common", "npm:0.11.23"],\
-            ["@keplr-wallet/crypto", "npm:0.11.23"],\
-            ["@keplr-wallet/proto-types", "npm:0.11.23"],\
-            ["@keplr-wallet/types", "npm:0.11.23"],\
-            ["@keplr-wallet/unit", "npm:0.11.23"],\
+            ["@keplr-wallet/common", "npm:0.11.25"],\
+            ["@keplr-wallet/crypto", "npm:0.11.25"],\
+            ["@keplr-wallet/proto-types", "npm:0.11.25"],\
+            ["@keplr-wallet/types", "npm:0.11.25"],\
+            ["@keplr-wallet/unit", "npm:0.11.25"],\
             ["axios", "npm:0.27.2"],\
             ["bech32", "npm:1.1.4"],\
             ["buffer", "npm:6.0.3"],\
@@ -607,10 +607,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@keplr-wallet/crypto", [\
-        ["npm:0.11.23", {\
-          "packageLocation": "./.yarn/cache/@keplr-wallet-crypto-npm-0.11.23-00a1560834-660425deb6.zip/node_modules/@keplr-wallet/crypto/",\
+        ["npm:0.11.25", {\
+          "packageLocation": "./.yarn/cache/@keplr-wallet-crypto-npm-0.11.25-eb75244924-bdb5ff6c57.zip/node_modules/@keplr-wallet/crypto/",\
           "packageDependencies": [\
-            ["@keplr-wallet/crypto", "npm:0.11.23"],\
+            ["@keplr-wallet/crypto", "npm:0.11.25"],\
             ["@ethersproject/keccak256", "npm:5.7.0"],\
             ["bip32", "npm:2.0.6"],\
             ["bip39", "npm:3.0.4"],\
@@ -624,10 +624,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@keplr-wallet/proto-types", [\
-        ["npm:0.11.23", {\
-          "packageLocation": "./.yarn/cache/@keplr-wallet-proto-types-npm-0.11.23-e19f2b6321-0dfe72c3c9.zip/node_modules/@keplr-wallet/proto-types/",\
+        ["npm:0.11.25", {\
+          "packageLocation": "./.yarn/cache/@keplr-wallet-proto-types-npm-0.11.25-8f5637fdcf-07f0efcd41.zip/node_modules/@keplr-wallet/proto-types/",\
           "packageDependencies": [\
-            ["@keplr-wallet/proto-types", "npm:0.11.23"],\
+            ["@keplr-wallet/proto-types", "npm:0.11.25"],\
             ["long", "npm:4.0.0"],\
             ["protobufjs", "npm:6.11.3"]\
           ],\
@@ -635,10 +635,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@keplr-wallet/types", [\
-        ["npm:0.11.23", {\
-          "packageLocation": "./.yarn/cache/@keplr-wallet-types-npm-0.11.23-47d40e583e-15c60741f3.zip/node_modules/@keplr-wallet/types/",\
+        ["npm:0.11.25", {\
+          "packageLocation": "./.yarn/cache/@keplr-wallet-types-npm-0.11.25-03c9c802b5-1482307c0a.zip/node_modules/@keplr-wallet/types/",\
           "packageDependencies": [\
-            ["@keplr-wallet/types", "npm:0.11.23"],\
+            ["@keplr-wallet/types", "npm:0.11.25"],\
             ["axios", "npm:0.27.2"],\
             ["long", "npm:4.0.0"],\
             ["secretjs", "npm:0.17.7"]\
@@ -647,11 +647,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["@keplr-wallet/unit", [\
-        ["npm:0.11.23", {\
-          "packageLocation": "./.yarn/cache/@keplr-wallet-unit-npm-0.11.23-5690bbdf49-560aec00cb.zip/node_modules/@keplr-wallet/unit/",\
+        ["npm:0.11.25", {\
+          "packageLocation": "./.yarn/cache/@keplr-wallet-unit-npm-0.11.25-e5c3f823f6-dfed155ce2.zip/node_modules/@keplr-wallet/unit/",\
           "packageDependencies": [\
-            ["@keplr-wallet/unit", "npm:0.11.23"],\
-            ["@keplr-wallet/types", "npm:0.11.23"],\
+            ["@keplr-wallet/unit", "npm:0.11.25"],\
+            ["@keplr-wallet/types", "npm:0.11.25"],\
             ["big-integer", "npm:1.6.51"],\
             ["utility-types", "npm:3.10.0"]\
           ],\
@@ -3977,10 +3977,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["icns-frontend", "workspace:."],\
-            ["@keplr-wallet/common", "npm:0.11.23"],\
-            ["@keplr-wallet/cosmos", "npm:0.11.23"],\
-            ["@keplr-wallet/proto-types", "npm:0.11.23"],\
-            ["@keplr-wallet/types", "npm:0.11.23"],\
+            ["@keplr-wallet/common", "npm:0.11.25"],\
+            ["@keplr-wallet/cosmos", "npm:0.11.25"],\
+            ["@keplr-wallet/proto-types", "npm:0.11.25"],\
+            ["@keplr-wallet/types", "npm:0.11.25"],\
             ["@next/eslint-plugin-next", "npm:13.0.5"],\
             ["@types/eslint", "npm:8.4.10"],\
             ["@types/node", "npm:18.11.9"],\
