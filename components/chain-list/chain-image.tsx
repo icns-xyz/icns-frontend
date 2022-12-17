@@ -21,6 +21,10 @@ export const ChainImage = ({ src, ...props }: ImageProps) => {
 };
 
 const ImageWrapper = styled.div`
+  position: relative;
+  width: 3rem;
+  height: 3rem;
+
   img {
     border-radius: 50%;
   }

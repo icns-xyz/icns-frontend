@@ -4,7 +4,6 @@ import { Dispatch, FunctionComponent, SetStateAction } from "react";
 import { ChainImage } from "./chain-image";
 import { Flex1 } from "../../styles/flex-1";
 import {
-  ChainImageContainer,
   ChainInfoContainer,
   ChainItemContainer,
   ChainName,
@@ -35,13 +34,11 @@ export const AllChainsItem: FunctionComponent<Props> = (props) => {
         checked={allChecked}
         onClick={checkHandler}
       >
-        <ChainImageContainer width="3rem" height="3rem">
-          <ChainImage
-            src={chainItem.chainImageUrl}
-            fill={true}
-            alt={`${chainItem.prefix} chain image`}
-          />
-        </ChainImageContainer>
+        <ChainImage
+          src={chainItem.chainImageUrl}
+          fill={true}
+          alt={`${chainItem.prefix} chain image`}
+        />
         <ChainInfoContainer>
           <ChainName>{`.${chainItem.prefix}`}</ChainName>
           <WalletAddress>{chainItem.address}</WalletAddress>
