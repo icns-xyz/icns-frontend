@@ -5,8 +5,6 @@ import styled from "styled-components";
 import { ChainItem } from "./chain-item";
 
 interface Props {
-  allChecked: boolean;
-  setAllChecked: Dispatch<SetStateAction<boolean>>;
   chainList: ChainItemType[];
   disabledChainList: ChainItemType[];
   checkedItems: Set<unknown>;
@@ -14,14 +12,7 @@ interface Props {
 }
 
 export const ChainList: FunctionComponent<Props> = (props) => {
-  const {
-    allChecked,
-    setAllChecked,
-    chainList,
-    disabledChainList,
-    checkedItems,
-    setCheckedItems,
-  } = props;
+  const { chainList, disabledChainList, checkedItems, setCheckedItems } = props;
 
   const checkedItemHandler = (chainItem: ChainItemType, isChecked: boolean) => {
     const tempSet = new Set(checkedItems);
@@ -34,22 +25,6 @@ export const ChainList: FunctionComponent<Props> = (props) => {
 
     setCheckedItems(tempSet);
   };
-
-  useEffect(() => {
-    if (allChecked) {
-      setCheckedItems(new Set(chainList));
-    } else if (chainList.length === checkedItems.size) {
-      setCheckedItems(new Set());
-    }
-  }, [allChecked]);
-
-  useEffect(() => {
-    if (chainList.length === checkedItems.size && checkedItems.size !== 0) {
-      setAllChecked(true);
-    } else {
-      setAllChecked(false);
-    }
-  }, [checkedItems]);
 
   return (
     <ChainContainer color={color.grey["900"]}>

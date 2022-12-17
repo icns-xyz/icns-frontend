@@ -30,7 +30,6 @@ import {
 } from "../../wallets";
 import { ChainIdHelper } from "@keplr-wallet/cosmos";
 
-import AllChainsIcon from "../../public/images/svg/all-chains-icon.svg";
 import { AllChainsItem } from "../../components/chain-list/all-chains-item";
 import { SearchInput } from "../../components/search-input";
 import {
@@ -71,9 +70,6 @@ export default function VerificationPage() {
   const [registeredChainList, setRegisteredChainList] = useState<
     RegisteredAddresses[]
   >([]);
-
-  const [allChains, setAllChains] = useState<ChainItemType>();
-  const [allChecked, setAllChecked] = useState(false);
   const [checkedItems, setCheckedItems] = useState(new Set());
 
   const [searchValue, setSearchValue] = useState("");
@@ -88,20 +84,10 @@ export default function VerificationPage() {
   useEffect(() => {
     if (wallet) {
       window.addEventListener("keplr_keystorechange", async () => {
-        init();
+        await init();
       });
     }
   }, [wallet]);
-
-  useEffect(() => {
-    setAllChains({
-      chainId: "all chains",
-      chainName: "all chains",
-      prefix: `all chains(${chainList.length})`,
-      address: chainList.map((chain) => chain.chainName).join(", "),
-      chainImageUrl: AllChainsIcon,
-    });
-  }, [chainList]);
 
   useEffect(() => {
     const disabledChainList = chainList.filter((chain) => {
@@ -121,17 +107,15 @@ export default function VerificationPage() {
       (chain) => !disabledChainList.includes(chain),
     );
 
-    setAllChains({
-      chainId: "all chains",
-      chainName: "all chains",
-      prefix: `all chains(${filteredChainList.length})`,
-      address: filteredChainList.map((chain) => chain.chainName).join(", "),
-      chainImageUrl: AllChainsIcon,
-    });
-
     setChainList(filteredChainList);
     setDisabledChainList(disabledChainList);
+
+    setCheckedItems(new Set(filteredChainList));
   }, [registeredChainList]);
+
+  useEffect(() => {
+    setCheckedItems(new Set(chainList));
+  }, [chainList]);
 
   const init = async () => {
     if (window.location.search) {
@@ -381,17 +365,15 @@ export default function VerificationPage() {
               />
             </ChainListTitleContainer>
 
-            {allChains && !searchValue ? (
+            {!searchValue ? (
               <AllChainsItem
-                allChecked={allChecked}
-                setAllChecked={setAllChecked}
-                chainItem={allChains}
+                chainList={chainList}
+                checkedItems={checkedItems}
+                setCheckedItems={setCheckedItems}
               />
             ) : null}
 
             <ChainList
-              allChecked={allChecked}
-              setAllChecked={setAllChecked}
               chainList={chainList.filter(
                 (chain) =>
                   chain.chainId.includes(searchValue) ||
