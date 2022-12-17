@@ -39,7 +39,7 @@ const SearchContainer = styled.div`
   gap: 0.625rem;
 
   min-width: 10rem;
-  height: 2rem;
+  height: 2.3rem;
 
   padding: 0.5rem 1.3rem;
 
