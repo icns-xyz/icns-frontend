@@ -9,10 +9,11 @@ interface PrimaryButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export const PrimaryButton: FunctionComponent<PrimaryButtonProps> = ({
   children,
   isLoading,
+  disabled,
   ...props
 }) => {
   return (
-    <StyledPrimaryButton {...props}>
+    <StyledPrimaryButton {...props} disabled={disabled || isLoading}>
       {isLoading ? (
         <SpinnerWrapper>
           <Spinner />
@@ -61,6 +62,7 @@ const StyledPrimaryButton = styled.button`
 
   &:disabled {
     background-color: ${color.orange["300"]};
+    cursor: not-allowed;
 
     span {
       opacity: 0.5;

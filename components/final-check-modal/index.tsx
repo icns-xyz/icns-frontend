@@ -17,6 +17,7 @@ interface Props {
   isModalOpen: boolean;
   onCloseModal: () => void;
   onClickRegisterButton: () => Promise<void>;
+  isLoadingRegistration?: boolean;
 }
 
 export const FinalCheckModal: FunctionComponent<Props> = (props) => {
@@ -26,6 +27,7 @@ export const FinalCheckModal: FunctionComponent<Props> = (props) => {
     isModalOpen,
     onCloseModal,
     onClickRegisterButton,
+    isLoadingRegistration,
   } = props;
   const router = useRouter();
 
@@ -89,7 +91,10 @@ export const FinalCheckModal: FunctionComponent<Props> = (props) => {
             Use a different account
           </SecondaryButton>
           <RegisterButton>
-            <PrimaryButton onClick={onClickRegisterButton}>
+            <PrimaryButton
+              onClick={onClickRegisterButton}
+              isLoading={isLoadingRegistration}
+            >
               Register
             </PrimaryButton>
           </RegisterButton>

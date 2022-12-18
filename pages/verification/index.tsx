@@ -267,8 +267,6 @@ export default function VerificationPage() {
   const onClickRegistration = () => {
     amplitude.track("click register button");
 
-    console.log(isOwner);
-
     if (isOwner) {
       handleRegistration();
     } else {
@@ -448,6 +446,7 @@ export default function VerificationPage() {
         isModalOpen={isModalOpen}
         onCloseModal={() => setModalOpen(false)}
         onClickRegisterButton={handleRegistration}
+        isLoadingRegistration={isLoadingRegistration}
       />
     </Container>
   );
