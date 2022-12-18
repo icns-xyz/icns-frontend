@@ -78,11 +78,24 @@ export default function Home() {
             </MainTitleImageContainer>
           </MainTitleImageBackground>
 
-          <ConnectButtonContainer>
-            <PrimaryButton onClick={onClickConnectWalletButton}>
-              Connect Wallet
-            </PrimaryButton>
-          </ConnectButtonContainer>
+          <CTAContainer>
+            <ConnectButtonContainer>
+              <PrimaryButton onClick={onClickConnectWalletButton}>
+                Connect Wallet
+              </PrimaryButton>
+            </ConnectButtonContainer>
+            <ICNSDescription>
+              ICNS allows you to use easy-to-remember names instead of
+              addresses.
+              <br />
+              <LearnMoreLink
+                href="https://medium.com/@icns/announcing-icns-the-interchain-name-service-e61e0c3e2abb"
+                target="_blank"
+              >
+                Learn More
+              </LearnMoreLink>
+            </ICNSDescription>
+          </CTAContainer>
           <SubContainer>
             <CheckContainer>
               <CheckIconContainer>
@@ -203,11 +216,29 @@ const MainLogoContainer = styled.div`
   height: 25rem;
 `;
 
+const CTAContainer = styled.div`
+  display: flex;
+`;
+
 const ConnectButtonContainer = styled.div`
   width: 19.9rem;
   height: 5rem;
 
   margin-left: 5rem;
+  margin-right: 26px;
+`;
+
+const ICNSDescription = styled.p`
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 150%;
+  color: #6c6c6c;
+`;
+
+const LearnMoreLink = styled.a`
+  &:visited {
+    color: #6c6c6c;
+  }
 `;
 
 const SubContainer = styled.div`
