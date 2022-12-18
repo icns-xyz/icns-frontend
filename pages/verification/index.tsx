@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import {
   ChainItemType,
   DisabledChainItemType,
+  ErrorMessage,
   QueryError,
   RegisteredAddresses,
   TwitterProfileType,
@@ -58,6 +59,7 @@ import { makeClaimMessage, makeSetRecordMessage } from "../../messages";
 import Axios from "axios";
 import { BackButton } from "../../components/back-button";
 import { FinalCheckModal } from "../../components/final-check-modal";
+import { ErrorModal } from "../../components/error-modal";
 
 export default function VerificationPage() {
   const router = useRouter();
@@ -93,6 +95,8 @@ export default function VerificationPage() {
   const [isOwner, setIsOwner] = useState(false);
 
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isErrorModalOpen, setErrorModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
 
   useEffect(() => {
     init();
@@ -203,8 +207,11 @@ export default function VerificationPage() {
           setRegisteredChainList(addressesQueryResponse.data.addresses);
         }
       } catch (error) {
-        if (error instanceof Error && error.message === TWITTER_LOGIN_ERROR) {
-          await router.push("/");
+        if (error instanceof Error) {
+          if (error.message === TWITTER_LOGIN_ERROR) {
+            setErrorMessage({ message: TWITTER_LOGIN_ERROR, path: "/" });
+            setErrorModalOpen(true);
+          }
         }
 
         console.error(error);
@@ -227,7 +234,8 @@ export default function VerificationPage() {
 
       return keplrWallet;
     } else {
-      ErrorHandler(KEPLR_NOT_FOUND_ERROR);
+      setErrorMessage({ message: KEPLR_NOT_FOUND_ERROR, path: "/" });
+      setErrorModalOpen(true);
     }
   };
 
@@ -399,7 +407,17 @@ export default function VerificationPage() {
       }
     } catch (error) {
       if (Axios.isAxiosError(error)) {
-        console.error((error?.response?.data as QueryError).message);
+        setErrorMessage({
+          message: (error?.response?.data as QueryError).message,
+        });
+        setErrorModalOpen(true);
+        return;
+      }
+
+      if (error instanceof Error) {
+        console.log(error.message);
+        setErrorMessage({ message: error.message });
+        setErrorModalOpen(true);
       }
     } finally {
       setIsLoadingRegistration(false);
@@ -489,6 +507,12 @@ export default function VerificationPage() {
         onCloseModal={() => setModalOpen(false)}
         onClickRegisterButton={handleRegistration}
         isLoadingRegistration={isLoadingRegistration}
+      />
+
+      <ErrorModal
+        isModalOpen={isErrorModalOpen}
+        onCloseModal={() => setErrorModalOpen(false)}
+        errorMessage={errorMessage}
       />
     </Container>
   );
