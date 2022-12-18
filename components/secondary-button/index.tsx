@@ -11,14 +11,14 @@ export const SecondaryButton = styled.button`
 
   font-family: "Inter", serif;
   font-style: normal;
-  font-weight: 600;
-  font-size: 1.25rem;
-  line-height: 1.25rem;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.025rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
 
-  color: ${color.white};
-  background-color: ${color.grey["300"]};
+  color: ${color.grey["200"]};
+  background-color: transparent;
 
   cursor: pointer;
 `;
