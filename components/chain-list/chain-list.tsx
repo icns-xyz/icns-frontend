@@ -1,12 +1,12 @@
 import { Dispatch, FunctionComponent, SetStateAction, useEffect } from "react";
-import { ChainItemType } from "../../types";
+import { ChainItemType, DisabledChainItemType } from "../../types";
 import color from "../../styles/color";
 import styled from "styled-components";
 import { ChainItem } from "./chain-item";
 
 interface Props {
   chainList: ChainItemType[];
-  disabledChainList: ChainItemType[];
+  disabledChainList: DisabledChainItemType[];
   checkedItems: Set<unknown>;
   setCheckedItems: Dispatch<SetStateAction<Set<unknown>>>;
 }
@@ -30,7 +30,7 @@ export const ChainList: FunctionComponent<Props> = (props) => {
     <ChainContainer color={color.grey["900"]}>
       {chainList.map((chainItem) => (
         <ChainItem
-          key={chainItem.address}
+          key={chainItem.chainId}
           chainItem={chainItem}
           checkedItemHandler={checkedItemHandler}
           checkedItems={checkedItems}
@@ -38,11 +38,10 @@ export const ChainList: FunctionComponent<Props> = (props) => {
       ))}
       {disabledChainList.map((chainItem) => (
         <ChainItem
-          key={chainItem.address}
+          key={chainItem.chainId}
           chainItem={chainItem}
           checkedItemHandler={checkedItemHandler}
           checkedItems={checkedItems}
-          disabled={true}
         />
       ))}
     </ChainContainer>

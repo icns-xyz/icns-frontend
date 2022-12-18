@@ -45,18 +45,32 @@ export class KeplrWallet implements Wallet {
   }
 
   getChainInfosWithoutEndpoints(): Promise<
-    Omit<ChainInfo, "rest" | "rpc" | "nodeProvider">[]
+    (Pick<ChainInfo, "chainId" | "chainName" | "bech32Config"> & {
+      readonly isEthermintLike?: boolean;
+    })[]
   > {
-    // TODO: Update @keplr-wallet/types
-    return (this.keplr as any).getChainInfosWithoutEndpoints();
+    return this.keplr.getChainInfosWithoutEndpoints().then((chainInfos) => {
+      return chainInfos.map((chainInfo) => {
+        return {
+          ...chainInfo,
+          isEthermintLike: chainInfo.features?.includes("eth-address-gen"),
+        };
+      });
+    });
   }
 
   getKey(chainId: string): Promise<{
     readonly name: string;
     readonly pubKey: Uint8Array;
     readonly bech32Address: string;
+    readonly isLedgerNano?: boolean;
   }> {
-    return this.keplr.getKey(chainId);
+    return this.keplr.getKey(chainId).then((key) => {
+      return {
+        ...key,
+        isLedgerNano: key.isNanoLedger,
+      };
+    });
   }
 
   init(chainIds: string[]): Promise<void> {
@@ -88,8 +102,7 @@ export class KeplrWallet implements Wallet {
       signature: Uint8Array;
     }[]
   > {
-    // TODO: Update @keplr-wallet/types
-    return (this.keplr as any).signICNSAdr36(
+    return this.keplr.signICNSAdr36(
       chainId,
       contractAddress,
       owner,

@@ -1,4 +1,4 @@
-import { ChainItemType } from "../../types";
+import { ChainItemType, DisabledChainItemType } from "../../types";
 import { FunctionComponent, useEffect, useState } from "react";
 
 import color from "../../styles/color";
@@ -8,15 +8,31 @@ import { ChainImage } from "./chain-image";
 import { Checkbox } from "../checkbox";
 
 interface Props {
-  chainItem: ChainItemType;
+  chainItem: ChainItemType | DisabledChainItemType;
   checkedItemHandler: (chainItem: ChainItemType, isChecked: boolean) => void;
   checkedItems: Set<unknown>;
-  disabled?: boolean;
 }
 
 export const ChainItem: FunctionComponent<Props> = (props) => {
-  const { chainItem, checkedItemHandler, checkedItems, disabled } = props;
-  const [checked, setChecked] = useState(!!disabled);
+  const { chainItem, checkedItemHandler, checkedItems } = props;
+  const disabled = "disabled" in chainItem && chainItem.disabled;
+  // XXX: Currently, this component can't handle `checked` state well,
+  //      If chain is disabled, it should be disabled in general.
+  //      However, if it is disabled due to the limitation of ethermint and ledger,
+  //      it should be not checked.
+  //      To solve this problem, for now, just use dumb way.
+  //      If chain is disabled with explicit reason, it should be unchecked.
+  const [checked, setChecked] = useState(!!disabled && !chainItem.reason);
+
+  useEffect(() => {
+    if (disabled) {
+      if (chainItem.reason) {
+        setChecked(false);
+      } else {
+        setChecked(true);
+      }
+    }
+  }, [chainItem, disabled]);
 
   const checkHandler = () => {
     if (!disabled) {
@@ -46,7 +62,12 @@ export const ChainItem: FunctionComponent<Props> = (props) => {
       />
       <ChainInfoContainer>
         <ChainName>{`.${chainItem.prefix}`}</ChainName>
-        <WalletAddress>{chainItem.address}</WalletAddress>
+        {chainItem.address ? (
+          <WalletAddress>{chainItem.address}</WalletAddress>
+        ) : null}
+        {disabled && chainItem.reason ? (
+          <DisabledReason>{chainItem.reason.message}</DisabledReason>
+        ) : null}
       </ChainInfoContainer>
 
       <Flex1 />
@@ -116,4 +137,11 @@ export const WalletAddress = styled.div`
   text-overflow: ellipsis;
 
   color: ${color.grey["400"]};
+`;
+
+export const DisabledReason = styled.div`
+  color: ${color.grey["200"]};
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
 `;

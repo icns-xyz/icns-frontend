@@ -498,39 +498,39 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@keplr-wallet/common@npm:0.11.23, @keplr-wallet/common@npm:^0.11.23":
-  version: 0.11.23
-  resolution: "@keplr-wallet/common@npm:0.11.23"
+"@keplr-wallet/common@npm:0.11.25, @keplr-wallet/common@npm:^0.11.25":
+  version: 0.11.25
+  resolution: "@keplr-wallet/common@npm:0.11.25"
   dependencies:
-    "@keplr-wallet/crypto": 0.11.23
+    "@keplr-wallet/crypto": 0.11.25
     buffer: ^6.0.3
     delay: ^4.4.0
-  checksum: fa756241d0dece173875ee851df2702adfa934d36f2b074efd3895090940db12018cb4489733225ed7660af8da3a58104da229b1a1db6971b6a678e8f4a8c9d9
+  checksum: 30aed28c568d2f0b33dc3d1d05526ba9893e4d458187109f19b20025b9ef95094aa328d4473a7bdf6c45dce251d7bfc85fd5f6adf7cd5586060fbe481dc76411
   languageName: node
   linkType: hard
 
-"@keplr-wallet/cosmos@npm:^0.11.23":
-  version: 0.11.23
-  resolution: "@keplr-wallet/cosmos@npm:0.11.23"
+"@keplr-wallet/cosmos@npm:^0.11.25":
+  version: 0.11.25
+  resolution: "@keplr-wallet/cosmos@npm:0.11.25"
   dependencies:
     "@ethersproject/address": ^5.6.0
-    "@keplr-wallet/common": 0.11.23
-    "@keplr-wallet/crypto": 0.11.23
-    "@keplr-wallet/proto-types": 0.11.23
-    "@keplr-wallet/types": 0.11.23
-    "@keplr-wallet/unit": 0.11.23
+    "@keplr-wallet/common": 0.11.25
+    "@keplr-wallet/crypto": 0.11.25
+    "@keplr-wallet/proto-types": 0.11.25
+    "@keplr-wallet/types": 0.11.25
+    "@keplr-wallet/unit": 0.11.25
     axios: ^0.27.2
     bech32: ^1.1.4
     buffer: ^6.0.3
     long: ^4.0.0
     protobufjs: ^6.11.2
-  checksum: 3777ad82ee55c341db417e9a4d079f55e78ddd6b0372c3e3b7d3f1cf6598ce4bbae1b2ed3d7f72980d861c2580da1b41e9143f30c524b45e86cc0b56e016de50
+  checksum: 25a540d80fb5cd93d88f7b071b801789fb2bd7360b610f57231070411fed63d6a17ab3ad014bc54158c43cf1034799428c6e6087b7db1cbe09cd08726e95535c
   languageName: node
   linkType: hard
 
-"@keplr-wallet/crypto@npm:0.11.23":
-  version: 0.11.23
-  resolution: "@keplr-wallet/crypto@npm:0.11.23"
+"@keplr-wallet/crypto@npm:0.11.25":
+  version: 0.11.25
+  resolution: "@keplr-wallet/crypto@npm:0.11.25"
   dependencies:
     "@ethersproject/keccak256": ^5.5.0
     bip32: ^2.0.6
@@ -540,39 +540,39 @@ __metadata:
     crypto-js: ^4.0.0
     elliptic: ^6.5.3
     sha.js: ^2.4.11
-  checksum: 660425deb64b5aee5a2497470490ad11f97472823909dd9eb3066730cc4011656433d0349279866369d00fe166680ba21b17a990f93000a0aab712f4da5274d8
+  checksum: bdb5ff6c57fbe296e40da9e913e5cf89a29a2b5f2887d56b2d2cac801ae06cc8b9b0b16b7d8cc5275bca434a3f632bf1b1f52c3b5b3253643f0adb4a9771e85e
   languageName: node
   linkType: hard
 
-"@keplr-wallet/proto-types@npm:0.11.23, @keplr-wallet/proto-types@npm:^0.11.23":
-  version: 0.11.23
-  resolution: "@keplr-wallet/proto-types@npm:0.11.23"
+"@keplr-wallet/proto-types@npm:0.11.25, @keplr-wallet/proto-types@npm:^0.11.25":
+  version: 0.11.25
+  resolution: "@keplr-wallet/proto-types@npm:0.11.25"
   dependencies:
     long: ^4.0.0
     protobufjs: ^6.11.2
-  checksum: 0dfe72c3c9d12319276fc7e67ff997b4a01216299e73d331132565d8489ca729d4207713c11b91f8893774995c2d813b7faed6b83911400d13969a0d3a147189
+  checksum: 07f0efcd41ef83eb7e9441ab06cd7e607311c5db1fef09b90c0bbef8baeff2feded3ca6a958243cfdfb6dd9aa7ebd6ee51df781c2b3bfe29e2a83961ef7eb58b
   languageName: node
   linkType: hard
 
-"@keplr-wallet/types@npm:0.11.23, @keplr-wallet/types@npm:^0.11.23":
-  version: 0.11.23
-  resolution: "@keplr-wallet/types@npm:0.11.23"
+"@keplr-wallet/types@npm:0.11.25, @keplr-wallet/types@npm:^0.11.25":
+  version: 0.11.25
+  resolution: "@keplr-wallet/types@npm:0.11.25"
   dependencies:
     axios: ^0.27.2
     long: ^4.0.0
     secretjs: 0.17.7
-  checksum: 15c60741f3b15c3ad2542ba655224b1fdd95736c31b2885c1e37c6fb7cac14c8e6b80a2add84d5ae17e97ab016b3046f4720729580017300ba8d0873cf7a2dd3
+  checksum: 1482307c0aabd9494635fa62a99160e5f0906951de9af027a48d927c205d130f1c62c43172ef672ad24982cc9864aab91866a6568d3e2d833ecb584b22eab9a8
   languageName: node
   linkType: hard
 
-"@keplr-wallet/unit@npm:0.11.23":
-  version: 0.11.23
-  resolution: "@keplr-wallet/unit@npm:0.11.23"
+"@keplr-wallet/unit@npm:0.11.25":
+  version: 0.11.25
+  resolution: "@keplr-wallet/unit@npm:0.11.25"
   dependencies:
-    "@keplr-wallet/types": 0.11.23
+    "@keplr-wallet/types": 0.11.25
     big-integer: ^1.6.48
     utility-types: ^3.10.0
-  checksum: 560aec00cb6b0b6b9934f70712ad43632c7420fb61b3d66fb8789b5cfdf9b8dd8e5ec5e43159e31e2f845e8ea8b1bf15ba8c97bf47fd0ea4734403c5321fd0bc
+  checksum: dfed155ce2487396a549e7fbab514adceec30938f45fd5af61d03bf51a5be558736e450acf5b1ff764e9d3d42634306f6d10c1fe6480adad00ac3d7162e27985
   languageName: node
   linkType: hard
 
@@ -3546,10 +3546,10 @@ __metadata:
   resolution: "icns-frontend@workspace:."
   dependencies:
     "@amplitude/analytics-browser": ^1.6.6
-    "@keplr-wallet/common": ^0.11.23
-    "@keplr-wallet/cosmos": ^0.11.23
-    "@keplr-wallet/proto-types": ^0.11.23
-    "@keplr-wallet/types": ^0.11.23
+    "@keplr-wallet/common": ^0.11.25
+    "@keplr-wallet/cosmos": ^0.11.25
+    "@keplr-wallet/proto-types": ^0.11.25
+    "@keplr-wallet/types": ^0.11.25
     "@next/eslint-plugin-next": ^13.0.5
     "@sentry/nextjs": ^7.27.0
     "@types/eslint": ^8.4.10
