@@ -236,7 +236,11 @@ const ICNSDescription = styled.p`
 `;
 
 const LearnMoreLink = styled.a`
-  &:visited {
+  color: #6c6c6c;
+
+  &:link,
+  &:hover,
+  &:active &:visited {
     color: #6c6c6c;
   }
 `;
