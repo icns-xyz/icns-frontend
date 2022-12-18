@@ -30,7 +30,7 @@ export const ChainList: FunctionComponent<Props> = (props) => {
     <ChainContainer color={color.grey["900"]}>
       {chainList.map((chainItem) => (
         <ChainItem
-          key={chainItem.address}
+          key={chainItem.chainId}
           chainItem={chainItem}
           checkedItemHandler={checkedItemHandler}
           checkedItems={checkedItems}
@@ -38,7 +38,7 @@ export const ChainList: FunctionComponent<Props> = (props) => {
       ))}
       {disabledChainList.map((chainItem) => (
         <ChainItem
-          key={chainItem.address}
+          key={chainItem.chainId}
           chainItem={chainItem}
           checkedItemHandler={checkedItemHandler}
           checkedItems={checkedItems}

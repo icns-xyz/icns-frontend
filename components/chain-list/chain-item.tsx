@@ -16,7 +16,23 @@ interface Props {
 export const ChainItem: FunctionComponent<Props> = (props) => {
   const { chainItem, checkedItemHandler, checkedItems } = props;
   const disabled = "disabled" in chainItem && chainItem.disabled;
-  const [checked, setChecked] = useState(!!disabled);
+  // XXX: Currently, this component can't handle `checked` state well,
+  //      If chain is disabled, it should be disabled in general.
+  //      However, if it is disabled due to the limitation of ethermint and ledger,
+  //      it should be not checked.
+  //      To solve this problem, for now, just use dumb way.
+  //      If chain is disabled with explicit reason, it should be unchecked.
+  const [checked, setChecked] = useState(!!disabled && !chainItem.reason);
+
+  useEffect(() => {
+    if (disabled) {
+      if (chainItem.reason) {
+        setChecked(false);
+      } else {
+        setChecked(true);
+      }
+    }
+  }, [chainItem, disabled]);
 
   const checkHandler = () => {
     if (!disabled) {
