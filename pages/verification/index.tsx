@@ -31,7 +31,7 @@ import {
   sendMsgs,
   simulateMsgs,
 } from "../../wallets";
-import { ChainIdHelper } from "@keplr-wallet/cosmos";
+import { Bech32Address, ChainIdHelper } from "@keplr-wallet/cosmos";
 
 import { AllChainsItem } from "../../components/chain-list/all-chains-item";
 import { SearchInput } from "../../components/search-input";
@@ -89,8 +89,8 @@ export default function VerificationPage() {
 
   const [searchValue, setSearchValue] = useState("");
 
+  const [nftOwnerAddress, setNFTOwnerAddress] = useState("");
   const [isOwner, setIsOwner] = useState(false);
-  // const [isAgree, setIsAgree] = useState(false);
 
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -193,6 +193,7 @@ export default function VerificationPage() {
           if (keplrWallet) {
             const key = await keplrWallet.getKey(MainChainId);
             setIsOwner(ownerOfQueryResponse.data.owner === key.bech32Address);
+            setNFTOwnerAddress(ownerOfQueryResponse.data.owner);
           }
 
           const addressesQueryResponse = await queryAddressesFromTwitterName(
@@ -406,6 +407,10 @@ export default function VerificationPage() {
   };
 
   const isRegisterButtonDisable = (() => {
+    if (!isOwner) {
+      return true;
+    }
+
     const hasCheckedItem = checkedItems.size > 0;
 
     return !hasCheckedItem;
@@ -422,7 +427,6 @@ export default function VerificationPage() {
           <ContentContainer>
             <BackButton />
             <TwitterProfile twitterProfileInformation={twitterAuthInfo} />
-
             <ChainListTitleContainer>
               <ChainListTitle>Chain List</ChainListTitle>
               <SearchInput
@@ -430,7 +434,6 @@ export default function VerificationPage() {
                 setSearchValue={setSearchValue}
               />
             </ChainListTitleContainer>
-
             {!searchValue ? (
               <AllChainsItem
                 chainList={chainList}
@@ -438,7 +441,6 @@ export default function VerificationPage() {
                 setCheckedItems={setCheckedItems}
               />
             ) : null}
-
             <ChainList
               chainList={chainList.filter(
                 (chain) =>
@@ -456,14 +458,14 @@ export default function VerificationPage() {
               setCheckedItems={setCheckedItems}
             />
 
-            {/*<AgreeContainer*/}
-            {/*  onClick={() => {*/}
-            {/*    setIsAgree(!isAgree);*/}
-            {/*  }}*/}
-            {/*>*/}
-            {/*  <AgreeCheckBox type="checkbox" checked={isAgree} readOnly />I*/}
-            {/*  check that Osmo is required for this transaction*/}
-            {/*</AgreeContainer>*/}
+            {!isOwner && nftOwnerAddress ? (
+              <OwnerAlert>
+                You are not owner of this name.
+                <br />
+                Please select the account (
+                {Bech32Address.shortenAddress(nftOwnerAddress, 28)})
+              </OwnerAlert>
+            ) : null}
 
             {chainList.length > 0 && (
               <ButtonContainer disabled={isRegisterButtonDisable}>
@@ -553,30 +555,15 @@ const ChainListTitle = styled.div`
   color: ${color.white};
 `;
 
-// const AgreeContainer = styled.div`
-//   display: flex;
-//   align-items: center;
-//   gap: 0.5rem;
-//
-//   font-family: "Inter", serif;
-//   font-style: normal;
-//   font-weight: 500;
-//   font-size: 0.8rem;
-//   line-height: 0.8rem;
-//
-//   text-transform: uppercase;
-//   user-select: none;
-//
-//   color: ${color.grey["400"]};
-//
-//   padding: 2rem 0;
-//
-//   cursor: pointer;
-// `;
-//
-// const AgreeCheckBox = styled.input.attrs({ type: "checkbox" })`
-//   width: 1.2rem;
-//   height: 1.2rem;
-//
-//   accent-color: ${color.orange["200"]};
-// `;
+const OwnerAlert = styled.div`
+  font-family: "Inter", serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.9rem;
+  line-height: 1.1rem;
+  text-align: center;
+
+  color: ${color.grey["400"]};
+
+  padding-top: 1.25rem;
+`;
