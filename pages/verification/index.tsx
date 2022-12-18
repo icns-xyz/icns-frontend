@@ -1,3 +1,5 @@
+import * as amplitude from "@amplitude/analytics-browser";
+
 // React
 import { useEffect, useState } from "react";
 
@@ -30,7 +32,6 @@ import {
 } from "../../wallets";
 import { ChainIdHelper } from "@keplr-wallet/cosmos";
 
-import AllChainsIcon from "../../public/images/svg/all-chains-icon.svg";
 import { AllChainsItem } from "../../components/chain-list/all-chains-item";
 import { SearchInput } from "../../components/search-input";
 import {
@@ -53,16 +54,23 @@ import {
   TWITTER_LOGIN_ERROR,
 } from "../../constants/error-message";
 import { makeClaimMessage, makeSetRecordMessage } from "../../messages";
-import Axios, { AxiosError } from "axios";
+import Axios from "axios";
 import { BackButton } from "../../components/back-button";
+import { FinalCheckModal } from "../../components/final-check-modal";
 
 export default function VerificationPage() {
   const router = useRouter();
   const [twitterAuthInfo, setTwitterAuthInfo] = useState<TwitterProfileType>();
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingInit, setIsLoadingInit] = useState(true);
+  const [isLoadingRegistration, setIsLoadingRegistration] = useState(false);
 
   const [wallet, setWallet] = useState<KeplrWallet>();
+  const [walletKey, setWalletKey] = useState<{
+    name: string;
+    pubKey: Uint8Array;
+    bech32Address: string;
+  }>();
 
   const [chainList, setChainList] = useState<ChainItemType[]>([]);
   const [disabledChainList, setDisabledChainList] = useState<ChainItemType[]>(
@@ -71,80 +79,26 @@ export default function VerificationPage() {
   const [registeredChainList, setRegisteredChainList] = useState<
     RegisteredAddresses[]
   >([]);
-
-  const [allChains, setAllChains] = useState<ChainItemType>();
-  const [allChecked, setAllChecked] = useState(false);
   const [checkedItems, setCheckedItems] = useState(new Set());
 
   const [searchValue, setSearchValue] = useState("");
 
   const [isOwner, setIsOwner] = useState(false);
-  const [isAgree, setIsAgree] = useState(false);
+  // const [isAgree, setIsAgree] = useState(false);
+
+  const [isModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    const init = async () => {
-      if (window.location.search) {
-        try {
-          const { state, code } = checkTwitterAuthQueryParameter(
-            window.location.search,
-          );
-
-          // Initialize Wallet
-          const keplrWallet = await initWallet();
-
-          // Fetch Twitter Profile
-          const twitterInfo = await fetchTwitterInfo(state, code);
-
-          // contract check registered
-          const registeredQueryResponse = await queryRegisteredTwitterId(
-            twitterInfo.id,
-          );
-
-          setTwitterAuthInfo({
-            ...twitterInfo,
-            isRegistered: "data" in registeredQueryResponse,
-          });
-
-          if ("data" in registeredQueryResponse) {
-            const ownerOfQueryResponse = await queryOwnerOfTwitterName(
-              registeredQueryResponse.data.name,
-            );
-
-            const addressesQueryResponse = await queryAddressesFromTwitterName(
-              registeredQueryResponse.data.name,
-            );
-
-            if (keplrWallet) {
-              const key = await keplrWallet.getKey(MainChainId);
-              setIsOwner(ownerOfQueryResponse.data.owner === key.bech32Address);
-            }
-
-            setRegisteredChainList(addressesQueryResponse.data.addresses);
-          }
-        } catch (error) {
-          if (error instanceof Error && error.message === TWITTER_LOGIN_ERROR) {
-            await router.push("/");
-          }
-
-          console.error(error);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
-
     init();
   }, []);
 
   useEffect(() => {
-    setAllChains({
-      chainId: "all chains",
-      chainName: "all chains",
-      prefix: `all chains(${chainList.length})`,
-      address: chainList.map((chain) => chain.chainName).join(", "),
-      chainImageUrl: AllChainsIcon,
-    });
-  }, [chainList]);
+    if (wallet) {
+      window.addEventListener("keplr_keystorechange", async () => {
+        await init();
+      });
+    }
+  }, [wallet]);
 
   useEffect(() => {
     const disabledChainList = chainList.filter((chain) => {
@@ -164,26 +118,77 @@ export default function VerificationPage() {
       (chain) => !disabledChainList.includes(chain),
     );
 
-    setAllChains({
-      chainId: "all chains",
-      chainName: "all chains",
-      prefix: `all chains(${filteredChainList.length})`,
-      address: filteredChainList.map((chain) => chain.chainName).join(", "),
-      chainImageUrl: AllChainsIcon,
-    });
-
     setChainList(filteredChainList);
     setDisabledChainList(disabledChainList);
+
+    setCheckedItems(new Set(filteredChainList));
   }, [registeredChainList]);
+
+  useEffect(() => {
+    setCheckedItems(new Set(chainList));
+  }, [chainList]);
+
+  const init = async () => {
+    if (window.location.search) {
+      try {
+        const { state, code } = checkTwitterAuthQueryParameter(
+          window.location.search,
+        );
+
+        // Initialize Wallet
+        const keplrWallet = await initWallet();
+
+        // Fetch Twitter Profile
+        const twitterInfo = await fetchTwitterInfo(state, code);
+
+        // contract check registered
+        const registeredQueryResponse = await queryRegisteredTwitterId(
+          twitterInfo.id,
+        );
+
+        setTwitterAuthInfo({
+          ...twitterInfo,
+          isRegistered: "data" in registeredQueryResponse,
+        });
+
+        if ("data" in registeredQueryResponse) {
+          const ownerOfQueryResponse = await queryOwnerOfTwitterName(
+            registeredQueryResponse.data.name,
+          );
+
+          if (keplrWallet) {
+            const key = await keplrWallet.getKey(MainChainId);
+            setIsOwner(ownerOfQueryResponse.data.owner === key.bech32Address);
+          }
+
+          const addressesQueryResponse = await queryAddressesFromTwitterName(
+            registeredQueryResponse.data.name,
+          );
+
+          setRegisteredChainList(addressesQueryResponse.data.addresses);
+        }
+      } catch (error) {
+        if (error instanceof Error && error.message === TWITTER_LOGIN_ERROR) {
+          await router.push("/");
+        }
+
+        console.error(error);
+      } finally {
+        setIsLoadingInit(false);
+      }
+    }
+  };
 
   const initWallet = async () => {
     const keplr = await getKeplrFromWindow();
 
     if (keplr) {
       const keplrWallet = new KeplrWallet(keplr);
+      const key = await keplrWallet.getKey(MainChainId);
 
       await fetchChainList(keplrWallet);
       setWallet(keplrWallet);
+      setWalletKey(key);
 
       return keplrWallet;
     } else {
@@ -259,8 +264,22 @@ export default function VerificationPage() {
     }
   };
 
-  const onClickRegistration = async () => {
+  const onClickRegistration = () => {
+    amplitude.track("click register button");
+
+    console.log(isOwner);
+
+    if (isOwner) {
+      handleRegistration();
+    } else {
+      setModalOpen(true);
+    }
+  };
+
+  const handleRegistration = async () => {
     try {
+      setIsLoadingRegistration(true);
+
       const { state, code } = checkTwitterAuthQueryParameter(
         window.location.search,
       );
@@ -268,16 +287,14 @@ export default function VerificationPage() {
 
       const adr36Infos = await checkAdr36();
 
-      if (wallet && adr36Infos) {
-        const key = await wallet.getKey(MainChainId);
-
+      if (wallet && walletKey && adr36Infos) {
         const icnsVerificationList = await verifyTwitterAccount(
-          key.bech32Address,
+          walletKey.bech32Address,
           twitterInfo.accessToken,
         );
 
         const registerMsg = makeClaimMessage(
-          key.bech32Address,
+          walletKey.bech32Address,
           twitterInfo.username,
           icnsVerificationList,
           localStorage.getItem(REFERRAL_KEY) ?? undefined,
@@ -285,7 +302,7 @@ export default function VerificationPage() {
 
         const addressMsgs = adr36Infos.map((adr36Info) => {
           return makeSetRecordMessage(
-            key.bech32Address,
+            walletKey.bech32Address,
             twitterInfo.username,
             adr36Info,
           );
@@ -310,7 +327,7 @@ export default function VerificationPage() {
 
         const simulated = await simulateMsgs(
           chainInfo,
-          key.bech32Address,
+          walletKey.bech32Address,
           {
             proto: protoMsgs,
           },
@@ -322,7 +339,7 @@ export default function VerificationPage() {
         const txHash = await sendMsgs(
           wallet,
           chainInfo,
-          key.bech32Address,
+          walletKey.bech32Address,
           {
             amino: aminoMsgs,
             proto: protoMsgs,
@@ -345,20 +362,23 @@ export default function VerificationPage() {
       if (Axios.isAxiosError(error)) {
         console.error((error?.response?.data as QueryError).message);
       }
+    } finally {
+      setIsLoadingRegistration(false);
     }
   };
 
-  const isRegisterButtonDisable =
-    checkedItems.size < 1 ||
-    (!isOwner && registeredChainList.length > 0) ||
-    !isAgree;
+  const isRegisterButtonDisable = (() => {
+    const hasCheckedItem = checkedItems.size > 0;
+
+    return !hasCheckedItem;
+  })();
 
   return (
     <Container>
       <Logo />
 
       <MainContainer>
-        {isLoading ? (
+        {isLoadingInit ? (
           <SkeletonChainList />
         ) : (
           <ContentContainer>
@@ -373,17 +393,15 @@ export default function VerificationPage() {
               />
             </ChainListTitleContainer>
 
-            {allChains && !searchValue ? (
+            {!searchValue ? (
               <AllChainsItem
-                allChecked={allChecked}
-                setAllChecked={setAllChecked}
-                chainItem={allChains}
+                chainList={chainList}
+                checkedItems={checkedItems}
+                setCheckedItems={setCheckedItems}
               />
             ) : null}
 
             <ChainList
-              allChecked={allChecked}
-              setAllChecked={setAllChecked}
               chainList={chainList.filter(
                 (chain) =>
                   chain.chainId.includes(searchValue) ||
@@ -400,26 +418,37 @@ export default function VerificationPage() {
               setCheckedItems={setCheckedItems}
             />
 
-            <AgreeContainer
-              onClick={() => {
-                setIsAgree(!isAgree);
-              }}
-            >
-              <AgreeCheckBox type="checkbox" checked={isAgree} readOnly />I
-              check that Osmo is required for this transaction
-            </AgreeContainer>
+            {/*<AgreeContainer*/}
+            {/*  onClick={() => {*/}
+            {/*    setIsAgree(!isAgree);*/}
+            {/*  }}*/}
+            {/*>*/}
+            {/*  <AgreeCheckBox type="checkbox" checked={isAgree} readOnly />I*/}
+            {/*  check that Osmo is required for this transaction*/}
+            {/*</AgreeContainer>*/}
 
-            <ButtonContainer disabled={isRegisterButtonDisable}>
-              <PrimaryButton
-                disabled={isRegisterButtonDisable}
-                onClick={onClickRegistration}
-              >
-                Register
-              </PrimaryButton>
-            </ButtonContainer>
+            {chainList.length > 0 && (
+              <ButtonContainer disabled={isRegisterButtonDisable}>
+                <PrimaryButton
+                  disabled={isRegisterButtonDisable}
+                  onClick={onClickRegistration}
+                  isLoading={isLoadingRegistration}
+                >
+                  Register
+                </PrimaryButton>
+              </ButtonContainer>
+            )}
           </ContentContainer>
         )}
       </MainContainer>
+
+      <FinalCheckModal
+        twitterUserName={twitterAuthInfo?.username}
+        walletInfo={walletKey}
+        isModalOpen={isModalOpen}
+        onCloseModal={() => setModalOpen(false)}
+        onClickRegisterButton={handleRegistration}
+      />
     </Container>
   );
 }
@@ -459,6 +488,8 @@ export const ButtonContainer = styled.div<{ disabled?: boolean }>`
   width: 11rem;
   height: 3.5rem;
 
+  margin-top: 1.5rem;
+
   background-color: ${(props) =>
     props.disabled ? color.orange["300"] : color.orange["100"]};
 `;
@@ -483,30 +514,30 @@ const ChainListTitle = styled.div`
   color: ${color.white};
 `;
 
-const AgreeContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  font-family: "Inter", serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 0.8rem;
-  line-height: 0.8rem;
-
-  text-transform: uppercase;
-  user-select: none;
-
-  color: ${color.grey["400"]};
-
-  padding: 2rem 0;
-
-  cursor: pointer;
-`;
-
-const AgreeCheckBox = styled.input.attrs({ type: "checkbox" })`
-  width: 1.2rem;
-  height: 1.2rem;
-
-  accent-color: ${color.orange["200"]};
-`;
+// const AgreeContainer = styled.div`
+//   display: flex;
+//   align-items: center;
+//   gap: 0.5rem;
+//
+//   font-family: "Inter", serif;
+//   font-style: normal;
+//   font-weight: 500;
+//   font-size: 0.8rem;
+//   line-height: 0.8rem;
+//
+//   text-transform: uppercase;
+//   user-select: none;
+//
+//   color: ${color.grey["400"]};
+//
+//   padding: 2rem 0;
+//
+//   cursor: pointer;
+// `;
+//
+// const AgreeCheckBox = styled.input.attrs({ type: "checkbox" })`
+//   width: 1.2rem;
+//   height: 1.2rem;
+//
+//   accent-color: ${color.orange["200"]};
+// `;

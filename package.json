@@ -10,10 +10,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@amplitude/analytics-browser": "^1.6.6",
     "@keplr-wallet/common": "^0.11.25",
     "@keplr-wallet/cosmos": "^0.11.25",
     "@keplr-wallet/proto-types": "^0.11.25",
     "@keplr-wallet/types": "^0.11.25",
+    "@sentry/nextjs": "^7.27.0",
     "axios": "^0.27.2",
     "buffer": "^6.0.3",
     "crypto": "^1.0.1",

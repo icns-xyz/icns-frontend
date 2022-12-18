@@ -1,4 +1,4 @@
-import { ChainItemType, WidthHeightProps } from "../../types";
+import { ChainItemType } from "../../types";
 import { FunctionComponent, useEffect, useState } from "react";
 
 import color from "../../styles/color";
@@ -39,13 +39,11 @@ export const ChainItem: FunctionComponent<Props> = (props) => {
       checked={checked}
       onClick={checkHandler}
     >
-      <ChainImageContainer width="3rem" height="3rem">
-        <ChainImage
-          src={chainItem.chainImageUrl}
-          fill={true}
-          alt={`${chainItem.prefix} chain image`}
-        />
-      </ChainImageContainer>
+      <ChainImage
+        src={chainItem.chainImageUrl}
+        fill={true}
+        alt={`${chainItem.prefix} chain image`}
+      />
       <ChainInfoContainer>
         <ChainName>{`.${chainItem.prefix}`}</ChainName>
         <WalletAddress>{chainItem.address}</WalletAddress>
@@ -88,13 +86,6 @@ export const ChainItemContainer = styled.div<{
   &:hover {
     background: ${(props) => (props.isLoading ? null : color.grey["700"])};
   }
-`;
-
-export const ChainImageContainer = styled.div<WidthHeightProps>`
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
-
-  position: relative;
 `;
 
 export const ChainInfoContainer = styled.div`

@@ -50,3 +50,5 @@ build
 
 # Intelij files
 .idea
+# Sentry
+.sentryclirc

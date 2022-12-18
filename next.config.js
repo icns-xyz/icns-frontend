@@ -1,5 +1,10 @@
-/** @type {import('next').NextConfig} */
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { withSentryConfig } = require("@sentry/nextjs");
+
 const nextConfig = {
+  sentry: {
+    hideSourceMaps: true,
+  },
   reactStrictMode: false,
   swcMinify: true,
   compiler: {
@@ -23,4 +28,11 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+const sentryWebpackPluginOptions = {
+  silent: true,
+};
+
+module.exports =
+  process.env.NEXT_IS_ENABLE_USER_TRACKING === "true"
+    ? withSentryConfig(nextConfig, sentryWebpackPluginOptions)
+    : nextConfig;

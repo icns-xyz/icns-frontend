@@ -1,3 +1,5 @@
+import * as amplitude from "@amplitude/analytics-browser";
+
 // NextJs
 import Image from "next/image";
 
@@ -24,6 +26,8 @@ export default function Home() {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const onClickConnectWalletButton = async () => {
+    amplitude.track("click connect wallet button");
+
     setModalOpen(true);
   };
 

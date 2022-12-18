@@ -21,7 +21,6 @@ import {
 } from "../twitter-profile";
 import {
   ChainContainer,
-  ChainImageContainer,
   ChainInfoContainer,
   ChainItemContainer,
 } from "../chain-list";
@@ -60,9 +59,9 @@ export const SkeletonChainList: FunctionComponent = () => (
         .map((_, index) => (
           <div key={index}>
             <ChainItemContainer isLoading={true} isSkeleton={true}>
-              <ChainImageContainer width="3rem" height="3rem">
+              <SkeletonImageContainer>
                 <SkeletonCircle width="3rem" height="3rem" />
-              </ChainImageContainer>
+              </SkeletonImageContainer>
               <ChainInfoContainer>
                 <SkeletonText width="4rem" height="1rem" />
                 <SkeletonText width="12rem" height="1rem" />
@@ -93,6 +92,13 @@ const SkeletonTitle = styled.div`
   background-color: ${color.grey["800"]};
 `;
 
+const SkeletonImageContainer = styled.div`
+  width: 3rem;
+  height: 3rem;
+
+  position: relative;
+`;
+
 const SkeletonButtonContainer = styled.div`
   margin-top: 1.5rem;
 `;
@@ -100,8 +106,6 @@ const SkeletonButtonContainer = styled.div`
 const SkeletonButton = styled.div`
   width: 12rem;
   height: 4rem;
-
-  padding-top: 1.5rem;
 
   background-color: ${color.grey["800"]};
 `;
