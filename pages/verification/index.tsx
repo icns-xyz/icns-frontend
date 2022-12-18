@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 // Types
 import {
   ChainItemType,
+  DisabledChainItemType,
   QueryError,
   RegisteredAddresses,
   TwitterProfileType,
@@ -70,12 +71,17 @@ export default function VerificationPage() {
     name: string;
     pubKey: Uint8Array;
     bech32Address: string;
+    isLedgerNano?: boolean;
   }>();
 
-  const [chainList, setChainList] = useState<ChainItemType[]>([]);
-  const [disabledChainList, setDisabledChainList] = useState<ChainItemType[]>(
-    [],
-  );
+  const [chainList, setChainList] = useState<
+    (ChainItemType & {
+      isEthermintLike?: boolean;
+    })[]
+  >([]);
+  const [disabledChainList, setDisabledChainList] = useState<
+    DisabledChainItemType[]
+  >([]);
   const [registeredChainList, setRegisteredChainList] = useState<
     RegisteredAddresses[]
   >([]);
@@ -101,22 +107,50 @@ export default function VerificationPage() {
   }, [wallet]);
 
   useEffect(() => {
-    const disabledChainList = chainList.filter((chain) => {
-      for (const registeredChain of registeredChainList) {
-        if (
-          chain.prefix === registeredChain.bech32_prefix &&
-          chain.address === registeredChain.address
-        ) {
+    const disabledChainList = chainList
+      .filter((chain) => {
+        if (!chain.address) {
+          // Address can be "" if `getKey` failed.
           return true;
         }
-      }
 
-      return false;
+        for (const registeredChain of registeredChainList) {
+          if (
+            chain.prefix === registeredChain.bech32_prefix &&
+            chain.address === registeredChain.address
+          ) {
+            return true;
+          }
+        }
+
+        return false;
+      })
+      .map<DisabledChainItemType>((chain) => {
+        if (walletKey) {
+          if (walletKey.isLedgerNano && chain.isEthermintLike) {
+            return {
+              ...chain,
+              disabled: true,
+              reason: new Error(
+                "Support for Ethereum address on Ledger is coming soon.",
+              ),
+            };
+          }
+        }
+
+        return {
+          ...chain,
+          disabled: true,
+        };
+      });
+
+    const filteredChainList = chainList.filter((chain) => {
+      return (
+        disabledChainList.find(
+          (disabled) => disabled.chainId === chain.chainId,
+        ) == null
+      );
     });
-
-    const filteredChainList = chainList.filter(
-      (chain) => !disabledChainList.includes(chain),
-    );
 
     setChainList(filteredChainList);
     setDisabledChainList(disabledChainList);
@@ -200,7 +234,7 @@ export default function VerificationPage() {
     const chainIds = (await wallet.getChainInfosWithoutEndpoints()).map(
       (c) => c.chainId,
     );
-    const chainKeys = await Promise.all(
+    const chainKeys = await Promise.allSettled(
       chainIds.map((chainId) => wallet.getKey(chainId)),
     );
 
@@ -213,14 +247,20 @@ export default function VerificationPage() {
           chainImageUrl: `https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/${
             ChainIdHelper.parse(chainInfo.chainId).identifier
           }/chain.png`,
+          isEthermintLike: chainInfo.isEthermintLike,
         };
       },
     );
 
     const chainArray = [];
     for (let i = 0; i < chainKeys.length; i++) {
+      const chainKey = chainKeys[i];
+      if (chainKey.status !== "fulfilled") {
+        console.log("Failed to get key from wallet", chainKey);
+      }
       chainArray.push({
-        address: chainKeys[i].bech32Address,
+        address:
+          chainKey.status === "fulfilled" ? chainKey.value.bech32Address : "",
         ...chainInfos[i],
       });
     }
@@ -266,8 +306,6 @@ export default function VerificationPage() {
 
   const onClickRegistration = () => {
     amplitude.track("click register button");
-
-    console.log(isOwner);
 
     if (isOwner) {
       handleRegistration();
