@@ -407,7 +407,7 @@ export default function VerificationPage() {
   };
 
   const isRegisterButtonDisable = (() => {
-    if (!isOwner) {
+    if (!isOwner && nftOwnerAddress) {
       return true;
     }
 
