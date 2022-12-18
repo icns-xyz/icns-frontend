@@ -54,7 +54,7 @@ export const FinalCheckModal: FunctionComponent<Props> = (props) => {
     >
       <ModalContainer>
         <ModalTitle>Final Checks</ModalTitle>
-        <ModalDescription>{`You are claiming the ICNS name ${twitterUserName} on main keplr account`}</ModalDescription>
+        <ModalDescription>{`You are claiming the ICNS name ${twitterUserName} on keplr account`}</ModalDescription>
 
         <NameBox
           marginTop="3.875rem"
@@ -109,7 +109,7 @@ export const FinalCheckModal: FunctionComponent<Props> = (props) => {
               }}
             />
           }
-          title="Main Keplr Account"
+          title={walletInfo?.name || "Keplr account"}
           content={Bech32Address.shortenAddress(
             walletInfo?.bech32Address || "",
             28,
