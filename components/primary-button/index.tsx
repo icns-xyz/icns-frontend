@@ -1,18 +1,36 @@
 import { ButtonHTMLAttributes, FunctionComponent } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import color from "../../styles/color";
 
-export const PrimaryButton: FunctionComponent<
-  ButtonHTMLAttributes<HTMLButtonElement>
-> = ({ children, ...props }) => {
+interface PrimaryButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  isLoading?: boolean;
+}
+
+export const PrimaryButton: FunctionComponent<PrimaryButtonProps> = ({
+  children,
+  isLoading,
+  ...props
+}) => {
   return (
     <StyledPrimaryButton {...props}>
-      <span>{children}</span>
+      {isLoading ? (
+        <SpinnerWrapper>
+          <Spinner />
+          <Spinner />
+          <Spinner />
+          <Spinner />
+        </SpinnerWrapper>
+      ) : (
+        <span>{children}</span>
+      )}
     </StyledPrimaryButton>
   );
 };
 
 const StyledPrimaryButton = styled.button`
+  display: flex;
+  align-items center;
+  justify-content: center;
   width: 100%;
   height: 100%;
 
@@ -53,4 +71,40 @@ const StyledPrimaryButton = styled.button`
     transition-duration: 0.5s;
     color: ${color.orange["50"]};
   }
+`;
+
+const SpinnerWrapper = styled.div`
+  display: flex;
+  position: relative;
+
+  width: 20px;
+  height: 20px;
+`;
+
+const spinAnimation = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const Spinner = styled.div<{ animationDelay?: string }>`
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  animation: ${spinAnimation} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  ${({ animationDelay }) =>
+    animationDelay ? `animation-delay: ${animationDelay};` : ""}
+
+  border-radius: 100%;
+  border-style: solid;
+  border-width: 3px;
+  border-color: white transparent transparent transparent;
 `;

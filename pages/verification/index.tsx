@@ -62,7 +62,8 @@ export default function VerificationPage() {
   const router = useRouter();
   const [twitterAuthInfo, setTwitterAuthInfo] = useState<TwitterProfileType>();
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingInit, setIsLoadingInit] = useState(true);
+  const [isLoadingRegistration, setIsLoadingRegistration] = useState(false);
 
   const [wallet, setWallet] = useState<KeplrWallet>();
   const [walletKey, setWalletKey] = useState<{
@@ -173,7 +174,7 @@ export default function VerificationPage() {
 
         console.error(error);
       } finally {
-        setIsLoading(false);
+        setIsLoadingInit(false);
       }
     }
   };
@@ -267,6 +268,7 @@ export default function VerificationPage() {
     amplitude.track("click register button");
 
     console.log(isOwner);
+
     if (isOwner) {
       handleRegistration();
     } else {
@@ -276,6 +278,8 @@ export default function VerificationPage() {
 
   const handleRegistration = async () => {
     try {
+      setIsLoadingRegistration(true);
+
       const { state, code } = checkTwitterAuthQueryParameter(
         window.location.search,
       );
@@ -358,6 +362,8 @@ export default function VerificationPage() {
       if (Axios.isAxiosError(error)) {
         console.error((error?.response?.data as QueryError).message);
       }
+    } finally {
+      setIsLoadingRegistration(false);
     }
   };
 
@@ -372,7 +378,7 @@ export default function VerificationPage() {
       <Logo />
 
       <MainContainer>
-        {isLoading ? (
+        {isLoadingInit ? (
           <SkeletonChainList />
         ) : (
           <ContentContainer>
@@ -426,6 +432,7 @@ export default function VerificationPage() {
                 <PrimaryButton
                   disabled={isRegisterButtonDisable}
                   onClick={onClickRegistration}
+                  isLoading={isLoadingRegistration}
                 >
                   Register
                 </PrimaryButton>
