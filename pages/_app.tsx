@@ -5,17 +5,18 @@ import { useRouter } from "next/router";
 import React, { useEffect, useMemo } from "react";
 import { DefaultTheme, ThemeProvider } from "styled-components";
 import ErrorBoundary from "../components/error-boundary";
+import color from "../styles/color";
 
 import { GlobalStyle } from "../styles/global";
 
 const homePageTheme: DefaultTheme = {
-  bgColor: "rgba(18, 18, 18, 1)",
-  bgGridColor: "rgba(51, 51, 51, 1)",
+  bgColor: color.black,
+  bgGridColor: color.grey["600"],
 };
 
 const defaultPageTheme: DefaultTheme = {
-  bgColor: "rgba(18, 18, 18, 0.8)",
-  bgGridColor: "rgba(51, 51, 51, 0.3)",
+  bgColor: "#0B0B0B",
+  bgGridColor: color.grey["900"],
 };
 
 if (process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY !== undefined) {
