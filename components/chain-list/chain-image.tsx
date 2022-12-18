@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Image, { ImageProps } from "next/image";
 
-import KeplrIcon from "../../public/images/svg/keplr-icon.svg";
+import ICNSLogo from "../../public/images/icns-logo-120x120.png";
 import styled from "styled-components";
 
 export const ChainImage = ({ src, ...props }: ImageProps) => {
@@ -14,7 +14,7 @@ export const ChainImage = ({ src, ...props }: ImageProps) => {
         src={srcState}
         alt="chain image"
         sizes="3rem"
-        onError={() => setSrcState(KeplrIcon)}
+        onError={() => setSrcState(ICNSLogo)}
       />
     </ImageWrapper>
   );
