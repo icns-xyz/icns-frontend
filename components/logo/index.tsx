@@ -36,4 +36,8 @@ export const LogoContainer = styled.div`
 
   margin-top: 5rem;
   margin-left: 5rem;
+
+  @media screen and (max-width: 1280px) {
+    display: none;
+  }
 `;
