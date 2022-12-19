@@ -3,7 +3,6 @@ import styled from "styled-components";
 import color from "../../styles/color";
 
 import ArrowLeftIcon from "../../public/images/svg/arrow-left.svg";
-import Image from "next/image";
 
 export const BackButton: FunctionComponent = () => {
   return (
@@ -13,14 +12,7 @@ export const BackButton: FunctionComponent = () => {
       }}
     >
       <ContentContainer>
-        <IconContainer>
-          <Image
-            src={ArrowLeftIcon}
-            fill={true}
-            sizes="1rem"
-            alt="arrow left icon"
-          />
-        </IconContainer>
+        <ArrowLeftIcon />
         <div>BACK</div>
       </ContentContainer>
     </Container>
@@ -43,6 +35,10 @@ const Container = styled.div`
   color: ${color.grey["400"]};
 
   cursor: pointer;
+
+  &:hover {
+    color: ${color.grey["500"]};
+  }
 `;
 
 const ContentContainer = styled.div`
@@ -51,11 +47,4 @@ const ContentContainer = styled.div`
   align-items: center;
 
   gap: 0.25rem;
-`;
-
-const IconContainer = styled.div`
-  position: relative;
-
-  width: 1rem;
-  height: 1rem;
 `;
