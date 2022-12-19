@@ -59,7 +59,7 @@ export default function CompletePage() {
 
     const { twitterUsername } = router.query;
 
-    const shareMessage = `👨‍🚀 To Interchain... And Beyond!%0a%0aHey frens, I just minted my name for the interchain on @icns_xyz: ${twitterUsername}%0a%0aClaim yours now ▶`;
+    const shareMessage = `👨‍🚀 To the Interchain... And Beyond!%0a%0aHey frens, I just minted my name for the interchain on @icns_xyz: ${twitterUsername}%0a%0aClaim yours now ▶`;
 
     const width = 500;
     const height = 700;
