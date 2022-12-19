@@ -50,6 +50,7 @@ import {
   queryRegisteredTwitterId,
   verifyTwitterAccount,
 } from "../../queries";
+import { ErrorHandler } from "../../utils/error";
 import {
   KEPLR_NOT_FOUND_ERROR,
   TWITTER_LOGIN_ERROR,
@@ -59,9 +60,8 @@ import Axios from "axios";
 import { BackButton } from "../../components/back-button";
 import { FinalCheckModal } from "../../components/final-check-modal";
 import { ErrorModal } from "../../components/error-modal";
-import * as process from "process";
 
-export default function VerificationPage(props: { blockList: string[] }) {
+export default function VerificationPage() {
   const router = useRouter();
   const [twitterAuthInfo, setTwitterAuthInfo] = useState<TwitterProfileType>();
 
@@ -263,10 +263,6 @@ export default function VerificationPage(props: { blockList: string[] }) {
 
     const chainArray = [];
     for (let i = 0; i < chainKeys.length; i++) {
-      if (props.blockList.includes(chainInfos[i].prefix)) {
-        continue;
-      }
-
       const chainKey = chainKeys[i];
       if (chainKey.status !== "fulfilled") {
         console.log("Failed to get key from wallet", chainKey);
@@ -520,15 +516,6 @@ export default function VerificationPage(props: { blockList: string[] }) {
       />
     </Container>
   );
-}
-
-export async function getStaticProps() {
-  let blockList: string[] = [];
-  if (process.env.BLOCK_LIST) {
-    blockList = process.env.BLOCK_LIST.trim().split(",");
-  }
-
-  return { props: { blockList } };
 }
 
 const Container = styled.div`
