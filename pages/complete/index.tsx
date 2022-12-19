@@ -79,7 +79,7 @@ export default function CompletePage() {
         <ContentContainer>
           <TitleContainer>
             {isSuccess ? (
-              <div>Your Name is Active Now!</div>
+              <div>Your name has been claimed!</div>
             ) : (
               <SpinnerWrapper>
                 <Spinner />
@@ -124,7 +124,7 @@ export default function CompletePage() {
         </DescriptionContainer>
 
         {/*<ShareButtonContainer onClick={onClickShareButton}>*/}
-        {/*  <ShareButtonText>SHARE MY NAME</ShareButtonText>*/}
+        {/*  <ShareButtonText>Tweet Invite Link</ShareButtonText>*/}
         {/* <TwitterIcon /> */}
         {/*</ShareButtonContainer>*/}
       </MainContainer>
