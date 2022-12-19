@@ -66,7 +66,7 @@ export const WalletItem: FunctionComponent<Props> = (props: Props) => {
   };
 
   return (
-    <WalletContainer isReady={wallet.isReady} onClick={onClickWalletItem}>
+    <WalleButton disabled={!wallet.isReady} onClick={onClickWalletItem}>
       <WalletIcon>
         <Image
           src={wallet.image}
@@ -82,29 +82,38 @@ export const WalletItem: FunctionComponent<Props> = (props: Props) => {
             <WalletDescription>Go to install Keplr Extension</WalletDescription>
           )
         ) : (
-          <WalletDescription>Comming soon</WalletDescription>
+          <WalletDescription>Coming soon</WalletDescription>
         )}
       </WalletContentContainer>
 
       <Flex1 />
 
       <Image src={ArrowRightIcon} alt="arrow right icon" />
-    </WalletContainer>
+    </WalleButton>
   );
 };
 
-const WalletContainer = styled.div<{ isReady: boolean }>`
+const WalleButton = styled.button`
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  border: none;
 
   height: 5.8rem;
   padding: 1rem;
 
   background-color: ${color.grey["600"]};
-  opacity: ${(props) => (props.isReady ? 1 : 0.3)};
 
-  cursor: ${(props) => (props.isReady ? "pointer" : "default")};
+  &:hover:not(:disabled) {
+    background-color: ${color.grey["700"]};
+    cursor: pointer;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
 `;
 
 const WalletIcon = styled.div`

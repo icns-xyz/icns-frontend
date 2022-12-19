@@ -36,7 +36,8 @@ export const ConnectWalletModal: FunctionComponent<Props> = (props) => {
       <ModalContainer>
         <ModalTitle>Connect Wallet</ModalTitle>
         <ModalDescription>
-          Plz check which account is selected after you connect it
+          Make sure you have the correst account to cliam your ICNS name is
+          slelected on your wallet
         </ModalDescription>
 
         {WalletList.map((walletItem) => {
@@ -53,7 +54,7 @@ const ModalContainer = styled.div`
   gap: 0.9rem;
   padding: 2.2rem;
 
-  min-width: 28rem;
+  max-width: 28.5rem;
 `;
 
 const ModalTitle = styled.div`
