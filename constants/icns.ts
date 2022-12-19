@@ -1,6 +1,8 @@
-export const MainChainId = "osmo-test-4";
+export const OSMOSIS_CHAIN_ID =
+  process.env.NEXT_PUBLIC_OSMOSIS_CHAIND_ID ?? "osmosis-test-4";
 
-export const REFERRAL_KEY = "icns-referral";
+export const REFERRAL_KEY =
+  process.env.NEXT_PUBLIC_REFERRAL_KEY ?? "icns-referral";
 
 export const RPC_URL =
   process.env.NEXT_PUBLIC_OSMOSIS_RPC_URL ?? "https://rpc.testnet.osmosis.zone";
