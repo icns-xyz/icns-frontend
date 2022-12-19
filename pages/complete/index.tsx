@@ -1,6 +1,6 @@
 import * as amplitude from "@amplitude/analytics-browser";
 import Image from "next/image";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 import Typed from "react-typed";
 
@@ -75,18 +75,20 @@ export default function CompletePage() {
   return (
     <Container>
       <Logo />
-
       <MainContainer>
-        <MainTitle>
-          {isSuccess && (
-            <Typed
-              strings={["Your Name is Active Now!"]}
-              stopped={!isSuccess}
-              typeSpeed={100}
-            />
-          )}
-        </MainTitle>
         <ContentContainer>
+          <TitleContainer>
+            {isSuccess ? (
+              <div>Your Name is Active Now!</div>
+            ) : (
+              <SpinnerWrapper>
+                <Spinner />
+                <Spinner />
+                <Spinner />
+                <Spinner />
+              </SpinnerWrapper>
+            )}
+          </TitleContainer>
           <RecipentContainer>
             <RecipentTitle>Recipent</RecipentTitle>
             <AddressContainer>
@@ -116,8 +118,8 @@ export default function CompletePage() {
             <AlertCircleOutlineIcon />
           </AlertIcon>
           <DescriptionText>
-            If you want to make that name address with same twitter account,
-            just go to home and start again.
+            ICNS name will stay the same even if your twitter handle changes in
+            the future.
           </DescriptionText>
         </DescriptionContainer>
 
@@ -140,39 +142,40 @@ const MainContainer = styled.div`
   flex-direction: column;
   align-items: center;
 
-  padding-top: 10.1rem;
+  padding-top: 15.1rem;
 
   color: white;
-`;
-
-const MainTitle = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-family: "Inter", serif;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 2rem;
-  line-height: 2rem;
-
-  height: 5rem;
 `;
 
 const ContentContainer = styled.div`
   width: 30rem;
 
-  padding: 2rem 2rem;
+  padding: 2.625rem 4rem;
 
   background-color: ${color.grey["900"]};
+`;
+
+const TitleContainer = styled.div`
+  height: 1.52rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.52rem;
+  letter-spacing: 0.07em;
+  color: ${color.white};
+
+  margin-bottom: 2.625rem;
 `;
 
 const RecipentContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-
-  padding: 2rem;
 `;
 
 const RecipentTitle = styled.div`
@@ -243,6 +246,42 @@ const DescriptionText = styled.div`
   line-height: 140%;
 
   color: ${color.grey["400"]};
+`;
+
+const SpinnerWrapper = styled.div`
+  display: flex;
+  position: relative;
+
+  width: 2rem;
+  height: 2rem;
+`;
+
+const spinAnimation = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const Spinner = styled.div<{ animationDelay?: string }>`
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  animation: ${spinAnimation} 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  ${({ animationDelay }) =>
+    animationDelay ? `animation-delay: ${animationDelay};` : ""}
+
+  border-radius: 100%;
+  border-style: solid;
+  border-width: 3px;
+  border-color: white transparent transparent transparent;
 `;
 
 const ShareButtonContainer = styled.div`
