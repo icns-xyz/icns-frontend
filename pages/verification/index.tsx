@@ -240,15 +240,33 @@ export default function VerificationPage() {
   };
 
   const fetchChainList = async (wallet: KeplrWallet) => {
-    const chainIds = (await wallet.getChainInfosWithoutEndpoints()).map(
-      (c) => c.chainId,
-    );
-    const chainKeys = await Promise.allSettled(
-      chainIds.map((chainId) => wallet.getKey(chainId)),
-    );
+    const needAllowList =
+      process.env.NEXT_PUBLIC_CHAIN_ALLOWLIST != null &&
+      process.env.NEXT_PUBLIC_CHAIN_ALLOWLIST.trim().length !== 0;
+    const chainAllowList = (process.env.NEXT_PUBLIC_CHAIN_ALLOWLIST || "")
+      .split(",")
+      .map((str) => str.trim())
+      .filter((str) => str.length > 0)
+      .map((str) => ChainIdHelper.parse(str).identifier);
 
-    const chainInfos = (await wallet.getChainInfosWithoutEndpoints()).map(
-      (chainInfo) => {
+    const chainAllowListMap = new Map<string, true | undefined>();
+    for (const allow of chainAllowList) {
+      chainAllowListMap.set(allow, true);
+    }
+
+    const chainInfos = (await wallet.getChainInfosWithoutEndpoints())
+      .filter((chainInfo) => {
+        if (!needAllowList) {
+          return true;
+        }
+
+        const chainIdentifier = ChainIdHelper.parse(
+          chainInfo.chainId,
+        ).identifier;
+
+        return chainAllowListMap.get(chainIdentifier) === true;
+      })
+      .map((chainInfo) => {
         return {
           chainId: chainInfo.chainId,
           chainName: chainInfo.chainName,
@@ -258,7 +276,11 @@ export default function VerificationPage() {
           }/chain.png`,
           isEthermintLike: chainInfo.isEthermintLike,
         };
-      },
+      });
+
+    const chainIds = chainInfos.map((c) => c.chainId);
+    const chainKeys = await Promise.allSettled(
+      chainIds.map((chainId) => wallet.getKey(chainId)),
     );
 
     const chainArray = [];
