@@ -217,7 +217,6 @@ const SubContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.5rem;
 
   width: 29.9rem;
   height: 4.9rem;
@@ -232,6 +231,7 @@ const CheckContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: 0.25rem;
 
   font-family: "Inter", serif;
   font-style: normal;
@@ -241,11 +241,4 @@ const CheckContainer = styled.div`
   padding-left: 0.75rem;
 
   color: ${color.grey["400"]};
-`;
-
-const CheckIconContainer = styled.div`
-  position: relative;
-
-  width: 1.6rem;
-  height: 1.5rem;
 `;

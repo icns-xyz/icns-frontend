@@ -56,7 +56,7 @@ export const AllChainsItem: FunctionComponent<Props> = (props) => {
       >
         <AllChainsIcon />
         <ChainInfoContainer>
-          <ChainName>{`.all chains(${chainList.length})`}</ChainName>
+          <ChainName>{`All chains(${chainList.length})`}</ChainName>
           <WalletAddress>
             {chainList.map((chain) => chain.chainName).join(", ")}
           </WalletAddress>

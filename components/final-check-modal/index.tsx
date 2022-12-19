@@ -53,7 +53,7 @@ export const FinalCheckModal: FunctionComponent<Props> = (props) => {
     >
       <ModalContainer>
         <ModalTitle>Final Checks</ModalTitle>
-        <ModalDescription>{`You are claiming the ICNS name ${twitterUserName} on keplr account`}</ModalDescription>
+        <ModalDescription>{`You are claiming the ICNS name "${twitterUserName}" on Keplr account`}</ModalDescription>
 
         <NameBox
           marginTop="3.875rem"
@@ -68,13 +68,13 @@ export const FinalCheckModal: FunctionComponent<Props> = (props) => {
               }}
             />
           }
-          title="Your Twitter ID"
-          content={`@${twitterUserName}`}
+          title="Your Twitter Handle"
+          content={`${twitterUserName}`}
         />
         <div
           style={{
             width: "100%",
-            height: "3.625rem",
+            height: "3.25rem",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -116,18 +116,20 @@ export const FinalCheckModal: FunctionComponent<Props> = (props) => {
         />
 
         <SubTextsContainer>
+          <SubTextList>
+            <SubTextListItem>
+              ICNS name can only be claimed once per Twitter account.
+            </SubTextListItem>
+
+            <SubTextListItem>
+              ICNS name can’t be transferred at this time.
+            </SubTextListItem>
+            <SubTextListItem>
+              Please make sure you’ve selected the right account on your wallet.
+            </SubTextListItem>
+          </SubTextList>
           <SubText>
-            ☑️ ICNS name can only be claimed once per Twitter account.
-            <br />
-            ☑️ ICNS name can’t be transferred at this time.
-            <br />
-            ☑️ Please make sure you’ve selected the right account on your
-            wallet.
-          </SubText>
-          <br />
-          <SubText>
-            <SubBoldText>{MINIMUM_OSMO_FEE}</SubBoldText> will be spent as a
-            spam-prevention fee.
+            {MINIMUM_OSMO_FEE} will be spent as a spam-prevention fee.
           </SubText>
         </SubTextsContainer>
 
@@ -159,7 +161,7 @@ const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  max-width: 43.5rem;
+  max-width: 37.5rem;
 
   padding: 2rem 2.25rem;
 
@@ -178,8 +180,8 @@ const ModalTitle = styled.div`
 `;
 
 const ModalDescription = styled.div`
-  font-weight: 500;
-  font-size: 1rem;
+  font-weight: 400;
+  font-size: 0.875rem;
   line-height: 1.18rem;
 
   color: ${color.grey["100"]};
@@ -188,21 +190,29 @@ const ModalDescription = styled.div`
 const SubTextsContainer = styled.div`
   margin-top: 1.75rem;
 
-  padding: 2rem 1.5rem;
+  padding: 1rem 1.75rem;
 
   background-color: ${color.grey["700"]};
 `;
 
-const SubText = styled.div`
-  font-weight: 500;
-  font-size: 1rem;
+const SubTextList = styled.ul`
+  margin: 0 0 1rem;
+  padding: 0 0.75rem;
+`;
+
+const SubTextListItem = styled.li`
+  font-weight: 400;
+  font-size: 0.815rem;
   line-height: 1.5rem;
 
   color: ${color.grey["300"]};
 `;
 
-const SubBoldText = styled.span`
-  color: ${color.grey["100"]};
+const SubText = styled.div`
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.5rem;
+  color: ${color.grey["200"]};
 `;
 
 const ButtonContainer = styled.div`
@@ -221,7 +231,7 @@ const RegisterButton = styled.div`
 
 const CancelButton = styled.div`
   width: 80%;
-  height: 3.8rem;
+  margin-top: 0.75rem;
 `;
 
 const NameBox: FunctionComponent<{
@@ -274,11 +284,11 @@ const NameBoxIconContainer = styled.div`
 `;
 
 const NameBoxTitle = styled.div`
-  font-weight: 700;
+  font-weight: 500;
   font-size: 1rem;
   line-height: 1.18rem;
 
-  color: ${color.grey["400"]};
+  color: ${color.grey["100"]};
 `;
 
 const NameBoxContentContainer = styled.div`
@@ -286,14 +296,14 @@ const NameBoxContentContainer = styled.div`
   align-items: center;
   justify-content: center;
   
-  padding: 2.125rem 0;
+  padding: 2rem 0;
   
-  background-color ${color.grey["700"]};
+  background-color ${color.grey["600"]};
   border: 1px solid ${color.grey["300"]};
 
   font-weight: 600;
-  font-size: 1.5rem;
-  line-height: 1.81rem;
+  font-size: 1.375rem;
+  line-height: 1.6875rem;
   
   color: ${color.white}
 `;
