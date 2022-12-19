@@ -7,7 +7,8 @@ export const WALLET_INSTALL_URL =
 export const SELECTED_WALLET_KEY = "SELECTED_WALLET_KEY";
 
 export const MINIMUM_VERSION = "0.11.22";
-export const MINIMUM_OSMO_FEE = process.env.MINIMUM_OSMO_FEE ?? "0.5 OSMO";
+export const MINIMUM_OSMO_FEE =
+  process.env.NEXT_PUBLIC_MINIMUM_OSMO_FEE ?? "0.5 OSMO";
 
 export type WalletName = "Keplr" | "Cosmostation";
 export interface WalletType {

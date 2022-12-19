@@ -524,8 +524,8 @@ export default function VerificationPage(props: { blockList: string[] }) {
 
 export async function getStaticProps() {
   let blockList: string[] = [];
-  if (process.env.BLOCK_LIST) {
-    blockList = process.env.BLOCK_LIST.trim().split(",");
+  if (process.env.NEXT_PUBLIC_BLOCK_LIST) {
+    blockList = process.env.NEXT_PUBLIC_BLOCK_LIST.trim().split(",");
   }
 
   return { props: { blockList } };
