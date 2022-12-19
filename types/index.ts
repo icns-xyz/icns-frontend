@@ -4,3 +4,4 @@ export * from "./chain-item-type";
 export * from "./msg";
 export * from "./twitter";
 export * from "./icns";
+export * from "./error-message";

@@ -53,7 +53,7 @@ export const ChainContainer = styled.div`
   flex-direction: column;
   width: 100%;
   //max-height: 33rem;
-  overflow: scroll;
+  overflow-y: scroll;
 
   flex: 1;
 
