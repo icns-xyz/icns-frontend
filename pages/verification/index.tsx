@@ -37,7 +37,7 @@ import { Bech32Address, ChainIdHelper } from "@keplr-wallet/cosmos";
 import { AllChainsItem } from "../../components/chain-list/all-chains-item";
 import { SearchInput } from "../../components/search-input";
 import {
-  OSMOSIS_CHAIN_ID,
+  MAIN_CHAIN_ID,
   REFERRAL_KEY,
   RESOLVER_ADDRESS,
   REST_URL,
@@ -195,7 +195,7 @@ export default function VerificationPage(props: { blockList: string[] }) {
           );
 
           if (keplrWallet) {
-            const key = await keplrWallet.getKey(OSMOSIS_CHAIN_ID);
+            const key = await keplrWallet.getKey(MAIN_CHAIN_ID);
             setIsOwner(ownerOfQueryResponse.data.owner === key.bech32Address);
             setNFTOwnerAddress(ownerOfQueryResponse.data.owner);
           }
@@ -226,7 +226,7 @@ export default function VerificationPage(props: { blockList: string[] }) {
 
     if (keplr) {
       const keplrWallet = new KeplrWallet(keplr);
-      const key = await keplrWallet.getKey(OSMOSIS_CHAIN_ID);
+      const key = await keplrWallet.getKey(MAIN_CHAIN_ID);
 
       await fetchChainList(keplrWallet);
       setWallet(keplrWallet);
@@ -301,14 +301,14 @@ export default function VerificationPage(props: { blockList: string[] }) {
 
   const checkAdr36 = async () => {
     if (twitterAuthInfo && wallet) {
-      const key = await wallet.getKey(OSMOSIS_CHAIN_ID);
+      const key = await wallet.getKey(MAIN_CHAIN_ID);
 
       const chainIds = Array.from(checkedItems).map((chain) => {
         return (chain as ChainItemType).chainId;
       });
 
       return wallet.signICNSAdr36(
-        OSMOSIS_CHAIN_ID,
+        MAIN_CHAIN_ID,
         RESOLVER_ADDRESS,
         key.bech32Address,
         twitterAuthInfo.username,
@@ -372,7 +372,7 @@ export default function VerificationPage(props: { blockList: string[] }) {
         }
 
         const chainInfo = {
-          chainId: OSMOSIS_CHAIN_ID,
+          chainId: MAIN_CHAIN_ID,
           rest: REST_URL,
         };
 

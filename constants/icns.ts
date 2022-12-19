@@ -1,5 +1,5 @@
-export const OSMOSIS_CHAIN_ID =
-  process.env.NEXT_PUBLIC_OSMOSIS_CHAIND_ID ?? "osmosis-test-4";
+export const MAIN_CHAIN_ID =
+  process.env.NEXT_PUBLIC_MAIN_CHAIN_ID ?? "osmo-test-4";
 
 export const REFERRAL_KEY =
   process.env.NEXT_PUBLIC_REFERRAL_KEY ?? "icns-referral";
