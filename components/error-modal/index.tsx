@@ -50,12 +50,7 @@ export const ErrorModal: FunctionComponent<Props> = (props) => {
       <ModalContainer>
         <ErrorTitleContainer>
           <ErrorImageContainer>
-            <Image
-              src={ErrorIcon}
-              fill={true}
-              sizes="2.5rem"
-              alt="error icon"
-            />
+            <ErrorIcon />
           </ErrorImageContainer>
           Error
         </ErrorTitleContainer>
@@ -65,12 +60,7 @@ export const ErrorModal: FunctionComponent<Props> = (props) => {
         {errorMessage?.path ? (
           <ErrorBackButton onClick={onClose}>
             <ErrorBackIconContainer>
-              <Image
-                src={ArrowLeftIcon}
-                fill={true}
-                sizes="1.5rem"
-                alt="back button icon"
-              />
+              <ArrowLeftIcon />
             </ErrorBackIconContainer>
             GO BACK TO HOME
           </ErrorBackButton>

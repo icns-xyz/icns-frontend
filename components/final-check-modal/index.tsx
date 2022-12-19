@@ -1,14 +1,13 @@
+import { Bech32Address } from "@keplr-wallet/cosmos";
+import Image from "next/image";
+import { useRouter } from "next/router";
 import { FunctionComponent } from "react";
-import color from "../../styles/color";
 import ReactModal from "react-modal";
 import styled from "styled-components";
-import TwitterIcon from "../../public/images/svg/twitter-modal-icon.svg";
-import Image from "next/image";
+import { MINIMUM_OSMO_FEE } from "../../constants/wallet";
+import color from "../../styles/color";
 import { PrimaryButton } from "../primary-button";
 import { SecondaryButton } from "../secondary-button";
-import { MINIMUM_OSMO_FEE } from "../../constants/wallet";
-import { useRouter } from "next/router";
-import { Bech32Address } from "@keplr-wallet/cosmos";
 
 interface Props {
   twitterUserName: string | undefined;

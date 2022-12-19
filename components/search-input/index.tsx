@@ -1,7 +1,5 @@
 import { Dispatch, FunctionComponent, SetStateAction } from "react";
 
-import Image from "next/image";
-
 import styled from "styled-components";
 import color from "../../styles/color";
 
@@ -18,7 +16,7 @@ export const SearchInput: FunctionComponent<Props> = (props) => {
   return (
     <SearchContainer>
       <SearchIconContainer>
-        <Image src={SearchIcon} fill={true} sizes="1.3rem" alt="search icon" />
+        <SearchIcon />
       </SearchIconContainer>
 
       <SearchText

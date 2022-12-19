@@ -3,7 +3,6 @@ import ArrowRightIcon from "../../public/images/svg/arrow-right.svg";
 import color from "../../styles/color";
 import { Flex1 } from "../../styles/flex-1";
 import styled from "styled-components";
-import Image from "next/image";
 import {
   MINIMUM_VERSION,
   SELECTED_WALLET_KEY,
@@ -67,14 +66,9 @@ export const WalletItem: FunctionComponent<Props> = (props: Props) => {
 
   return (
     <WalleButton disabled={!wallet.isReady} onClick={onClickWalletItem}>
-      <WalletIcon>
-        <Image
-          src={wallet.image}
-          fill={true}
-          sizes="3.75rem"
-          alt="wallet Icon"
-        />
-      </WalletIcon>
+      <WalletIconContainer>
+        <wallet.IconComponent width="60" height="60" />
+      </WalletIconContainer>
       <WalletContentContainer>
         <WalletName>{wallet.name}</WalletName>
         {wallet.isReady ? (
@@ -88,7 +82,7 @@ export const WalletItem: FunctionComponent<Props> = (props: Props) => {
 
       <Flex1 />
 
-      <Image src={ArrowRightIcon} alt="arrow right icon" />
+      <ArrowRightIcon />
     </WalleButton>
   );
 };
@@ -116,7 +110,7 @@ const WalleButton = styled.button`
   }
 `;
 
-const WalletIcon = styled.div`
+const WalletIconContainer = styled.div`
   position: relative;
 
   width: 3.75rem;

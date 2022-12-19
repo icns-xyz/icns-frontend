@@ -115,7 +115,7 @@ export default function CompletePage() {
 
         <DescriptionContainer>
           <AlertIcon>
-            <Image src={AlertCircleOutlineIcon} fill={true} alt="alert icon" />
+            <AlertCircleOutlineIcon />
           </AlertIcon>
           <DescriptionText>
             If you want to make that name address with same twitter account,
@@ -125,7 +125,7 @@ export default function CompletePage() {
 
         {/*<ShareButtonContainer onClick={onClickShareButton}>*/}
         {/*  <ShareButtonText>SHARE MY NAME</ShareButtonText>*/}
-        {/*  <Image src={TwitterIcon} alt="twitter icon" />*/}
+        {/* <TwitterIcon /> */}
         {/*</ShareButtonContainer>*/}
       </MainContainer>
     </Container>

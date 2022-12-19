@@ -1,8 +1,5 @@
 import * as amplitude from "@amplitude/analytics-browser";
 
-// NextJs
-import Image from "next/image";
-
 // Styles
 import styled from "styled-components";
 import color from "../styles/color";
@@ -52,28 +49,10 @@ export default function Home() {
       <MainContainer>
         <MainTitleContainer>
           <MainTitleImageBackground>
-            <Image
-              src={StarIcon}
-              width={50}
-              height={50}
-              alt="Star Icon"
-              className="starIcon first"
-            />
-            <Image
-              src={StarIcon}
-              width={50}
-              height={50}
-              alt="Star Icon"
-              className="starIcon last"
-            />
+            <StarIcon className="starIcon first" />
+            <StarIcon className="starIcon last" />
             <MainTitleImageContainer>
-              <Image
-                src={MainTitle}
-                fill={true}
-                sizes="60rem"
-                alt="Main Title"
-                priority
-              />
+              <MainTitle />
             </MainTitleImageContainer>
           </MainTitleImageBackground>
 
@@ -97,32 +76,18 @@ export default function Home() {
           </CTAContainer>
           <SubContainer>
             <CheckContainer>
-              <CheckIconContainer>
-                <Image
-                  src={CheckIcon}
-                  fill={true}
-                  sizes="1.6rem"
-                  alt="Check Icon"
-                />
-              </CheckIconContainer>
+              <CheckIcon />
               Osmo is required for this transaction
             </CheckContainer>
             <CheckContainer>
-              <CheckIconContainer>
-                <Image
-                  src={CheckIcon}
-                  fill={true}
-                  sizes="1.6rem"
-                  alt="Check Icon"
-                />
-              </CheckIconContainer>
+              <CheckIcon />
               More wallet support coming soon
             </CheckContainer>
           </SubContainer>
         </MainTitleContainer>
 
         <MainLogoContainer>
-          <Image src={MainLogo} fill={true} sizes="25rem" alt="Main Logo" />
+          <MainLogo />
         </MainLogoContainer>
       </MainContainer>
 
@@ -158,7 +123,7 @@ const MainContainer = styled.div`
   margin-top: 15rem;
   margin-left: 10rem;
 
-  img.starIcon {
+  .starIcon {
     position: absolute;
 
     &.first {

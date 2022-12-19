@@ -1,4 +1,3 @@
-import { ChainItemType } from "../../types";
 import {
   Dispatch,
   FunctionComponent,
@@ -6,19 +5,19 @@ import {
   useEffect,
   useState,
 } from "react";
+import { ChainItemType } from "../../types";
 
-import { ChainImage } from "./chain-image";
+import styled from "styled-components";
+import AllChainsIcon from "../../public/images/svg/all-chains-icon.svg";
+import color from "../../styles/color";
 import { Flex1 } from "../../styles/flex-1";
+import { Checkbox } from "../checkbox";
 import {
   ChainInfoContainer,
   ChainItemContainer,
   ChainName,
   WalletAddress,
 } from "./chain-item";
-import color from "../../styles/color";
-import styled from "styled-components";
-import { Checkbox } from "../checkbox";
-import AllChainsIcon from "../../public/images/svg/all-chains-icon.svg";
 
 interface Props {
   chainList: ChainItemType[];
@@ -55,7 +54,7 @@ export const AllChainsItem: FunctionComponent<Props> = (props) => {
         checked={checked}
         onClick={checkHandler}
       >
-        <ChainImage src={AllChainsIcon} fill={true} alt={`all chain images`} />
+        <AllChainsIcon />
         <ChainInfoContainer>
           <ChainName>{`.all chains(${chainList.length})`}</ChainName>
           <WalletAddress>
