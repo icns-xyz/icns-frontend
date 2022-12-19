@@ -15,6 +15,7 @@ import { TendermintTxTracer } from "@keplr-wallet/cosmos";
 import { queryAddressesFromTwitterName } from "../../queries";
 import { RegisteredAddresses } from "../../types";
 import { SHARE_URL } from "../../constants/twitter";
+import { RPC_URL } from "../../constants/icns";
 
 export default function CompletePage() {
   const router = useRouter();
@@ -34,10 +35,7 @@ export default function CompletePage() {
   }, [router.query]);
 
   const initialize = async (txHash: string, twitterUserName: string) => {
-    const txTracer = new TendermintTxTracer(
-      "https://rpc.testnet.osmosis.zone",
-      "/websocket",
-    );
+    const txTracer = new TendermintTxTracer(RPC_URL, "/websocket");
 
     try {
       const result: { code?: number } = await txTracer.traceTx(
