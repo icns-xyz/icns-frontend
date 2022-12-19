@@ -8,19 +8,18 @@ import styled from "styled-components";
 import color from "../styles/color";
 
 // Components
-import { PrimaryButton } from "../components/primary-button";
 import { ConnectWalletModal } from "../components/connect-wallet-modal";
+import { PrimaryButton } from "../components/primary-button";
 
 // Image Assets
-import MainTitle from "../public/images/svg/main-title.svg";
-import MainLogo from "../public/images/svg/main-logo.svg";
-import CheckIcon from "../public/images/svg/check-icon.svg";
-import StarIcon from "../public/images/svg/bg-asset-3.svg";
-import { Logo } from "../components/logo";
 import { useEffect, useState } from "react";
-import { MINIMUM_OSMO_FEE, SELECTED_WALLET_KEY } from "../constants/wallet";
-import { replaceToInstallPage } from "../utils/url";
+import { Logo } from "../components/logo";
 import { REFERRAL_KEY } from "../constants/icns";
+import { SELECTED_WALLET_KEY } from "../constants/wallet";
+import StarIcon from "../public/images/svg/bg-asset-3.svg";
+import CheckIcon from "../public/images/svg/check-icon.svg";
+import MainLogo from "../public/images/svg/main-logo.svg";
+import MainTitle from "../public/images/svg/main-title.svg";
 
 export default function Home() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -81,7 +80,7 @@ export default function Home() {
           <CTAContainer>
             <ConnectButtonContainer>
               <PrimaryButton onClick={onClickConnectWalletButton}>
-                Connect Wallet
+                Claim Now
               </PrimaryButton>
             </ConnectButtonContainer>
             <ICNSDescription>
@@ -106,9 +105,7 @@ export default function Home() {
                   alt="Check Icon"
                 />
               </CheckIconContainer>
-              You are a <CheckBoldText>&nbsp;keplr&nbsp;</CheckBoldText> user.
-              if not, you can install&nbsp;
-              <InstallLInk onClick={replaceToInstallPage}>HERE</InstallLInk>
+              Osmo is required for this transaction
             </CheckContainer>
             <CheckContainer>
               <CheckIconContainer>
@@ -119,8 +116,7 @@ export default function Home() {
                   alt="Check Icon"
                 />
               </CheckIconContainer>
-              <CheckBoldText>{MINIMUM_OSMO_FEE}&nbsp;</CheckBoldText> is
-              required for this transaction
+              More wallet support coming soon
             </CheckContainer>
           </SubContainer>
         </MainTitleContainer>
@@ -171,7 +167,7 @@ const MainContainer = styled.div`
     }
 
     &.last {
-      right: -23px;
+      right: -24px;
       top: -24px;
     }
   }
@@ -190,7 +186,7 @@ const MainTitleImageBackground = styled.div`
   display: flex;
   justify-content: center;
 
-  width: 70rem;
+  width: calc(70rem - 1.5px);
   height: 19.9rem;
 
   background-color: ${color.black};
@@ -210,7 +206,7 @@ const MainTitleImageContainer = styled.div`
 const MainLogoContainer = styled.div`
   position: relative;
 
-  right: 2.5rem;
+  right: 2.58rem;
 
   min-width: 25rem;
   height: 25rem;
@@ -221,17 +217,23 @@ const CTAContainer = styled.div`
 `;
 
 const ConnectButtonContainer = styled.div`
-  width: 19.9rem;
-  height: 5rem;
+  width: calc(20rem - 2px);
+  height: calc(5rem - 1.5px);
 
-  margin-left: 5rem;
-  margin-right: 26px;
+  margin: 1.5px 1.5px 1.5px 5.01rem;
 `;
 
 const ICNSDescription = styled.p`
+  background-color: ${color.black};
+
+  width: calc(40rem - 3px);
+  height: calc(5rem - 1.5px);
+  margin: 1.5px;
+  padding: 13.5px 26px;
+
   font-weight: 500;
   font-size: 16px;
-  line-height: 150%;
+  line-height: 162%;
   color: #6c6c6c;
 `;
 
@@ -240,7 +242,8 @@ const LearnMoreLink = styled.a`
 
   &:link,
   &:hover,
-  &:active &:visited {
+  &:active,
+  &:visited {
     color: #6c6c6c;
   }
 `;
@@ -254,7 +257,7 @@ const SubContainer = styled.div`
   width: 29.9rem;
   height: 4.9rem;
 
-  margin-top: 5.1rem;
+  margin-top: 5rem;
   margin-left: 5rem;
 
   background-color: ${color.black};
@@ -267,28 +270,12 @@ const CheckContainer = styled.div`
 
   font-family: "Inter", serif;
   font-style: normal;
-  font-weight: 500;
-  font-size: 0.8rem;
-  line-height: 16px;
-
-  text-transform: uppercase;
-
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 117.5%;
   padding-left: 0.75rem;
 
   color: ${color.grey["400"]};
-`;
-
-const InstallLInk = styled.a`
-  color: ${color.grey["400"]};
-  text-decoration: underline;
-
-  cursor: pointer;
-`;
-
-const CheckBoldText = styled.span`
-  font-size: 0.8rem;
-
-  color: ${color.grey["100"]};
 `;
 
 const CheckIconContainer = styled.div`
