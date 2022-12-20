@@ -127,6 +127,12 @@ export default function VerificationPage() {
           return true;
         }
 
+        if (walletKey) {
+          if (walletKey.isLedgerNano && chain.isEthermintLike) {
+            return true;
+          }
+        }
+
         for (const registeredChain of registeredChainList) {
           if (
             chain.prefix === registeredChain.bech32_prefix &&
@@ -214,6 +220,8 @@ export default function VerificationPage() {
           );
 
           setRegisteredChainList(addressesQueryResponse.data.addresses);
+        } else {
+          setRegisteredChainList([]);
         }
       } catch (error) {
         if (error instanceof Error) {
