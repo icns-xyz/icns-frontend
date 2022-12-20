@@ -26,7 +26,7 @@ export const INVALID_REFERRAL_MESSAGE =
 
 export const TOO_MANY_CHAINS_IN_LEDGER_ERROR = "Output buffer too small";
 export const TOO_MANY_CHAINS_IN_LEDGER_MESSAGE =
-  "Maximum 20 chains can be linked at a time on Ledger hardware wallet. Unselect some chains and try again.";
+  "Due to hardware constraints, limited number of chains can be linked at a time(1-2 on Ledger Nano S / 25 on Ledger Nano S+/X). Please select less chains and try again.";
 
 export const EVM_CHAIN_IN_LEDGER_ERROR = "Ledger is unsupported for this chain";
 export const EVM_CHAIN_IN_LEDGER_MESSAGE =
