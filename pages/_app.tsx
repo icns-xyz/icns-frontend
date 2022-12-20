@@ -70,10 +70,10 @@ export default function App({ Component, pageProps }: AppProps) {
         />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta
-          content={`${origin}/images/og-image.webp`}
+          content={`${origin}/images/og-image.jpg`}
           property="twitter:image"
         />
-        <meta content={`${origin}/images/og-image.webp`} property="og:image" />
+        <meta content={`${origin}/images/og-image.jpg`} property="og:image" />
         <meta content="summary_large_image" name="twitter:card" />
         <meta property="og:type" content="website" />
 
