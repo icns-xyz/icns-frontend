@@ -15,7 +15,8 @@ import { TendermintTxTracer } from "@keplr-wallet/cosmos";
 import { queryAddressesFromTwitterName } from "../../queries";
 import { RegisteredAddresses } from "../../types";
 import { SHARE_URL } from "../../constants/twitter";
-import { RPC_URL } from "../../constants/icns";
+import { REST_URL, RPC_URL } from "../../constants/icns";
+import { fetch_retry } from "../../utils/url";
 
 export default function CompletePage() {
   const router = useRouter();
@@ -35,14 +36,12 @@ export default function CompletePage() {
   }, [router.query]);
 
   const initialize = async (txHash: string, twitterUserName: string) => {
-    const txTracer = new TendermintTxTracer(RPC_URL, "/websocket");
-
     try {
-      const result: { code?: number } = await txTracer.traceTx(
-        Buffer.from(txHash, "hex"),
-      );
+      const response = await (
+        await fetch_retry(`${REST_URL}/cosmos/tx/v1beta1/txs/${txHash}`, 12)
+      ).json();
 
-      if (!result.code || result.code === 0) {
+      if (response.code || response.tx_response.code === 0) {
         amplitude.track("complete registration");
 
         const addresses = await queryAddressesFromTwitterName(twitterUserName);

@@ -370,6 +370,11 @@ export default function VerificationPage() {
           twitterInfo.accessToken,
         );
 
+        await verifyTwitterAccount(
+          walletKey.bech32Address,
+          twitterInfo.accessToken,
+        );
+
         icnsVerificationList.forEach((verification) => {
           if (verification.status === "fulfilled") {
             if (verification.value.errors.length > 0) {

@@ -21,6 +21,19 @@ export function request<TResponse>(
     .then((data) => data as TResponse);
 }
 
+export const fetch_retry = async (
+  url: string,
+  n: number,
+  options?: RequestInit,
+): Promise<Response> => {
+  try {
+    return await fetch(url, options);
+  } catch (err) {
+    if (n === 1) throw err;
+    return await fetch_retry(url, n - 1, options);
+  }
+};
+
 export function buildQueryString(query: Record<string, any>): string {
   return Object.entries(query)
     .map(([key, value]) =>
