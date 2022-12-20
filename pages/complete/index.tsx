@@ -120,7 +120,7 @@ export default function CompletePage() {
             width={28}
             height={28}
           />
-          <ShareButtonText>SHARE MY NAME</ShareButtonText>
+          <ShareButtonText>INVITE FRIENDS</ShareButtonText>
         </ShareButtonContainer>
       </MainContainer>
     </Container>
