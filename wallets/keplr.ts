@@ -53,7 +53,9 @@ export class KeplrWallet implements Wallet {
       return chainInfos.map((chainInfo) => {
         return {
           ...chainInfo,
-          isEthermintLike: chainInfo.features?.includes("eth-address-gen"),
+          isEthermintLike:
+            chainInfo.features?.includes("eth-address-gen") ||
+            chainInfo.features?.includes("eth-key-sign"),
         };
       });
     });
