@@ -59,9 +59,8 @@ import Axios from "axios";
 import { BackButton } from "../../components/back-button";
 import { FinalCheckModal } from "../../components/final-check-modal";
 import { ErrorModal } from "../../components/error-modal";
-import * as process from "process";
 
-export default function VerificationPage(props: { blockList: string[] }) {
+export default function VerificationPage() {
   const router = useRouter();
   const [twitterAuthInfo, setTwitterAuthInfo] = useState<TwitterProfileType>();
 
@@ -240,15 +239,33 @@ export default function VerificationPage(props: { blockList: string[] }) {
   };
 
   const fetchChainList = async (wallet: KeplrWallet) => {
-    const chainIds = (await wallet.getChainInfosWithoutEndpoints()).map(
-      (c) => c.chainId,
-    );
-    const chainKeys = await Promise.allSettled(
-      chainIds.map((chainId) => wallet.getKey(chainId)),
-    );
+    const needAllowList =
+      process.env.NEXT_PUBLIC_CHAIN_ALLOWLIST != null &&
+      process.env.NEXT_PUBLIC_CHAIN_ALLOWLIST.trim().length !== 0;
+    const chainAllowList = (process.env.NEXT_PUBLIC_CHAIN_ALLOWLIST || "")
+      .split(",")
+      .map((str) => str.trim())
+      .filter((str) => str.length > 0)
+      .map((str) => ChainIdHelper.parse(str).identifier);
 
-    const chainInfos = (await wallet.getChainInfosWithoutEndpoints()).map(
-      (chainInfo) => {
+    const chainAllowListMap = new Map<string, true | undefined>();
+    for (const allow of chainAllowList) {
+      chainAllowListMap.set(allow, true);
+    }
+
+    const chainInfos = (await wallet.getChainInfosWithoutEndpoints())
+      .filter((chainInfo) => {
+        if (!needAllowList) {
+          return true;
+        }
+
+        const chainIdentifier = ChainIdHelper.parse(
+          chainInfo.chainId,
+        ).identifier;
+
+        return chainAllowListMap.get(chainIdentifier) === true;
+      })
+      .map((chainInfo) => {
         return {
           chainId: chainInfo.chainId,
           chainName: chainInfo.chainName,
@@ -258,15 +275,15 @@ export default function VerificationPage(props: { blockList: string[] }) {
           }/chain.png`,
           isEthermintLike: chainInfo.isEthermintLike,
         };
-      },
+      });
+
+    const chainIds = chainInfos.map((c) => c.chainId);
+    const chainKeys = await Promise.allSettled(
+      chainIds.map((chainId) => wallet.getKey(chainId)),
     );
 
     const chainArray = [];
     for (let i = 0; i < chainKeys.length; i++) {
-      if (props.blockList.includes(chainInfos[i].prefix)) {
-        continue;
-      }
-
       const chainKey = chainKeys[i];
       if (chainKey.status !== "fulfilled") {
         console.log("Failed to get key from wallet", chainKey);
@@ -520,15 +537,6 @@ export default function VerificationPage(props: { blockList: string[] }) {
       />
     </Container>
   );
-}
-
-export async function getStaticProps() {
-  let blockList: string[] = [];
-  if (process.env.NEXT_PUBLIC_BLOCK_LIST) {
-    blockList = process.env.NEXT_PUBLIC_BLOCK_LIST.trim().split(",");
-  }
-
-  return { props: { blockList } };
 }
 
 const Container = styled.div`
