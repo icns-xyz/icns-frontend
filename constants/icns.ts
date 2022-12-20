@@ -81,4 +81,6 @@ export const CHAIN_ALLOWLIST =
     "tgrade-mainnet-1",
     "umee-1",
     "vidulum-1",
+    "evmos_9001-2",
+    "injective-1",
   ].join(",");
