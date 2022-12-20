@@ -74,7 +74,8 @@ export const BeforeYouStartModal: FunctionComponent<Props> = (props) => {
             </SubTextListItem>
             <br />
             <SubTextListItem>
-              ICNS name can only be claimed once per Twitter account.
+              ICNS names could permanently link your Twitter identity to your
+              crypto wallet, recorded on the blockchain.
             </SubTextListItem>
           </SubTextList>
         </SubTextsContainer>
