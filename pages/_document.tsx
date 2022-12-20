@@ -69,11 +69,14 @@ class MyDocument extends Document {
             content="initial-scale=1.0, width=device-width"
           />
           <meta
-            content={`${origin}/images/og-image.jpg`}
+            content={`https://app.icns.xyz/images/og-image.jpg`}
             name="twitter:image"
           />
           <meta content={`ICNS image`} name="twitter:image:alt" />
-          <meta content={`${origin}/images/og-image.jpg`} property="og:image" />
+          <meta
+            content={`https://app.icns.xyz/images/og-image.jpg`}
+            property="og:image"
+          />
           <meta content="summary_large_image" name="twitter:card" />
           <meta property="og:type" content="website" />
 
