@@ -68,6 +68,7 @@ import Axios from "axios";
 import { BackButton } from "../../components/back-button";
 import { FinalCheckModal } from "../../components/final-check-modal";
 import { ErrorModal } from "../../components/error-modal";
+import { captureException } from "@sentry/nextjs";
 
 export default function VerificationPage() {
   const router = useRouter();
@@ -462,6 +463,7 @@ export default function VerificationPage() {
           return;
         }
 
+        captureException(error);
         setErrorMessage({
           message: (error?.response?.data as QueryError).message,
         });
@@ -471,6 +473,7 @@ export default function VerificationPage() {
 
       if (error instanceof Error) {
         console.log(error.message);
+        captureException(error);
 
         setErrorMessage({ message: error.message });
         setErrorModalOpen(true);
