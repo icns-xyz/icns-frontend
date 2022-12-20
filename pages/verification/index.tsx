@@ -497,10 +497,10 @@ export default function VerificationPage() {
           return;
         }
 
-        const errorMessage = error.message || error;
+        const errorMessage = (error?.response?.data as QueryError).message;
         captureException(errorMessage);
         setErrorMessage({
-          message: (error?.response?.data as QueryError).message,
+          message: errorMessage,
         });
         setErrorModalOpen(true);
         return;
