@@ -8,7 +8,7 @@ import { Logo } from "../../components/logo";
 import color from "../../styles/color";
 
 import AlertCircleOutlineIcon from "../../public/images/svg/alert-circle-outline.svg";
-import TwitterIcon from "../../public/images/svg/twitter-icon.svg";
+
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { TendermintTxTracer } from "@keplr-wallet/cosmos";
@@ -64,7 +64,7 @@ export default function CompletePage() {
     const width = 500;
     const height = 700;
     window.open(
-      `${SHARE_URL}?url=https://app.icns.xyz?referral=${twitterUsername}/&text=${shareMessage}`,
+      `${SHARE_URL}?url=https://app.icns.xyz?referral=${twitterUsername}&text=${shareMessage}`,
       "Share Twitter",
       `top=${(window.screen.height - height) / 2}, left=${
         (window.screen.width - width) / 2
@@ -123,10 +123,15 @@ export default function CompletePage() {
           </DescriptionText>
         </DescriptionContainer>
 
-        {/*<ShareButtonContainer onClick={onClickShareButton}>*/}
-        {/*  <ShareButtonText>Tweet Invite Link</ShareButtonText>*/}
-        {/* <TwitterIcon /> */}
-        {/*</ShareButtonContainer>*/}
+        <ShareButtonContainer onClick={onClickShareButton}>
+          <Image
+            src="/images/icons/twitter-small.png"
+            alt="twitter icon"
+            width={28}
+            height={28}
+          />
+          <ShareButtonText>SHARE MY NAME</ShareButtonText>
+        </ShareButtonContainer>
       </MainContainer>
     </Container>
   );
@@ -147,10 +152,14 @@ const MainContainer = styled.div`
   color: white;
 `;
 
-const ContentContainer = styled.div`
-  width: 30rem;
+const MainTitle = styled.h1`
+  text-overflow: ;
+`;
 
-  padding: 2.625rem 4rem;
+const ContentContainer = styled.div`
+  width: 31rem;
+
+  padding: 2.625rem 3rem;
 
   background-color: ${color.grey["900"]};
 `;
@@ -175,6 +184,7 @@ const TitleContainer = styled.div`
 const RecipentContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin: 0 1rem;
   gap: 0.5rem;
 `;
 
@@ -221,7 +231,7 @@ const DescriptionContainer = styled.div`
 
   gap: 1rem;
 
-  width: 30rem;
+  width: 31rem;
 
   margin-top: 1.5rem;
   padding: 1.25rem 2rem;
@@ -252,8 +262,8 @@ const SpinnerWrapper = styled.div`
   display: flex;
   position: relative;
 
-  width: 2rem;
-  height: 2rem;
+  width: 28px;
+  height: 28px;
 `;
 
 const spinAnimation = keyframes`
@@ -274,13 +284,13 @@ const Spinner = styled.div<{ animationDelay?: string }>`
   width: 100%;
   height: 100%;
 
-  animation: ${spinAnimation} 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  animation: ${spinAnimation} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   ${({ animationDelay }) =>
     animationDelay ? `animation-delay: ${animationDelay};` : ""}
 
   border-radius: 100%;
   border-style: solid;
-  border-width: 3px;
+  border-width: 5px;
   border-color: white transparent transparent transparent;
 `;
 
@@ -294,7 +304,7 @@ const ShareButtonContainer = styled.div`
   width: 20rem;
   height: 5rem;
 
-  margin-top: 2.5rem;
+  margin-top: 0.75rem;
 
   cursor: pointer;
   user-select: none;
@@ -308,6 +318,7 @@ const ShareButtonText = styled.div`
   font-weight: 700;
   font-size: 1.25rem;
   line-height: 1.25rem;
+  letter-spacing: 0.07em;
 
   color: ${color.grey["100"]};
 `;
