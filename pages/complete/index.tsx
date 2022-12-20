@@ -11,11 +11,10 @@ import AlertCircleOutlineIcon from "../../public/images/svg/alert-circle-outline
 
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { TendermintTxTracer } from "@keplr-wallet/cosmos";
 import { queryAddressesFromTwitterName } from "../../queries";
 import { RegisteredAddresses } from "../../types";
 import { SHARE_URL } from "../../constants/twitter";
-import { RPC_URL } from "../../constants/icns";
+import { REST_URL, RPC_URL } from "../../constants/icns";
 
 export default function CompletePage() {
   const router = useRouter();
@@ -35,19 +34,33 @@ export default function CompletePage() {
   }, [router.query]);
 
   const initialize = async (txHash: string, twitterUserName: string) => {
-    const txTracer = new TendermintTxTracer(RPC_URL, "/websocket");
-
     try {
-      const result: { code?: number } = await txTracer.traceTx(
-        Buffer.from(txHash, "hex"),
-      );
+      for (let i = 0; i < 20; i++) {
+        // Try to fetch tx response per 3sec, 20times.
+        await new Promise((resolve) => setTimeout(resolve, 3000));
 
-      if (!result.code || result.code === 0) {
-        amplitude.track("complete registration");
+        const res = await fetch(`${REST_URL}/cosmos/tx/v1beta1/txs/${txHash}`);
 
-        const addresses = await queryAddressesFromTwitterName(twitterUserName);
-        setRegisteredAddressed(addresses.data.addresses);
-        setIsSuccess(true);
+        if (res.ok && res.status === 200) {
+          const txRes = await res.json();
+
+          if (txRes && txRes.tx_response) {
+            if (
+              txRes.tx_response.code == null ||
+              txRes.tx_response.code === 0
+            ) {
+              amplitude.track("complete registration");
+
+              const addresses = await queryAddressesFromTwitterName(
+                twitterUserName,
+              );
+              setRegisteredAddressed(addresses.data.addresses);
+              setIsSuccess(true);
+
+              break;
+            }
+          }
+        }
       }
     } catch (e) {
       console.log("error", e);
