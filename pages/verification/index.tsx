@@ -56,6 +56,8 @@ import {
   ACCOUNT_NOT_EXIST_MESSAGE,
   INSUFFICIENT_GAS_ERROR,
   INSUFFICIENT_GAS_MESSAGE,
+  INVALID_REFERRAL_ERROR,
+  INVALID_REFERRAL_MESSAGE,
   KEPLR_NOT_FOUND_ERROR,
   TWITTER_LOGIN_ERROR,
   VERIFICATION_THRESHOLD_ERROR,
@@ -454,6 +456,12 @@ export default function VerificationPage() {
           return;
         }
 
+        if (message.includes(INVALID_REFERRAL_ERROR)) {
+          setErrorMessage({ message: INVALID_REFERRAL_MESSAGE });
+          setErrorModalOpen(true);
+          return;
+        }
+
         setErrorMessage({
           message: (error?.response?.data as QueryError).message,
         });
@@ -528,8 +536,10 @@ export default function VerificationPage() {
               <OwnerAlert>
                 You are not owner of this name.
                 <br />
-                Please select the account (
-                {Bech32Address.shortenAddress(nftOwnerAddress, 28)})
+                Please select the account{" "}
+                <AddressBold>
+                  ({Bech32Address.shortenAddress(nftOwnerAddress, 28)})
+                </AddressBold>
               </OwnerAlert>
             ) : null}
 
@@ -638,4 +648,8 @@ const OwnerAlert = styled.div`
   color: ${color.grey["400"]};
 
   padding-top: 1.25rem;
+`;
+
+const AddressBold = styled.span`
+  color: ${color.white};
 `;
