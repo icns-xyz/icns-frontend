@@ -416,6 +416,8 @@ export default function VerificationPage() {
           rest: REST_URL,
         };
 
+        console.log(aminoMsgs);
+
         const simulated = await simulateMsgs(
           chainInfo,
           walletKey.bech32Address,
