@@ -5,15 +5,10 @@
 import * as Sentry from "@sentry/nextjs";
 
 const SENTRY_DSN = process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN;
-const IS_ENABLE_USER_TRACKING =
-  process.env.NEXT_PUBLIC_IS_ENABLE_USER_TRACKING ||
-  process.env.NEXT_IS_ENABLE_USER_TRACKING;
 
 Sentry.init({
-  enabled: IS_ENABLE_USER_TRACKING === "true",
-  dsn:
-    SENTRY_DSN ||
-    "https://78c91641e90f4f7cad28f50aaec9fb95@o4504343701946368.ingest.sentry.io/4504343708827648",
+  enabled: !!SENTRY_DSN,
+  dsn: SENTRY_DSN,
   // Adjust this value in production, or use tracesSampler for greater control
   tracesSampleRate: 1.0,
   // ...

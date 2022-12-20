@@ -29,7 +29,7 @@ export const queryRegisteredTwitterId = async (
       Buffer.from(JSON.stringify(msg)).toString("base64"),
     ),
     {},
-    true,
+    { isErrorIgnore: true },
   );
 };
 
@@ -61,6 +61,6 @@ export const queryOwnerOfTwitterName = async (
       Buffer.from(JSON.stringify(msg)).toString("base64"),
     ),
     {},
-    true,
+    { isErrorIgnore: true },
   );
 };

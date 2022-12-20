@@ -5,11 +5,13 @@ import { WALLET_INSTALL_URL } from "../constants/wallet";
 export function request<TResponse>(
   url: string,
   config: RequestInit = {},
-  isIgnore?: boolean,
+  customConfig?: {
+    isErrorIgnore?: boolean;
+  },
 ): Promise<TResponse> {
   return fetch(url, config)
     .then((response) => {
-      if (!response.ok && !isIgnore) {
+      if (!response.ok && !customConfig?.isErrorIgnore) {
         throw new Error(
           `This is an HTTP error: The status is ${response.status} ${response.statusText}`,
         );
