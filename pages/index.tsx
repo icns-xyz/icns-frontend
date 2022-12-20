@@ -81,11 +81,18 @@ export default function Home() {
           <SubContainer>
             <CheckContainer>
               <CheckIcon />
-              Osmo is required for this transaction
+              0.5+ Osmo is required for this transaction{" "}
+              <a
+                href="https://app.osmosis.zone"
+                target="_blank"
+                rel="noreferrer"
+              >
+                GET OSMO
+              </a>
             </CheckContainer>
             <CheckContainer>
               <CheckIcon />
-              More wallet support coming soon
+              Make sure you have a Cosmos wallet installed
             </CheckContainer>
           </SubContainer>
         </MainTitleContainer>
@@ -246,4 +253,8 @@ const CheckContainer = styled.div`
   padding-left: 0.75rem;
 
   color: ${color.grey["400"]};
+
+  a {
+    color: ${color.grey["400"]};
+  }
 `;
