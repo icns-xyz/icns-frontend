@@ -16,7 +16,6 @@ import {
   WalletType,
 } from "../../constants/wallet";
 import { getKeplrFromWindow, KeplrWallet } from "../../wallets";
-import { loginWithTwitter } from "../../queries";
 import {
   KEPLR_NO_ACCOUNT_ERROR,
   KEPLR_NO_ACCOUNT_MESSAGE,
@@ -30,10 +29,20 @@ interface Props {
   wallet: WalletType;
   setErrorMessage: Dispatch<SetStateAction<ErrorMessage | undefined>>;
   setErrorModalOpen: Dispatch<SetStateAction<boolean>>;
+  setBeforeYouStartModalOpen: Dispatch<SetStateAction<boolean>>;
+  setWalletKeyName: Dispatch<SetStateAction<string>>;
+  setSelectedWalletItem: Dispatch<SetStateAction<WalletType | undefined>>;
 }
 
 export const WalletItem: FunctionComponent<Props> = (props: Props) => {
-  const { wallet, setErrorModalOpen, setErrorMessage } = props;
+  const {
+    wallet,
+    setErrorModalOpen,
+    setErrorMessage,
+    setBeforeYouStartModalOpen,
+    setWalletKeyName,
+    setSelectedWalletItem,
+  } = props;
   const [isInstalled, setIsInstalled] = useState<boolean>();
 
   useEffect(() => {
@@ -41,13 +50,14 @@ export const WalletItem: FunctionComponent<Props> = (props: Props) => {
   }, []);
 
   const onClickWalletItem = async () => {
+    setSelectedWalletItem(wallet);
     try {
       if (wallet.name === "Keplr") {
         await connectKeplr();
         localStorage.setItem(SELECTED_WALLET_KEY, wallet.name);
       }
 
-      await loginWithTwitter();
+      setBeforeYouStartModalOpen(true);
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
@@ -78,11 +88,14 @@ export const WalletItem: FunctionComponent<Props> = (props: Props) => {
 
     if (keplr) {
       const wallet = new KeplrWallet(keplr);
+
       const chainIds = (await wallet.getChainInfosWithoutEndpoints()).map(
         (c) => c.chainId,
       );
 
       await wallet.init(chainIds);
+      const walletKey = await wallet.getKey(chainIds[0]);
+      setWalletKeyName(walletKey.name);
     }
   };
 

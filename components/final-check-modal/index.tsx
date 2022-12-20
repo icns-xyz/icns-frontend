@@ -69,7 +69,7 @@ export const FinalCheckModal: FunctionComponent<Props> = (props) => {
             />
           }
           title="Your Twitter Handle"
-          content={`${twitterUserName}`}
+          content={`@${twitterUserName}`}
         />
         <div
           style={{
@@ -108,8 +108,8 @@ export const FinalCheckModal: FunctionComponent<Props> = (props) => {
               }}
             />
           }
-          title="Keplr account"
-          content={walletInfo?.name || "Keplr account"}
+          title="Keplr Account"
+          content={walletInfo?.name || "Keplr Account"}
           contentTooltip={{
             id: "address-tooltip",
             content: walletInfo?.bech32Address || "",
@@ -127,6 +127,9 @@ export const FinalCheckModal: FunctionComponent<Props> = (props) => {
             </SubTextListItem>
             <SubTextListItem>
               Please make sure you’ve selected the right account on your wallet.
+            </SubTextListItem>
+            <SubTextListItem>
+              This is an irreversible onchain trasaction.
             </SubTextListItem>
           </SubTextList>
           <SubText>

@@ -19,12 +19,15 @@ import MainLogo from "../public/images/svg/main-logo.svg";
 import MainTitle from "../public/images/svg/main-title.svg";
 
 export default function Home() {
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [currentReferral, setCurrentReferral] = useState("");
+
+  const [isConnectWalletModalOpen, setIsConnectWalletModalOpen] =
+    useState(false);
 
   const onClickConnectWalletButton = async () => {
     amplitude.track("click connect wallet button");
 
-    setModalOpen(true);
+    setIsConnectWalletModalOpen(true);
   };
 
   useEffect(() => {
@@ -36,6 +39,7 @@ export default function Home() {
 
       if (referral) {
         localStorage.setItem(REFERRAL_KEY, referral);
+        setCurrentReferral(referral);
       }
     }
 
@@ -92,8 +96,9 @@ export default function Home() {
       </MainContainer>
 
       <ConnectWalletModal
-        isModalOpen={isModalOpen}
-        onCloseModal={() => setModalOpen(false)}
+        isModalOpen={isConnectWalletModalOpen}
+        onCloseModal={() => setIsConnectWalletModalOpen(false)}
+        currentReferal={currentReferral}
       />
     </Container>
   );
