@@ -61,6 +61,7 @@ import {
   INVALID_REFERRAL_ERROR,
   INVALID_REFERRAL_MESSAGE,
   KEPLR_NOT_FOUND_ERROR,
+  LEDGER_MAX_REGISTER_ERROR,
   TOO_MANY_CHAINS_IN_LEDGER_ERROR,
   TOO_MANY_CHAINS_IN_LEDGER_MESSAGE,
   TWITTER_LOGIN_ERROR,
@@ -510,7 +511,10 @@ export default function VerificationPage() {
         console.log(errorMessage);
         captureException(errorMessage);
 
-        if (error.message.includes(TOO_MANY_CHAINS_IN_LEDGER_ERROR)) {
+        if (
+          error.message.includes(TOO_MANY_CHAINS_IN_LEDGER_ERROR) ||
+          error.message.includes(LEDGER_MAX_REGISTER_ERROR)
+        ) {
           setErrorMessage({ message: TOO_MANY_CHAINS_IN_LEDGER_MESSAGE });
           setErrorModalOpen(true);
           return;
