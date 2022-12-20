@@ -24,6 +24,7 @@ import {
 } from "../../constants/error-message";
 import semver from "semver/preload";
 import { ErrorMessage } from "../../types";
+import { MAIN_CHAIN_ID } from "../../constants/icns";
 
 interface Props {
   wallet: WalletType;
@@ -94,8 +95,16 @@ export const WalletItem: FunctionComponent<Props> = (props: Props) => {
       );
 
       await wallet.init(chainIds);
-      const walletKey = await wallet.getKey(chainIds[0]);
+      const walletKey = await wallet.getKey(MAIN_CHAIN_ID);
       setWalletKeyName(walletKey.name);
+
+      // FIXME: Probably able to make memory leak.
+      //        setWalletKeyName should be persistent, so it is fine for now.
+      //        We should remove event listener well.
+      window.addEventListener("keplr_keystorechange", async () => {
+        const walletKey = await wallet.getKey(MAIN_CHAIN_ID);
+        setWalletKeyName(walletKey.name);
+      });
     }
   };
 
