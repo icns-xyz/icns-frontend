@@ -41,7 +41,6 @@ const sentryWebpackPluginOptions = {
   silent: true,
 };
 
-module.exports =
-  process.env.NEXT_IS_ENABLE_USER_TRACKING === "true"
-    ? withSentryConfig(nextConfig, sentryWebpackPluginOptions)
-    : nextConfig;
+module.exports = !!process.env.NEXT_PUBLIC_SENTRY_DSN
+  ? withSentryConfig(nextConfig, sentryWebpackPluginOptions)
+  : nextConfig;
