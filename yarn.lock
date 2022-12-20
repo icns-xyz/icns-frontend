@@ -1588,6 +1588,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@floating-ui/core@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "@floating-ui/core@npm:1.0.4"
+  checksum: 6362a625ad0dba7cfd197fc4b6f620eed95147d38684d7347287569897098862c6ba1173f3758d76d22e7739112c57dc836a569c582e78f5807c26ef41df4989
+  languageName: node
+  linkType: hard
+
+"@floating-ui/dom@npm:^1.0.4":
+  version: 1.0.12
+  resolution: "@floating-ui/dom@npm:1.0.12"
+  dependencies:
+    "@floating-ui/core": ^1.0.4
+  checksum: fbcdec5fb8d096a65da346e76fc6c8f2e4db3c9c70b06dea17321c775bc125ae0b02450a8b195a224b8edf9acba205b607f6d638bda78a2ca1b2ec92fa15b784
+  languageName: node
+  linkType: hard
+
 "@gar/promisify@npm:^1.1.3":
   version: 1.1.3
   resolution: "@gar/promisify@npm:1.1.3"
@@ -3559,6 +3575,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"classnames@npm:^2.3.2":
+  version: 2.3.2
+  resolution: "classnames@npm:2.3.2"
+  checksum: 2c62199789618d95545c872787137262e741f9db13328e216b093eea91c85ef2bfb152c1f9e63027204e2559a006a92eb74147d46c800a9f96297ae1d9f96f4e
+  languageName: node
+  linkType: hard
+
 "clean-regexp@npm:^1.0.0":
   version: 1.0.0
   resolution: "clean-regexp@npm:1.0.0"
@@ -5202,6 +5225,7 @@ __metadata:
     react-dom: 18.2.0
     react-is: ^18.2.0
     react-modal: ^3.16.1
+    react-tooltip: ^5.2.0
     react-typed: ^1.2.0
     semver: ^7.3.8
     styled-components: ^5.3.6
@@ -6862,6 +6886,19 @@ __metadata:
     react: ^0.14.0 || ^15.0.0 || ^16 || ^17 || ^18
     react-dom: ^0.14.0 || ^15.0.0 || ^16 || ^17 || ^18
   checksum: 978936e9320fad839c039b9ee4de55d40888156cb40e093615d6fbc2ff07139d5db06f14782cb7767f780bd5fb57956778669426c535ebc0068a7a03882c7e75
+  languageName: node
+  linkType: hard
+
+"react-tooltip@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "react-tooltip@npm:5.2.0"
+  dependencies:
+    "@floating-ui/dom": ^1.0.4
+    classnames: ^2.3.2
+  peerDependencies:
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: 452e0e7330a987819415a6ec354fea5a7d1eae31ed9c81eedc7016e4d0aebd82815262eaed1957fa5eb316dda4bbabba3bf6869740fa47406debfb560cd463e1
   languageName: node
   linkType: hard
 

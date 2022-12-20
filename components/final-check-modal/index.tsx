@@ -1,4 +1,3 @@
-import { Bech32Address } from "@keplr-wallet/cosmos";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { FunctionComponent } from "react";
@@ -8,6 +7,7 @@ import { MINIMUM_OSMO_FEE } from "../../constants/wallet";
 import color from "../../styles/color";
 import { PrimaryButton } from "../primary-button";
 import { SecondaryButton } from "../secondary-button";
+import { Tooltip } from "react-tooltip";
 
 interface Props {
   twitterUserName: string | undefined;
@@ -108,11 +108,12 @@ export const FinalCheckModal: FunctionComponent<Props> = (props) => {
               }}
             />
           }
-          title={walletInfo?.name || "Keplr account"}
-          content={Bech32Address.shortenAddress(
-            walletInfo?.bech32Address || "",
-            28,
-          )}
+          title="Keplr account"
+          content={walletInfo?.name || "Keplr account"}
+          contentTooltip={{
+            id: "address-tooltip",
+            content: walletInfo?.bech32Address || "",
+          }}
         />
 
         <SubTextsContainer>
@@ -238,10 +239,15 @@ const NameBox: FunctionComponent<{
   title: string;
   content: string;
 
+  contentTooltip?: {
+    id: string;
+    content: string;
+  };
+
   icon?: React.ReactElement;
 
   marginTop: string;
-}> = ({ icon, title, content, marginTop }) => {
+}> = ({ icon, title, content, contentTooltip, marginTop }) => {
   return (
     <NameBoxContainer
       style={{
@@ -252,7 +258,32 @@ const NameBox: FunctionComponent<{
         {icon ? <NameBoxIconContainer>{icon}</NameBoxIconContainer> : null}
         <NameBoxTitle>{title}</NameBoxTitle>
       </NameBoxTitleContainer>
-      <NameBoxContentContainer>{content}</NameBoxContentContainer>
+      <NameBoxContentContainer
+        style={{
+          textDecoration: contentTooltip ? "underline" : undefined,
+        }}
+      >
+        <div
+          id={contentTooltip?.id}
+          data-tooltip-content={contentTooltip?.content}
+          data-tooltip-place="top"
+        >
+          {content}
+        </div>
+        {contentTooltip ? (
+          <Tooltip
+            anchorId={contentTooltip.id}
+            style={{
+              backgroundColor: color.grey["400"],
+              color: color.white,
+              fontStyle: "normal",
+              fontWeight: 400,
+              fontSize: "14px",
+              lineHeight: "17px",
+            }}
+          />
+        ) : null}
+      </NameBoxContentContainer>
     </NameBoxContainer>
   );
 };

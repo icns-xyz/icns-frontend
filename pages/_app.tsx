@@ -9,6 +9,9 @@ import color from "../styles/color";
 
 import { GlobalStyle } from "../styles/global";
 
+// Tooltip default style.
+import "react-tooltip/dist/react-tooltip.css";
+
 const homePageTheme: DefaultTheme = {
   bgColor: color.black,
   bgGridColor: color.grey["600"],
