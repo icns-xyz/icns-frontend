@@ -7,3 +7,15 @@ export const KEPLR_VERSION_ERROR = "You should update keplr";
 export const KEPLR_NO_ACCOUNT_ERROR = "key doesn't exist";
 export const KEPLR_NO_ACCOUNT_MESSAGE =
   "Create a wallet account to get started with ICNS!";
+
+export const INSUFFICIENT_GAS_ERROR = "insufficient funds: invalid request";
+export const INSUFFICIENT_GAS_MESSAGE =
+  "Not enough OSMO in your account. Please add more OSMO to your account";
+
+export const ACCOUNT_NOT_EXIST_ERROR = "does not exist: unknown address";
+export const ACCOUNT_NOT_EXIST_MESSAGE =
+  "Account has not been registered on chain. Please add some OSMO to your account and try again.";
+
+export const VERIFICATION_THRESHOLD_ERROR = "verfication is below threshold:";
+export const VERIFICATION_THRESHOLD_MESSAGE =
+  "Verifier consensus failed. Verifiers may be offline. Please try again later.";
