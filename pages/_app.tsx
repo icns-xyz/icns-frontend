@@ -59,7 +59,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>Interchain Name Service</title>
         <meta content="Interchain Name Service" property="og:title" />
-        <meta content="Interchain Name Service" property="twitter:title" />
+        <meta content="Interchain Name Service" name="twitter:title" />
         <meta
           content="Your identity for the Interchain. Claim yours today."
           property="og:description"
@@ -69,10 +69,8 @@ export default function App({ Component, pageProps }: AppProps) {
           property="twitter:description"
         />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta
-          content={`${origin}/images/og-image.jpg`}
-          property="twitter:image"
-        />
+        <meta content={`${origin}/images/og-image.jpg`} name="twitter:image" />
+        <meta content={`ICNS image`} name="twitter:image:alt" />
         <meta content={`${origin}/images/og-image.jpg`} property="og:image" />
         <meta content="summary_large_image" name="twitter:card" />
         <meta property="og:type" content="website" />
