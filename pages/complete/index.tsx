@@ -111,6 +111,15 @@ export default function CompletePage() {
             </AddressContainer>
             <AvailableAddressText>{availableAddress}</AvailableAddressText>
           </RecipentContainer>
+          <SubLeaderboardIntroContainer>
+            <SubLeaderboardIntroTitle>
+              Make your way up the leaderboard
+            </SubLeaderboardIntroTitle>
+            <SubLeaderboardIntroDescription>
+              Tweet an invite link and both you and your friend will earn points
+              on the ICNS leaderboard.
+            </SubLeaderboardIntroDescription>
+          </SubLeaderboardIntroContainer>
         </ContentContainer>
 
         <ShareButtonContainer onClick={onClickShareButton}>
@@ -120,8 +129,100 @@ export default function CompletePage() {
             width={28}
             height={28}
           />
-          <ShareButtonText>INVITE FRIENDS</ShareButtonText>
+          <ShareButtonText>TWEET INVITE LINK</ShareButtonText>
         </ShareButtonContainer>
+        <CopyInviteLink
+          onClick={(e) => {
+            e.preventDefault();
+
+            const { twitterUsername } = router.query;
+
+            navigator.clipboard.writeText(
+              `https://app.icns.xyz?referral=${twitterUsername}`,
+            );
+          }}
+        >
+          copy invite link
+          <svg
+            style={{
+              marginLeft: "4px",
+            }}
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="none"
+            viewBox="0 0 16 16"
+          >
+            <path
+              strokeLinecap="square"
+              strokeWidth="1.5"
+              d="M10.667 2.667h-8v8"
+            />
+            <path
+              strokeLinecap="square"
+              strokeWidth="1.5"
+              d="M5.417 5.417H13.25V13.25H5.417z"
+            />
+          </svg>
+        </CopyInviteLink>
+        <ComingSoonLeaderboardContainer>
+          <RotateSvg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="26"
+            fill="none"
+            viewBox="0 0 28 26"
+          >
+            <path
+              fill="#424242"
+              d="M0.473 1.852H26.823999999999998V3.8790000000000004H0.473z"
+            />
+            <path
+              fill="#6F6F6F"
+              d="M0.473 22.122H26.823999999999998V24.149H0.473z"
+            />
+            <path
+              fill="#424242"
+              d="M13.986 12.662l11.703 9.629H2.283l11.703-9.629z"
+            />
+            <path
+              fill="#6F6F6F"
+              d="M13.986 12.662L2.284 3.54H25.69l-11.703 9.122z"
+            />
+          </RotateSvg>
+          <ComingSoonLeaderboardContent>
+            <ComingSoonLeaderboardContent1>
+              Coming soon
+            </ComingSoonLeaderboardContent1>
+            <ComingSoonLeaderboardContent2>
+              Leaderboard
+            </ComingSoonLeaderboardContent2>
+          </ComingSoonLeaderboardContent>
+          <RotateSvg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="26"
+            fill="none"
+            viewBox="0 0 28 26"
+          >
+            <path
+              fill="#424242"
+              d="M0.473 1.852H26.823999999999998V3.8790000000000004H0.473z"
+            />
+            <path
+              fill="#6F6F6F"
+              d="M0.473 22.122H26.823999999999998V24.149H0.473z"
+            />
+            <path
+              fill="#424242"
+              d="M13.986 12.662l11.703 9.629H2.283l11.703-9.629z"
+            />
+            <path
+              fill="#6F6F6F"
+              d="M13.986 12.662L2.284 3.54H25.69l-11.703 9.122z"
+            />
+          </RotateSvg>
+        </ComingSoonLeaderboardContainer>
       </MainContainer>
     </Container>
   );
@@ -142,14 +243,10 @@ const MainContainer = styled.div`
   color: white;
 `;
 
-const MainTitle = styled.h1`
-  text-overflow: ;
-`;
-
 const ContentContainer = styled.div`
   width: 31rem;
 
-  padding: 2.625rem 3rem;
+  padding: 2.625rem 0;
 
   background-color: ${color.grey["900"]};
 `;
@@ -174,7 +271,7 @@ const TitleContainer = styled.div`
 const RecipentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 1rem;
+  margin: 0 4rem;
   gap: 0.5rem;
 `;
 
@@ -186,6 +283,33 @@ const RecipentTitle = styled.div`
   line-height: 1rem;
 
   color: ${color.grey["400"]};
+`;
+
+const SubLeaderboardIntroContainer = styled.div`
+  margin: 0 2.5rem;
+  margin-top: 2.5rem;
+
+  padding: 1.25rem 1.5rem;
+
+  background-color: ${color.grey["700"]};
+`;
+
+const SubLeaderboardIntroTitle = styled.div`
+  font-weight: 600;
+  font-size: 0.8125rem;
+  line-height: 123.5%;
+
+  margin-bottom: 0.75rem;
+
+  color: ${color.grey["100"]};
+`;
+
+const SubLeaderboardIntroDescription = styled.div`
+  font-weight: 400;
+  font-size: 0.8125rem;
+  line-height: 138%;
+
+  color: ${color.grey["300"]};
 `;
 
 const AddressContainer = styled.div`
@@ -260,7 +384,8 @@ const ShareButtonContainer = styled.div`
   width: 20rem;
   height: 5rem;
 
-  margin-top: 0.75rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.125rem;
 
   cursor: pointer;
   user-select: none;
@@ -277,4 +402,75 @@ const ShareButtonText = styled.div`
   letter-spacing: 0.07em;
 
   color: ${color.grey["100"]};
+`;
+
+const CopyInviteLink = styled.div`
+  display: flex;
+  align-items: center;
+
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 102.5%;
+
+  text-align: center;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+
+  color: ${color.grey["200"]};
+  stroke: ${color.grey["200"]};
+
+  &:hover {
+    color: ${color.grey["300"]};
+    stroke: ${color.grey["300"]};
+  }
+
+  cursor: pointer;
+`;
+
+const ComingSoonLeaderboardContainer = styled.div`
+  margin-top: 4.5rem;
+
+  height: 5rem;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ComingSoonLeaderboardContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 10rem;
+`;
+
+const ComingSoonLeaderboardContent1 = styled.div`
+  font-weight: 600;
+  font-size: 0.8125rem;
+  line-height: 102.5%;
+
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+
+  margin-bottom: 0.5rem;
+
+  color: ${color.grey["700"]};
+`;
+
+const ComingSoonLeaderboardContent2 = styled.div`
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 102.5%;
+
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+
+  color: ${color.grey["500"]};
+`;
+
+const RotateSvg = styled.svg`
+  animation: ${spinAnimation} 4s linear infinite;
 `;
