@@ -4,20 +4,21 @@ import ReactModal from "react-modal";
 import { ErrorMessage } from "../../types";
 import styled from "styled-components";
 
-import Image from "next/image";
 interface Props {
   isModalOpen: boolean;
   onCloseModal: () => void;
   errorMessage?: ErrorMessage;
+  isWarning?: boolean;
 }
 
 import ErrorIcon from "../../public/images/svg/error-icon.svg";
+import WarningIcon from "../../public/images/svg/warning-icon.svg";
 import ArrowLeftIcon from "../../public/images/svg/arrow-left.svg";
 import { useRouter } from "next/router";
 
 export const ErrorModal: FunctionComponent<Props> = (props) => {
   const router = useRouter();
-  const { isModalOpen, onCloseModal, errorMessage } = props;
+  const { isModalOpen, onCloseModal, errorMessage, isWarning } = props;
 
   const onClose = async () => {
     if (errorMessage?.path) {
@@ -50,7 +51,7 @@ export const ErrorModal: FunctionComponent<Props> = (props) => {
       <ModalContainer>
         <ErrorTitleContainer>
           <ErrorImageContainer>
-            <ErrorIcon />
+            {isWarning ? <WarningIcon /> : <ErrorIcon />}
           </ErrorImageContainer>
           Error
         </ErrorTitleContainer>

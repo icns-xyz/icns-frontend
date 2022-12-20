@@ -1,9 +1,11 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import ReactModal from "react-modal";
 import styled from "styled-components";
 import color from "../../styles/color";
 import { WalletList } from "../../constants/wallet";
 import { WalletItem } from "./wallet-item";
+import { ErrorMessage } from "../../types";
+import { ErrorModal } from "../error-modal";
 
 interface Props {
   isModalOpen: boolean;
@@ -12,6 +14,8 @@ interface Props {
 
 export const ConnectWalletModal: FunctionComponent<Props> = (props) => {
   const { isModalOpen, onCloseModal } = props;
+  const [isErrorModalOpen, setErrorModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
 
   return (
     <ReactModal
@@ -41,9 +45,23 @@ export const ConnectWalletModal: FunctionComponent<Props> = (props) => {
         </ModalDescription>
 
         {WalletList.map((walletItem) => {
-          return <WalletItem wallet={walletItem} key={walletItem.name} />;
+          return (
+            <WalletItem
+              wallet={walletItem}
+              key={walletItem.name}
+              setErrorModalOpen={setErrorModalOpen}
+              setErrorMessage={setErrorMessage}
+            />
+          );
         })}
       </ModalContainer>
+
+      <ErrorModal
+        isModalOpen={isErrorModalOpen}
+        onCloseModal={() => setErrorModalOpen(false)}
+        errorMessage={errorMessage}
+        isWarning={true}
+      />
     </ReactModal>
   );
 };

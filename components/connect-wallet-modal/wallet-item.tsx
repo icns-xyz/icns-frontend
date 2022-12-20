@@ -1,4 +1,10 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import {
+  Dispatch,
+  FunctionComponent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import ArrowRightIcon from "../../public/images/svg/arrow-right.svg";
 import color from "../../styles/color";
 import { Flex1 } from "../../styles/flex-1";
@@ -12,17 +18,22 @@ import {
 import { getKeplrFromWindow, KeplrWallet } from "../../wallets";
 import { loginWithTwitter } from "../../queries";
 import {
+  KEPLR_NO_ACCOUNT_ERROR,
+  KEPLR_NO_ACCOUNT_MESSAGE,
   KEPLR_NOT_FOUND_ERROR,
   KEPLR_VERSION_ERROR,
 } from "../../constants/error-message";
 import semver from "semver/preload";
+import { ErrorMessage } from "../../types";
 
 interface Props {
   wallet: WalletType;
+  setErrorMessage: Dispatch<SetStateAction<ErrorMessage | undefined>>;
+  setErrorModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export const WalletItem: FunctionComponent<Props> = (props: Props) => {
-  const { wallet } = props;
+  const { wallet, setErrorModalOpen, setErrorMessage } = props;
   const [isInstalled, setIsInstalled] = useState<boolean>();
 
   useEffect(() => {
@@ -37,8 +48,19 @@ export const WalletItem: FunctionComponent<Props> = (props: Props) => {
       }
 
       await loginWithTwitter();
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error.message);
+
+        if (error.message === KEPLR_NO_ACCOUNT_ERROR) {
+          setErrorMessage({ message: KEPLR_NO_ACCOUNT_MESSAGE });
+          setErrorModalOpen(true);
+          return;
+        }
+
+        setErrorMessage({ message: error.message });
+        setErrorModalOpen(true);
+      }
     }
   };
 
