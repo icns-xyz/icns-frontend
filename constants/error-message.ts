@@ -23,3 +23,11 @@ export const VERIFICATION_THRESHOLD_MESSAGE =
 export const INVALID_REFERRAL_ERROR = "Invalid referral:";
 export const INVALID_REFERRAL_MESSAGE =
   "Make sure that the referrer ICNS name has been registered.";
+
+export const TOO_MANY_CHAINS_IN_LEDGER_ERROR = "Output buffer too small";
+export const TOO_MANY_CHAINS_IN_LEDGER_MESSAGE =
+  "Maximum 20 chains can be linked at a time on Ledger hardware wallet. Unselect some chains and try again.";
+
+export const EVM_CHAIN_IN_LEDGER_ERROR = "Ledger is unsupported for this chain";
+export const EVM_CHAIN_IN_LEDGER_MESSAGE =
+  "Ledger is unsupported for this chain. Remove EVM-based Cosmos SDK chains and try again.";
