@@ -30,4 +30,4 @@ export const TOO_MANY_CHAINS_IN_LEDGER_MESSAGE =
 
 export const EVM_CHAIN_IN_LEDGER_ERROR = "Ledger is unsupported for this chain";
 export const EVM_CHAIN_IN_LEDGER_MESSAGE =
-  "Ledger is unsupported for this chain. Remove EVM-based Cosmos SDK chains and try again.";
+  "ICNS for Cosmos chains using Ethereum/EVM keys are not supported. Remove EVM-based Cosmos SDK chains and try again.";
