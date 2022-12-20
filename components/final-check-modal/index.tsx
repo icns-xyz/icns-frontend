@@ -177,7 +177,7 @@ const ModalTitle = styled.div`
 
   color: ${color.white};
 
-  margin-bottom: 1.75rem;
+  margin-bottom: 1rem;
 `;
 
 const ModalDescription = styled.div`
@@ -316,8 +316,8 @@ const NameBoxIconContainer = styled.div`
 
 const NameBoxTitle = styled.div`
   font-weight: 500;
-  font-size: 1rem;
-  line-height: 1.18rem;
+  font-size: 0.875rem;
+  line-height: 1.05rem;
 
   color: ${color.grey["100"]};
 `;
