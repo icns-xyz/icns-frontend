@@ -98,9 +98,9 @@ export default function CompletePage() {
                   strings={registeredAddressed.map(
                     (address) => address.bech32_prefix,
                   )}
-                  typeSpeed={150}
-                  backSpeed={150}
-                  backDelay={1000}
+                  typeSpeed={30}
+                  backSpeed={30}
+                  backDelay={500}
                   loop
                   smartBackspace
                   onStringTyped={(arrayPos: number) => {
@@ -112,16 +112,6 @@ export default function CompletePage() {
             <AvailableAddressText>{availableAddress}</AvailableAddressText>
           </RecipentContainer>
         </ContentContainer>
-
-        <DescriptionContainer>
-          <AlertIcon>
-            <AlertCircleOutlineIcon />
-          </AlertIcon>
-          <DescriptionText>
-            ICNS name will stay the same even if your twitter handle changes in
-            the future.
-          </DescriptionText>
-        </DescriptionContainer>
 
         <ShareButtonContainer onClick={onClickShareButton}>
           <Image
@@ -222,40 +212,6 @@ const AvailableAddressText = styled.div`
   min-height: 0.75rem;
 
   color: ${color.blue};
-`;
-
-const DescriptionContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  gap: 1rem;
-
-  width: 31rem;
-
-  margin-top: 1.5rem;
-  padding: 1.25rem 2rem;
-
-  background-color: ${color.grey["900"]};
-`;
-
-const AlertIcon = styled.div`
-  position: relative;
-
-  width: 1.5rem;
-  height: 1.5rem;
-`;
-
-const DescriptionText = styled.div`
-  width: 100%;
-
-  font-family: "Inter", serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 0.8rem;
-  line-height: 140%;
-
-  color: ${color.grey["400"]};
 `;
 
 const SpinnerWrapper = styled.div`
