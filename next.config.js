@@ -5,6 +5,9 @@ const nextConfig = {
   sentry: {
     hideSourceMaps: true,
   },
+  api: {
+    externalResolver: true,
+  },
   reactStrictMode: false,
   swcMinify: true,
   compiler: {
