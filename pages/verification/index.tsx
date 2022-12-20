@@ -52,8 +52,14 @@ import {
   verifyTwitterAccount,
 } from "../../queries";
 import {
+  ACCOUNT_NOT_EXIST_ERROR,
+  ACCOUNT_NOT_EXIST_MESSAGE,
+  INSUFFICIENT_GAS_ERROR,
+  INSUFFICIENT_GAS_MESSAGE,
   KEPLR_NOT_FOUND_ERROR,
   TWITTER_LOGIN_ERROR,
+  VERIFICATION_THRESHOLD_ERROR,
+  VERIFICATION_THRESHOLD_MESSAGE,
 } from "../../constants/error-message";
 import { makeClaimMessage, makeSetRecordMessage } from "../../messages";
 import Axios from "axios";
@@ -428,6 +434,26 @@ export default function VerificationPage() {
       }
     } catch (error) {
       if (Axios.isAxiosError(error)) {
+        const message = (error?.response?.data as QueryError).message;
+
+        if (message.includes(INSUFFICIENT_GAS_ERROR)) {
+          setErrorMessage({ message: INSUFFICIENT_GAS_MESSAGE });
+          setErrorModalOpen(true);
+          return;
+        }
+
+        if (message.includes(ACCOUNT_NOT_EXIST_ERROR)) {
+          setErrorMessage({ message: ACCOUNT_NOT_EXIST_MESSAGE });
+          setErrorModalOpen(true);
+          return;
+        }
+
+        if (message.includes(VERIFICATION_THRESHOLD_ERROR)) {
+          setErrorMessage({ message: VERIFICATION_THRESHOLD_MESSAGE });
+          setErrorModalOpen(true);
+          return;
+        }
+
         setErrorMessage({
           message: (error?.response?.data as QueryError).message,
         });
@@ -437,6 +463,7 @@ export default function VerificationPage() {
 
       if (error instanceof Error) {
         console.log(error.message);
+
         setErrorMessage({ message: error.message });
         setErrorModalOpen(true);
       }

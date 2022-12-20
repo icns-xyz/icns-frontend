@@ -85,7 +85,7 @@ export const BeforeYouStartModal: FunctionComponent<Props> = (props) => {
             {selectedWalletItem && (
               <selectedWalletItem.IconComponent width={16} height={16} />
             )}
-            {walletKeyName}
+            <WalletAccountName>{walletKeyName}</WalletAccountName>
           </WalletAccountValue>
         </WalletAccountContainer>
         <ClaimWithTwitterButton onClick={handleClickButton}>
@@ -184,6 +184,13 @@ const WalletAccountValue = styled.div`
   line-height: 1.125rem;
 
   color: ${color.grey["100"]};
+`;
+
+const WalletAccountName = styled.div`
+  max-width: 11rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const ClaimWithTwitterButton = styled.button`
