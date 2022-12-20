@@ -370,6 +370,20 @@ export default function VerificationPage() {
           twitterInfo.accessToken,
         );
 
+        icnsVerificationList.forEach((verification) => {
+          if (verification.status === "fulfilled") {
+            if (verification.value.errors.length > 0) {
+              captureException(verification.value.errors);
+            }
+          }
+
+          if (verification.status === "rejected") {
+            if (verification.reason) {
+              captureException(verification.reason);
+            }
+          }
+        });
+
         const registerMsg = makeClaimMessage(
           walletKey.bech32Address,
           twitterInfo.username,
