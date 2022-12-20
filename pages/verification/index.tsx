@@ -54,11 +54,15 @@ import {
 import {
   ACCOUNT_NOT_EXIST_ERROR,
   ACCOUNT_NOT_EXIST_MESSAGE,
+  EVM_CHAIN_IN_LEDGER_ERROR,
+  EVM_CHAIN_IN_LEDGER_MESSAGE,
   INSUFFICIENT_GAS_ERROR,
   INSUFFICIENT_GAS_MESSAGE,
   INVALID_REFERRAL_ERROR,
   INVALID_REFERRAL_MESSAGE,
   KEPLR_NOT_FOUND_ERROR,
+  TOO_MANY_CHAINS_IN_LEDGER_ERROR,
+  TOO_MANY_CHAINS_IN_LEDGER_MESSAGE,
   TWITTER_LOGIN_ERROR,
   VERIFICATION_THRESHOLD_ERROR,
   VERIFICATION_THRESHOLD_MESSAGE,
@@ -490,6 +494,18 @@ export default function VerificationPage() {
       if (error instanceof Error) {
         console.log(error.message);
         captureException(error);
+
+        if (error.message.includes(TOO_MANY_CHAINS_IN_LEDGER_ERROR)) {
+          setErrorMessage({ message: TOO_MANY_CHAINS_IN_LEDGER_MESSAGE });
+          setErrorModalOpen(true);
+          return;
+        }
+
+        if (error.message.includes(EVM_CHAIN_IN_LEDGER_ERROR)) {
+          setErrorMessage({ message: EVM_CHAIN_IN_LEDGER_MESSAGE });
+          setErrorModalOpen(true);
+          return;
+        }
 
         setErrorMessage({ message: error.message });
         setErrorModalOpen(true);
