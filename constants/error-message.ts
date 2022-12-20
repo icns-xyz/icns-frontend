@@ -19,3 +19,7 @@ export const ACCOUNT_NOT_EXIST_MESSAGE =
 export const VERIFICATION_THRESHOLD_ERROR = "verfication is below threshold:";
 export const VERIFICATION_THRESHOLD_MESSAGE =
   "Verifier consensus failed. Verifiers may be offline. Please try again later.";
+
+export const INVALID_REFERRAL_ERROR = "Invalid referral:";
+export const INVALID_REFERRAL_MESSAGE =
+  "Make sure that the referrer ICNS name has been registered.";
