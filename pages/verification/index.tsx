@@ -373,13 +373,18 @@ export default function VerificationPage() {
         icnsVerificationList.forEach((verification) => {
           if (verification.status === "fulfilled") {
             if (verification.value.errors.length > 0) {
-              captureException(verification.value.errors);
+              verification.value.errors.forEach((error) => {
+                const errorMessage = error.message || error;
+                captureException(errorMessage);
+              });
             }
           }
 
           if (verification.status === "rejected") {
             if (verification.reason) {
-              captureException(verification.reason);
+              const errorMessage =
+                verification.reason.message || verification.reason;
+              captureException(errorMessage);
             }
           }
         });
@@ -479,7 +484,8 @@ export default function VerificationPage() {
           return;
         }
 
-        captureException(error);
+        const errorMessage = error.message || error;
+        captureException(errorMessage);
         setErrorMessage({
           message: (error?.response?.data as QueryError).message,
         });
@@ -488,8 +494,9 @@ export default function VerificationPage() {
       }
 
       if (error instanceof Error) {
-        console.log(error.message);
-        captureException(error);
+        const errorMessage = error.message || error;
+        console.log(errorMessage);
+        captureException(errorMessage);
 
         setErrorMessage({ message: error.message });
         setErrorModalOpen(true);
