@@ -37,6 +37,7 @@ import { Bech32Address, ChainIdHelper } from "@keplr-wallet/cosmos";
 import { AllChainsItem } from "../../components/chain-list/all-chains-item";
 import { SearchInput } from "../../components/search-input";
 import {
+  CHAIN_ALLOWLIST,
   MAIN_CHAIN_ID,
   REFERRAL_KEY,
   RESOLVER_ADDRESS,
@@ -240,9 +241,8 @@ export default function VerificationPage() {
 
   const fetchChainList = async (wallet: KeplrWallet) => {
     const needAllowList =
-      process.env.NEXT_PUBLIC_CHAIN_ALLOWLIST != null &&
-      process.env.NEXT_PUBLIC_CHAIN_ALLOWLIST.trim().length !== 0;
-    const chainAllowList = (process.env.NEXT_PUBLIC_CHAIN_ALLOWLIST || "")
+      CHAIN_ALLOWLIST != null && CHAIN_ALLOWLIST.trim().length !== 0;
+    const chainAllowList = (CHAIN_ALLOWLIST || "")
       .split(",")
       .map((str) => str.trim())
       .filter((str) => str.length > 0)
