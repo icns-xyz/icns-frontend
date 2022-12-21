@@ -36,6 +36,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@next/eslint-plugin-next", "npm:13.0.5"],\
             ["@sentry/nextjs", "virtual:4b77e00d446246df1ed27001550885fbf1b51be18c660c1b5c357d3d763078ecef2a676194291a120f149b87573081e5af0621dc83cf1f83383639f39ac133c7#npm:7.27.0"],\
             ["@svgr/webpack", "npm:6.5.1"],\
+            ["@types/cors", "npm:2.8.13"],\
             ["@types/eslint", "npm:8.4.10"],\
             ["@types/node", "npm:18.11.9"],\
             ["@types/react", "npm:18.0.25"],\
@@ -47,6 +48,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/parser", "virtual:4b77e00d446246df1ed27001550885fbf1b51be18c660c1b5c357d3d763078ecef2a676194291a120f149b87573081e5af0621dc83cf1f83383639f39ac133c7#npm:5.45.0"],\
             ["axios", "npm:0.27.2"],\
             ["buffer", "npm:6.0.3"],\
+            ["cors", "npm:2.8.5"],\
             ["crypto", "npm:1.0.1"],\
             ["eslint", "npm:8.28.0"],\
             ["eslint-config-next", "virtual:4b77e00d446246df1ed27001550885fbf1b51be18c660c1b5c357d3d763078ecef2a676194291a120f149b87573081e5af0621dc83cf1f83383639f39ac133c7#npm:13.0.5"],\
@@ -3957,6 +3959,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@types/cors", [\
+        ["npm:2.8.13", {\
+          "packageLocation": "./.yarn/cache/@types-cors-npm-2.8.13-4b8ac1068f-7ef197ea19.zip/node_modules/@types/cors/",\
+          "packageDependencies": [\
+            ["@types/cors", "npm:2.8.13"],\
+            ["@types/node", "npm:18.11.9"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@types/eslint", [\
         ["npm:8.4.10", {\
           "packageLocation": "./.yarn/cache/@types-eslint-npm-8.4.10-9df5f4bc78-21e009ed9e.zip/node_modules/@types/eslint/",\
@@ -5462,6 +5474,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/core-util-is-npm-1.0.3-ca74b76c90-9de8597363.zip/node_modules/core-util-is/",\
           "packageDependencies": [\
             ["core-util-is", "npm:1.0.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["cors", [\
+        ["npm:2.8.5", {\
+          "packageLocation": "./.yarn/cache/cors-npm-2.8.5-c9935a2d12-ced838404c.zip/node_modules/cors/",\
+          "packageDependencies": [\
+            ["cors", "npm:2.8.5"],\
+            ["object-assign", "npm:4.1.1"],\
+            ["vary", "npm:1.1.2"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -7291,6 +7314,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@next/eslint-plugin-next", "npm:13.0.5"],\
             ["@sentry/nextjs", "virtual:4b77e00d446246df1ed27001550885fbf1b51be18c660c1b5c357d3d763078ecef2a676194291a120f149b87573081e5af0621dc83cf1f83383639f39ac133c7#npm:7.27.0"],\
             ["@svgr/webpack", "npm:6.5.1"],\
+            ["@types/cors", "npm:2.8.13"],\
             ["@types/eslint", "npm:8.4.10"],\
             ["@types/node", "npm:18.11.9"],\
             ["@types/react", "npm:18.0.25"],\
@@ -7302,6 +7326,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@typescript-eslint/parser", "virtual:4b77e00d446246df1ed27001550885fbf1b51be18c660c1b5c357d3d763078ecef2a676194291a120f149b87573081e5af0621dc83cf1f83383639f39ac133c7#npm:5.45.0"],\
             ["axios", "npm:0.27.2"],\
             ["buffer", "npm:6.0.3"],\
+            ["cors", "npm:2.8.5"],\
             ["crypto", "npm:1.0.1"],\
             ["eslint", "npm:8.28.0"],\
             ["eslint-config-next", "virtual:4b77e00d446246df1ed27001550885fbf1b51be18c660c1b5c357d3d763078ecef2a676194291a120f149b87573081e5af0621dc83cf1f83383639f39ac133c7#npm:13.0.5"],\
@@ -10546,6 +10571,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["validate-npm-package-license", "npm:3.0.4"],\
             ["spdx-correct", "npm:3.1.1"],\
             ["spdx-expression-parse", "npm:3.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["vary", [\
+        ["npm:1.1.2", {\
+          "packageLocation": "./.yarn/cache/vary-npm-1.1.2-b49f70ae63-ae0123222c.zip/node_modules/vary/",\
+          "packageDependencies": [\
+            ["vary", "npm:1.1.2"]\
           ],\
           "linkType": "HARD"\
         }]\
