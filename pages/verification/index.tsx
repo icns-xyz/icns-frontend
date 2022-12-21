@@ -474,7 +474,7 @@ export default function VerificationPage() {
           pathname: "complete",
           query: {
             txHash: Buffer.from(txHash).toString("hex"),
-            twitterUsername: twitterInfo.username,
+            twitterUsername: registeredTwitterName || twitterInfo.username,
           },
         });
       }
