@@ -8,16 +8,17 @@ import ICNSIcon from "../../public/images/svg/icns-logo.svg";
 
 interface Props {
   isOwner?: boolean;
+  registeredTwitterName?: string;
   twitterProfileInformation?: TwitterAuthInfoResponse | null;
 }
 
 export const TwitterProfile: FunctionComponent<Props> = (props) => {
-  const { isOwner, twitterProfileInformation } = props;
+  const { isOwner, registeredTwitterName, twitterProfileInformation } = props;
   const [isCopied, setIsCopied] = useState<boolean>(false);
 
   const onClickInviteLink = async () => {
     await navigator.clipboard.writeText(
-      `https://app.icns.xyz?referral=${twitterProfileInformation?.username}`,
+      `https://app.icns.xyz?referral=${registeredTwitterName}`,
     );
 
     setIsCopied(true);
@@ -29,49 +30,51 @@ export const TwitterProfile: FunctionComponent<Props> = (props) => {
 
   return (
     <ProfileContainer color={color.grey["900"]}>
-      {isCopied ? (
-        <InviteLinkContainer>
-          copied
-          <CopiedIcon
-            width="14"
-            height="12"
-            viewBox="0 0 14 12"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M2 4.92614L6.08333 9.9375L12.5 2.0625"
-              stroke="current"
-              strokeWidth="2"
-              strokeLinecap="square"
-            />
-          </CopiedIcon>
-        </InviteLinkContainer>
-      ) : (
-        <InviteLinkContainer onClick={onClickInviteLink}>
-          copy invite link
-          <CopyIcon
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="none"
-            viewBox="0 0 16 16"
-          >
-            <path
-              stroke="current"
-              strokeLinecap="square"
-              strokeWidth="1.5"
-              d="M10.667 2.667h-8v8"
-            />
-            <path
-              stroke="current"
-              strokeLinecap="square"
-              strokeWidth="1.5"
-              d="M5.417 5.417H13.25V13.25H5.417z"
-            />
-          </CopyIcon>
-        </InviteLinkContainer>
-      )}
+      {registeredTwitterName ? (
+        isCopied ? (
+          <InviteLinkContainer>
+            copied
+            <CopiedIcon
+              width="14"
+              height="12"
+              viewBox="0 0 14 12"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M2 4.92614L6.08333 9.9375L12.5 2.0625"
+                stroke="current"
+                strokeWidth="2"
+                strokeLinecap="square"
+              />
+            </CopiedIcon>
+          </InviteLinkContainer>
+        ) : (
+          <InviteLinkContainer onClick={onClickInviteLink}>
+            copy invite link
+            <CopyIcon
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 16 16"
+            >
+              <path
+                stroke="current"
+                strokeLinecap="square"
+                strokeWidth="1.5"
+                d="M10.667 2.667h-8v8"
+              />
+              <path
+                stroke="current"
+                strokeLinecap="square"
+                strokeWidth="1.5"
+                d="M5.417 5.417H13.25V13.25H5.417z"
+              />
+            </CopyIcon>
+          </InviteLinkContainer>
+        )
+      ) : null}
       <ProfileImageContainer>
         <Image
           src={twitterProfileInformation?.profile_image_url ?? ""}
