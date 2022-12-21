@@ -75,7 +75,7 @@ const StyledPrimaryButton = styled.button`
   }
 `;
 
-const SpinnerWrapper = styled.div`
+export const SpinnerWrapper = styled.div`
   display: flex;
   position: relative;
 
@@ -92,7 +92,7 @@ const spinAnimation = keyframes`
   }
 `;
 
-const Spinner = styled.div<{ animationDelay?: string }>`
+export const Spinner = styled.div<{ animationDelay?: string }>`
   display: block;
   position: absolute;
   top: 0;

@@ -23,6 +23,7 @@
     "iron-session": "^6.3.1",
     "next": "13.0.5",
     "react": "18.2.0",
+    "react-countup": "^6.4.0",
     "react-dom": "18.2.0",
     "react-is": "^18.2.0",
     "react-modal": "^3.16.1",

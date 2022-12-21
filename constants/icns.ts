@@ -20,6 +20,9 @@ export const RESOLVER_ADDRESS =
   process.env.NEXT_PUBLIC_ICNS_RESOLVER_CONTRACT_ADDRESS ??
   "osmo1002awr7frr9wk44lc3vfzt0d2w6vz5z03ql6fszjsjy8vdcvk0sskruz3c";
 
+export const CLAIM_URL =
+  "https://lcd-osmosis.keplr.app/cosmwasm/wasm/v1/contract/osmo1mypljhatv0prfr9cjzzvamxdf2ctg34xkt50sudxads9zhqnyneqjuvy26/smart/eyJudW1fdG9rZW5zIjp7fX0=";
+
 export const CHAIN_ALLOWLIST =
   process.env.NEXT_PUBLIC_CHAIN_ALLOWLIST ||
   [
