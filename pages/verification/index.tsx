@@ -554,7 +554,10 @@ export default function VerificationPage() {
         ) : (
           <ContentContainer>
             <BackButton />
-            <TwitterProfile twitterProfileInformation={twitterAuthInfo} />
+            <TwitterProfile
+              isOwner={isOwner}
+              twitterProfileInformation={twitterAuthInfo}
+            />
             <ChainListTitleContainer>
               <ChainListTitle>Chain List</ChainListTitle>
               <SearchInput
