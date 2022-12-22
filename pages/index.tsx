@@ -6,23 +6,31 @@ import color from "../styles/color";
 
 // Components
 import { ConnectWalletModal } from "../components/connect-wallet-modal";
-import { PrimaryButton } from "../components/primary-button";
+import {
+  PrimaryButton,
+  Spinner,
+  SpinnerWrapper,
+} from "../components/primary-button";
 
 // Image Assets
 import { useEffect, useState } from "react";
 import { Logo } from "../components/logo";
-import { REFERRAL_KEY } from "../constants/icns";
+import { CLAIM_URL, REFERRAL_KEY } from "../constants/icns";
 import { SELECTED_WALLET_KEY } from "../constants/wallet";
 import StarIcon from "../public/images/svg/bg-asset-3.svg";
 import CheckIcon from "../public/images/svg/check-icon.svg";
 import MainLogo from "../public/images/svg/main-logo.svg";
 import MainTitle from "../public/images/svg/main-title.svg";
+import CountUp from "react-countup";
+import useInterval from "../hooks/use-interval";
 
 export default function Home() {
   const [currentReferral, setCurrentReferral] = useState("");
 
   const [isConnectWalletModalOpen, setIsConnectWalletModalOpen] =
     useState(false);
+
+  const [count, setCount] = useState<{ start: number; end: number }>();
 
   const onClickConnectWalletButton = async () => {
     amplitude.track("click connect wallet button");
@@ -46,10 +54,46 @@ export default function Home() {
     localStorage.removeItem(SELECTED_WALLET_KEY);
   }, []);
 
+  useEffect(() => {
+    setTimeout(() => {
+      countUpCallback();
+    }, 1000);
+  }, []);
+
+  useInterval(async () => {
+    await countUpCallback();
+  }, 10000);
+
+  const countUpCallback = async () => {
+    const response: { data: { count: number } } = await (
+      await fetch(CLAIM_URL)
+    ).json();
+
+    setCount({
+      start: (count?.end ?? 100) - 100,
+      end: response.data.count,
+    });
+  };
+
   return (
     <Container>
       <Logo />
 
+      <CountUpContainer>
+        {count ? (
+          <CountUpText>
+            <CountUp start={count?.start} end={count?.end ?? 0} duration={1} />
+          </CountUpText>
+        ) : (
+          <SpinnerWrapper>
+            <Spinner />
+            <Spinner />
+            <Spinner />
+            <Spinner />
+          </SpinnerWrapper>
+        )}
+        <CountUpDescription>ICNS names claimed so far</CountUpDescription>
+      </CountUpContainer>
       <MainContainer>
         <MainTitleContainer>
           <MainTitleImageBackground>
@@ -148,6 +192,45 @@ const MainContainer = styled.div`
       top: -24px;
     }
   }
+`;
+
+const CountUpContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1.25rem;
+
+  width: calc(25rem - 2px);
+  height: calc(5rem - 2px);
+
+  position: absolute;
+
+  margin-top: calc(10rem + 2px);
+  margin-left: calc(55rem + 2px);
+
+  background-color: ${color.black};
+`;
+
+const CountUpText = styled.div`
+  font-family: "Inter", serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.2rem;
+  letter-spacing: 0.46rem;
+
+  color: ${color.white};
+`;
+
+const CountUpDescription = styled.div`
+  font-family: "Inter", serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.1rem;
+
+  color: ${color.grey["400"]};
 `;
 
 const MainTitleContainer = styled.div`

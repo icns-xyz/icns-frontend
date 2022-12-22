@@ -106,6 +106,8 @@ export default function VerificationPage() {
   const [searchValue, setSearchValue] = useState("");
 
   const [nftOwnerAddress, setNFTOwnerAddress] = useState("");
+  // Handle the token id which actually registered.
+  const [registeredTwitterName, setRegisteredTwitterName] = useState("");
   const [isOwner, setIsOwner] = useState(false);
 
   const [isModalOpen, setModalOpen] = useState(false);
@@ -208,6 +210,13 @@ export default function VerificationPage() {
           ...twitterInfo,
           isRegistered: "data" in registeredQueryResponse,
         });
+
+        if (
+          "data" in registeredQueryResponse &&
+          registeredQueryResponse.data?.name
+        ) {
+          setRegisteredTwitterName(registeredQueryResponse.data.name);
+        }
 
         if ("data" in registeredQueryResponse) {
           const ownerOfQueryResponse = await queryOwnerOfTwitterName(
@@ -465,7 +474,7 @@ export default function VerificationPage() {
           pathname: "complete",
           query: {
             txHash: Buffer.from(txHash).toString("hex"),
-            twitterUsername: twitterInfo.username,
+            twitterUsername: registeredTwitterName || twitterInfo.username,
           },
         });
       }
@@ -554,7 +563,11 @@ export default function VerificationPage() {
         ) : (
           <ContentContainer>
             <BackButton />
-            <TwitterProfile twitterProfileInformation={twitterAuthInfo} />
+            <TwitterProfile
+              isOwner={isOwner}
+              registeredTwitterName={registeredTwitterName}
+              twitterProfileInformation={twitterAuthInfo}
+            />
             <ChainListTitleContainer>
               <ChainListTitle>Chain List</ChainListTitle>
               <SearchInput

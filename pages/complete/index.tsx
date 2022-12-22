@@ -77,7 +77,7 @@ export default function CompletePage() {
     const width = 500;
     const height = 700;
     window.open(
-      `${SHARE_URL}?url=https://app.icns.xyz?referral=${twitterUsername}&text=${shareMessage}`,
+      `${SHARE_URL}?url=https://app.icns.xyz/?referral=${twitterUsername}&text=${shareMessage}`,
       "Share Twitter",
       `top=${(window.screen.height - height) / 2}, left=${
         (window.screen.width - width) / 2
