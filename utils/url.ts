@@ -2,23 +2,32 @@ import { TwitterLoginSuccess } from "../types";
 import { TWITTER_LOGIN_ERROR } from "../constants/error-message";
 import { WALLET_INSTALL_URL } from "../constants/wallet";
 
-export function request<TResponse>(
+export async function request<TResponse>(
   url: string,
   config: RequestInit = {},
   customConfig?: {
     isErrorIgnore?: boolean;
   },
 ): Promise<TResponse> {
-  return fetch(url, config)
-    .then((response) => {
-      if (!response.ok && !customConfig?.isErrorIgnore) {
-        throw new Error(
-          `This is an HTTP error: The status is ${response.status} ${response.statusText}`,
-        );
-      }
-      return response.json();
-    })
-    .then((data) => data as TResponse);
+  const response = await fetch(url, config);
+  const data = await response.json();
+
+  if (
+    (!response.ok || data.error || data.errors) &&
+    !customConfig?.isErrorIgnore
+  ) {
+    const { error, errors } = data;
+    let errorMessage;
+    if (error && error.error) {
+      errorMessage = error.error_description;
+    } else {
+      errorMessage =
+        (error && error.toString()) || (errors && errors.toString());
+    }
+    throw new Error(errorMessage);
+  }
+
+  return data;
 }
 
 export function buildQueryString(query: Record<string, any>): string {

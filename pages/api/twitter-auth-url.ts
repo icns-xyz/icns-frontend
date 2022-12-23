@@ -1,13 +1,14 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { captureException } from "@sentry/nextjs";
 import crypto from "crypto";
 import { withIronSessionApiRoute } from "iron-session/next";
-import { base64URLEncode } from "../../utils/encoding";
-import { buildQueryString } from "../../utils/url";
-import { ironOptions } from "../../iron.config";
+import type { NextApiRequest, NextApiResponse } from "next";
 import {
   twitterOAuthBaseUrl,
   twitterOAuthScopes,
 } from "../../constants/twitter";
+import { ironOptions } from "../../iron.config";
+import { base64URLEncode } from "../../utils/encoding";
+import { buildQueryString } from "../../utils/url";
 
 export default withIronSessionApiRoute(async function handler(
   req: NextApiRequest,
@@ -46,6 +47,7 @@ export default withIronSessionApiRoute(async function handler(
     res.status(200).json({ authUrl });
   } catch (error) {
     console.error(error);
+    captureException(error);
     res.status(500).json({ error: "Internal server error" });
   }
 },

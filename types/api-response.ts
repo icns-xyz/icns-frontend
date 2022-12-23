@@ -38,6 +38,30 @@ export interface IcnsVerificationResponse {
   )[];
 }
 
+export interface IcnsVerificationResponseOnFrontend {
+  verificationList: (
+    | {
+        status: "fulfilled";
+        value: {
+          errors: Error[];
+          data: {
+            // JSON string
+            verifying_msg: string;
+            // Base64 encoded
+            public_key: string;
+            // Base64 encoded
+            signature: string;
+            algorithm: string;
+          };
+        };
+      }
+    | {
+        status: "rejected";
+        reason: string;
+      }
+  )[];
+}
+
 export interface NameByTwitterIdQueryResponse {
   data: {
     name: string;

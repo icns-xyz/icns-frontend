@@ -1,8 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { captureException } from "@sentry/nextjs";
 import { withIronSessionApiRoute } from "iron-session/next";
-import { request } from "../../utils/url";
-import { ironOptions } from "../../iron.config";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { twitterApiBaseUrl } from "../../constants/twitter";
+import { ironOptions } from "../../iron.config";
 
 export default withIronSessionApiRoute(async function handler(
   req: NextApiRequest,
@@ -45,53 +45,60 @@ export default withIronSessionApiRoute(async function handler(
       params.append("code_verifier", req.session.code_verifier);
     }
 
-    const { access_token: accessToken, refresh_token } =
-      await request<TwitterOAuth2TokenResponse>(
-        `${twitterApiBaseUrl}/oauth2/token`,
-        {
-          method: "post",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            Authorization: `Basic ${Buffer.from(
-              `${process.env.TWITTER_CLIENT_ID}:${process.env.TWITTER_CLIENT_SECRET}`,
-            ).toString("base64")}`,
-          },
-          body: params,
+    const {
+      access_token: accessToken,
+      refresh_token,
+    }: TwitterOAuth2TokenResponse = await (
+      await fetch(`${twitterApiBaseUrl}/oauth2/token`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Basic ${Buffer.from(
+            `${process.env.TWITTER_CLIENT_ID}:${process.env.TWITTER_CLIENT_SECRET}`,
+          ).toString("base64")}`,
         },
-      );
+        body: params,
+      })
+    ).json();
 
     req.session.refresh_token = refresh_token;
     await req.session.save();
-    const {
-      data: {
-        id,
-        username,
-        name,
-        profile_image_url,
-        description,
-        public_metrics,
-      },
-    } = await request<TwitterUsersMeResponse>(
-      `${twitterApiBaseUrl}/users/me?user.fields=profile_image_url,public_metrics,description`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
+    const { data, title }: TwitterUsersMeResponse = await (
+      await fetch(
+        `${twitterApiBaseUrl}/users/me?user.fields=profile_image_url,public_metrics,description`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         },
-      },
-    );
+      )
+    ).json();
+    const {
+      id,
+      username,
+      name,
+      profile_image_url,
+      description,
+      public_metrics,
+    } = data || {};
 
     res.status(200).json({
       accessToken,
       id,
       username,
       name,
-      profile_image_url: profile_image_url.replace("normal.jpg", "400x400.jpg"),
+      profile_image_url: profile_image_url?.replace(
+        "normal.jpg",
+        "400x400.jpg",
+      ),
       description,
       public_metrics,
+      error: title,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    res.status(500).json({ error: "Internal server error " });
+    captureException(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 },
 ironOptions);
@@ -105,7 +112,7 @@ interface TwitterOAuth2TokenResponse {
 }
 
 interface TwitterUsersMeResponse {
-  data: {
+  data?: {
     id: string;
     username: string;
     name: string;
@@ -113,6 +120,11 @@ interface TwitterUsersMeResponse {
     description: string;
     public_metrics: TwitterPublicMetrics;
   };
+  // Error data
+  title?: string;
+  detail?: string;
+  type?: string;
+  status?: string;
 }
 
 export interface TwitterPublicMetrics {

@@ -1,5 +1,5 @@
 import {
-  IcnsVerificationResponse,
+  IcnsVerificationResponseOnFrontend,
   TwitterAuthInfoResponse,
   TwitterAuthUrlResponse,
 } from "../types";
@@ -27,15 +27,18 @@ export const verifyTwitterAccount = async (
   accessToken: string,
 ) => {
   return (
-    await request<IcnsVerificationResponse>("/api/icns-verification", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
+    await request<IcnsVerificationResponseOnFrontend>(
+      "/api/icns-verification",
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          claimer: claimer,
+          authToken: accessToken,
+        }),
       },
-      body: JSON.stringify({
-        claimer: claimer,
-        authToken: accessToken,
-      }),
-    })
+    )
   ).verificationList;
 };

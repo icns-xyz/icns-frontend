@@ -2,12 +2,11 @@
 const { withSentryConfig } = require("@sentry/nextjs");
 
 const nextConfig = {
-  sentry: {
-    hideSourceMaps: true,
-  },
-  api: {
-    externalResolver: true,
-  },
+  ...(!!process.env.NEXT_PUBLIC_SENTRY_DSN && {
+    sentry: {
+      hideSourceMaps: true,
+    },
+  }),
   reactStrictMode: false,
   swcMinify: true,
   compiler: {

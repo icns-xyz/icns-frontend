@@ -239,13 +239,12 @@ export default function VerificationPage() {
         }
       } catch (error) {
         if (error instanceof Error) {
-          if (error.message === TWITTER_LOGIN_ERROR) {
-            setErrorMessage({ message: TWITTER_LOGIN_ERROR, path: "/" });
-            setErrorModalOpen(true);
-          }
+          setErrorMessage({ message: error.message, path: "/" });
+          setErrorModalOpen(true);
         }
 
         console.error(error);
+        captureException(error);
       } finally {
         setIsLoadingInit(false);
       }
@@ -404,8 +403,7 @@ export default function VerificationPage() {
 
           if (verification.status === "rejected") {
             if (verification.reason) {
-              const errorMessage =
-                verification.reason.message || verification.reason;
+              const errorMessage = verification.reason;
               captureException(errorMessage);
             }
           }
@@ -442,8 +440,6 @@ export default function VerificationPage() {
           chainId: MAIN_CHAIN_ID,
           rest: REST_URL,
         };
-
-        console.log(aminoMsgs);
 
         const simulated = await simulateMsgs(
           chainInfo,
