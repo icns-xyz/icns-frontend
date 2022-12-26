@@ -17,13 +17,9 @@ export async function request<TResponse>(
     !customConfig?.isErrorIgnore
   ) {
     const { error, errors } = data;
-    let errorMessage;
-    if (error && error.error) {
-      errorMessage = error.error_description;
-    } else {
-      errorMessage =
-        (error && error.toString()) || (errors && errors.toString());
-    }
+    const errorMessage =
+      (error && error.toString()) || (errors && errors.toString());
+
     throw new Error(errorMessage);
   }
 

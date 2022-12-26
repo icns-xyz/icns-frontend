@@ -48,6 +48,8 @@ export default withIronSessionApiRoute(async function handler(
     const {
       access_token: accessToken,
       refresh_token,
+      error: authTokenErrorTitle,
+      error_description: authTokenErrorDesc,
     }: TwitterOAuth2TokenResponse = await (
       await fetch(`${twitterApiBaseUrl}/oauth2/token`, {
         method: "post",
@@ -61,9 +63,17 @@ export default withIronSessionApiRoute(async function handler(
       })
     ).json();
 
+    if (authTokenErrorTitle) {
+      throw new Error(`${authTokenErrorTitle}: ${authTokenErrorDesc}`);
+    }
+
     req.session.refresh_token = refresh_token;
     await req.session.save();
-    const { data, title }: TwitterUsersMeResponse = await (
+    const {
+      data,
+      title: usersMeErrorTitle,
+      detail: usersMeErrorDesc,
+    }: TwitterUsersMeResponse = await (
       await fetch(
         `${twitterApiBaseUrl}/users/me?user.fields=profile_image_url,public_metrics,description`,
         {
@@ -73,6 +83,11 @@ export default withIronSessionApiRoute(async function handler(
         },
       )
     ).json();
+
+    if (usersMeErrorTitle) {
+      throw new Error(`${usersMeErrorTitle}: ${usersMeErrorDesc}`);
+    }
+
     const {
       id,
       username,
@@ -93,12 +108,11 @@ export default withIronSessionApiRoute(async function handler(
       ),
       description,
       public_metrics,
-      error: title,
     });
   } catch (error: any) {
     console.error(error);
     captureException(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message });
   }
 },
 ironOptions);
@@ -109,6 +123,8 @@ interface TwitterOAuth2TokenResponse {
   access_token: string;
   scope: string;
   refresh_token: string;
+  error?: string;
+  error_description?: string;
 }
 
 interface TwitterUsersMeResponse {
