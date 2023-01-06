@@ -15,7 +15,7 @@
     "@keplr-wallet/cosmos": "^0.11.25",
     "@keplr-wallet/proto-types": "^0.11.25",
     "@keplr-wallet/types": "^0.11.25",
-    "@sentry/nextjs": "^7.27.0",
+    "@sentry/nextjs": "^7.29.0",
     "axios": "^0.27.2",
     "buffer": "^6.0.3",
     "cors": "^2.8.5",
