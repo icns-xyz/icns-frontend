@@ -391,6 +391,8 @@ export default function VerificationPage() {
           twitterInfo.accessToken,
         );
 
+        console.log("icnsVerificationList", icnsVerificationList);
+
         icnsVerificationList.forEach((verification) => {
           if (verification.status === "fulfilled") {
             if (verification.value.errors.length > 0) {
