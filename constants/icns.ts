@@ -86,4 +86,12 @@ export const CHAIN_ALLOWLIST =
     "vidulum-1",
     "evmos_9001-2",
     "injective-1",
+    "celestia",
+    "gitopia",
+    "kyve-1",
+    "noble-1",
+    "passage-2",
+    "quasar-1",
+    "ssc-1",
+    "indigo-1", //Pryzm testnet
   ].join(",");
