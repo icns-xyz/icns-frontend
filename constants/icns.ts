@@ -93,5 +93,5 @@ export const CHAIN_ALLOWLIST =
     "passage-2",
     "quasar-1",
     "ssc-1",
-    "indigo-1", //Pryzm testnet
+    "pryzm-1", //Pryzm mainnet
   ].join(",");
