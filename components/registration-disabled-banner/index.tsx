@@ -6,7 +6,7 @@ export const RegistrationDisabledBanner: FunctionComponent = () => {
   return (
     <BannerContainer>
       <BannerText>
-        Registering new ICNS names is no longer available.
+        ICNS registration is closed. Names you already own are unaffected.
       </BannerText>
     </BannerContainer>
   );

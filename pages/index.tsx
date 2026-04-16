@@ -106,7 +106,7 @@ export default function Home() {
 
           <CTAContainer>
             <ConnectButtonContainer>
-              <PrimaryButton onClick={onClickConnectWalletButton}>
+              <PrimaryButton disabled>
                 Claim Now
               </PrimaryButton>
             </ConnectButtonContainer>
