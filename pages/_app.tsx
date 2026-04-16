@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useMemo } from "react";
 import { DefaultTheme, ThemeProvider } from "styled-components";
 import ErrorBoundary from "../components/error-boundary";
+import { RegistrationDisabledBanner } from "../components/registration-disabled-banner";
 import color from "../styles/color";
 
 import { GlobalStyle } from "../styles/global";
@@ -61,6 +62,7 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <React.Fragment>
         <GlobalStyle />
+        <RegistrationDisabledBanner />
         <ErrorBoundary>
           <Component {...pageProps} />
         </ErrorBoundary>
