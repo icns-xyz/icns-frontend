@@ -106,9 +106,7 @@ export default function Home() {
 
           <CTAContainer>
             <ConnectButtonContainer>
-              <PrimaryButton onClick={onClickConnectWalletButton}>
-                Claim Now
-              </PrimaryButton>
+              <PrimaryButton disabled>Claim Now</PrimaryButton>
             </ConnectButtonContainer>
             <ICNSDescription>
               ICNS allows you to use easy-to-remember names instead of
