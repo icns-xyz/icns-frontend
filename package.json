@@ -32,6 +32,11 @@
     "semver": "^7.3.8",
     "styled-components": "^5.3.6"
   },
+  "dependenciesMeta": {
+    "tiny-secp256k1": {
+      "built": false
+    }
+  },
   "devDependencies": {
     "@next/eslint-plugin-next": "^13.0.5",
     "@svgr/webpack": "^6.5.1",
